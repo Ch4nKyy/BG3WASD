@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <Forms>
+    <UDF1 Class="TCEForm" Encoding="Ascii85">b7Ej%2nldAU:MM2b.}cxWeIh0Gi32eO*FszVPx{2%{mcIVLrjY9FkwaRKgmbnNpGg/gz.[7L.V;:dpp6GcW*E</UDF1>
+  </Forms>
+  <CheatEntries>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"Apply WASD Patch"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{$lua}
+
+[ENABLE]
+if syntaxcheck then return end
+
+print("start")
+
+local scan1 = AOBScan("38 05 ?? ?? ?? ?? 0F 84 7D 10 00 00 48 8B 4E 68 8B 05 ?? ?? ?? ?? 39 81 40 01 00 00 0F 84 67 10 00 00 48 8B 99 B8 00 00 00 48 8B CB")
+if scan1 == nil then
+   print("scan1 didn't find anything")
+   return
+end
+if scan1.Count ~= 1 then
+   print("scan1 found more than 1")
+   scan1.Destroy()
+   scan1 = nil
+   return
+end
+
+local scan2 = AOBScan("38 05 ?? ?? ?? ?? 0F 84 44 01 00 00 48 8B 4B 68 8B 05 ?? ?? 64 04 39 81 40 01 00 00 0F 84 2E 01 00 00 48 8B B9 B8 00 00 00 48 8B CF E8 ?? E5 95 FF")
+if scan2 == nil then
+   print("scan2 didn't find anything")
+   scan1.Destroy()
+   scan1 = nil
+   return
+end
+if scan2.Count ~= 1 then
+   print("scan2 found more than 1")
+   scan1.Destroy()
+   scan1 = nil
+   scan2.Destroy()
+   scan2 = nil
+   return
+end
+
+local addr = tonumber(scan1[0], 16)
+pause()
+writeBytes(addr,0x90,0x90,0x90,0x90,0x90,0x90);
+writeBytes(addr+6,0x90,0x90,0x90,0x90,0x90,0x90);
+addr = tonumber(scan2[0], 16)
+writeBytes(addr,0x90,0x90,0x90,0x90,0x90,0x90);
+writeBytes(addr+6,0x90,0x90,0x90,0x90,0x90,0x90);
+unpause()
+
+addr = nil
+scan1.Destroy()
+scan1 = nil
+scan2.Destroy()
+scan2 = nil
+
+print("success")
+
+[DISABLE]
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
