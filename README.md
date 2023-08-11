@@ -29,25 +29,18 @@ and merge the following in there
    "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
 }
 ```
-2. Install Cheat Engine
+2. Install NativeModLoader from [Achievement Enabler](https://www.nexusmods.com/baldursgate3/mods/668)
 3. Optionally but recommended:
     * Install AutoHotKey
     * In-game, bind camera controls to arrow keys
 
 ### Do once and every time there is an update of this mod
 
-1. On https://github.com/Ch4nKyy/BG3WASD, click ```Code``` and then ```Download ZIP```
-2. Extract ZIP
-
-(This way I don't need to create releases all the time.)
+1. Place BG3WASD.dll inside `Baldurs Gate 3\bin\NativeMods\`
 
 ### Do every time you start the game:
 
-1. Open WASD.CT (with Cheat Engine)
-2. In Cheat Engine, open the process Baldur's Gate 3 (Vulkan) and keep the current code list.
-3. Check the box "Apply WASD Patch". This takes a few seconds!  
-(Please note that unchecking the box will not disable the mod, but restarting the game will.)
-4. Optionally but recommended:
+1. Optionally but recommended:
     * Start WASD_Toggle.ahk (with AutoHotKey)
 
 ## Hints
@@ -71,3 +64,41 @@ it reaches its destination or you press Cancel Action (by default, right click).
 
 If you want to update the mod yourself, see /doc.
 Requires some experience in reverse engineering.
+
+### Building
+
+## Requirements
+
+- [CMake](https://cmake.org/)
+  - Add this to your `PATH`
+- [PowerShell](https://github.com/PowerShell/PowerShell/releases/latest)
+- [Vcpkg](https://github.com/microsoft/vcpkg)
+  - Add the environment variable `VCPKG_ROOT` with the value as the path to the folder containing vcpkg
+- [Visual Studio Community 2022](https://visualstudio.microsoft.com/)
+  - Desktop development with C++
+- [Baldur's Gate 3 Steam Distribution](https://store.steampowered.com/app/1086940/Baldurs_Gate_3/)
+  - Add the environment variable `BG3PATH` with the value as path to game install folder
+  
+## Register Visual Studio as a Generator
+
+- Open `x64 Native Tools Command Prompt`
+- Run `cmake`
+- Close the cmd window
+
+## Building
+
+```
+git clone https://github.com/Ch4nKyy/BG3WASD.git
+cd BG3WASD
+git submodule init
+git submodule update
+.\build-release.ps1
+```
+
+### Solution Generation (Optional)
+If you want to generate a Visual Studio solution, run the following command:
+```
+.\generate-sln.ps1
+```
+
+> ***Note:*** *This will generate a `BG3WASD.sln` file in the **build** directory.*

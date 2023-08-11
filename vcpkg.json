@@ -1,0 +1,14 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+    "name": "bg3wasd",
+    "version-string": "1.0.0",
+    "description": "plugin for BG3 to enable wasd character movement",
+    "dependencies": [
+        "fmt",
+        "spdlog",
+        "nlohmann-json",
+        "simpleini",
+        "tomlplusplus",
+        "xbyak"
+    ]
+}
