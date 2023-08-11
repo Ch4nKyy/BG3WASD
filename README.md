@@ -65,7 +65,7 @@ it reaches its destination or you press Cancel Action (by default, right click).
 If you want to update the mod yourself, see /doc.
 Requires some experience in reverse engineering.
 
-### Building
+# Building
 
 ## Requirements
 
