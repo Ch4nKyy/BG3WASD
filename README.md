@@ -34,6 +34,12 @@ and merge the following in there
     * Install AutoHotKey
     * In-game, bind camera controls to arrow keys
 
+### Do every time there is an update of this mod
+
+1. On GitHub, click on Code
+2. Click on Download ZIP
+3. Extract ZIP
+
 ### Do every time you start the game:
 
 1. Open WASD.CT (with Cheat Engine)
