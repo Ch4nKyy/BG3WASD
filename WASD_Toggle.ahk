@@ -18,6 +18,8 @@ SetStoreCapsLockMode, Off
 SetTitleMatchMode 3 ; 3: Exact match
 #MaxThreadsPerHotkey 1
 
+AUTOWALK := 0
+
 CAMERA := 0
 CHARACTER := 1
 WASDControls := CHARACTER
@@ -45,6 +47,25 @@ $CapsLock::
     }
     return
 
+$+w up::
+    if (WASDControls = CAMERA)
+    {
+	}
+    else
+    {
+        if (AUTOWALK = 0)
+        {
+            Send {w down}
+            AUTOWALK = 1
+        }
+        Else
+        {
+            Send {w up}
+            AUTOWALK = 0
+        }
+    }
+    return
+
 $w::
     if (WASDControls = CAMERA)
     {
@@ -64,6 +85,7 @@ $w up::
     else
     {
         Send {w up}
+        AUTOWALK = 0
     }
     return
 
@@ -108,6 +130,11 @@ $s up::
     else
     {
         Send {s up}
+        if (AUTOWALK = 1)
+        {
+            Send {w up}
+            AUTOWALK = 0
+        }
     }
     return
 
