@@ -31,9 +31,9 @@ created for you.)
    "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
 }
 ```
-2. Install Cheat Engine
+2. Install [Cheat Engine](https://www.cheatengine.org/)
 3. Optionally but recommended:
-    * Install AutoHotKey
+    * Install [AutoHotKey](https://www.autohotkey.com/)
     * In-game, bind camera controls to arrow keys
 
 ### Do once and every time there is an update of this mod
