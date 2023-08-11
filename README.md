@@ -71,6 +71,12 @@ The AutoHotKey script can be edited with a normal text editor.
 When you click somewhere and your character auto-walks, then it will ignore your WASD inputs until
 it reaches its destination or you press Cancel Action (by default, right click).
 
+### The mod worked before, but stopped working!
+
+Game updates can break the mod in multiple ways.  
+The Cheat Engine file (or in the future, the DLL file) might need to be adapted.  
+It is also possible that an update resets your input config json, so please check that again!
+
 ## Development
 
 If you want to update the mod yourself, see /doc.
