@@ -9,7 +9,7 @@ Currently, only works with Vulkan, because I get better performance with it.
 If you desperately need DX11, create an issue or create the AOB scan yourself. See /doc.
 
 I highly recommend to also use my AutoHotKey script to toggle between WASD Camera movement
-and WASD Character movement. Default toggle key is CapsLock.
+and WASD Character movement. Default toggle key is CapsLock. Shift+W is auto-walk.
 
 Use together with [BG3Cam](https://github.com/shalzuth/BG3Cam) for a pretty immersive experience
 and common (MMO) RPG controls.
