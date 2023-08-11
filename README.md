@@ -3,15 +3,14 @@
 A mod for Baldur's Gate 3 that allows direct character movement with WASD keys (or others).
 
 Last updated: BG3 v4.1.1.3635601.  
-Newer versions might work, but sometimes stuff breaks.
-
-Currently, only works with Vulkan, because I get better performance with it.  
-If you desperately need DX11, create an issue or create the AOB scan yourself. See /doc.
+Newer versions might work, but sometimes stuff breaks.  
+Works with both Vulkan and DX11.
 
 I highly recommend to also use my AutoHotKey script to toggle between WASD Camera movement
 and WASD Character movement. Default toggle key is CapsLock. Shift+W is auto-walk.
 
-Use together with [BG3Cam](https://github.com/shalzuth/BG3Cam) for a pretty immersive experience
+Use together with a camera mod like [BG3Cam](https://github.com/shalzuth/BG3Cam) for a pretty
+immersive experience
 and common (MMO) RPG controls.
 
 ## How to use
@@ -20,7 +19,10 @@ and common (MMO) RPG controls.
 
 1. Edit  
 ```C:\Users\xxx\AppData\Local\Larian Studios\Baldur's Gate 3\PlayerProfiles\Public\inputconfig_p1.json```  
-and merge the following in there
+and add the following entries.  
+(If the file does not exist yet, create a text file with this name (Be sure to not hide file
+extensions in the explorer!) OR go in-game, change a hotkey and exit the game, then it will be
+created for you.)
 ```
 {
    "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
@@ -39,12 +41,14 @@ and merge the following in there
 1. On https://github.com/Ch4nKyy/BG3WASD, click ```Code``` and then ```Download ZIP```
 2. Extract ZIP
 
+Currently, it does not matter where you put these files, you have to start them manually anyway.
+
 (This way I don't need to create releases all the time.)
 
 ### Do every time you start the game:
 
 1. Open WASD.CT (with Cheat Engine)
-2. In Cheat Engine, open the process Baldur's Gate 3 (Vulkan) and keep the current code list.
+2. In Cheat Engine, open the process Baldur's Gate 3 and keep the current code list.
 3. Check the box "Apply WASD Patch". This takes a few seconds!  
 (Please note that unchecking the box will not disable the mod, but restarting the game will.)
 4. Optionally but recommended:
