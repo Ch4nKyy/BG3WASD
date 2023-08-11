@@ -3,29 +3,27 @@ using namespace DKUtil::Alias;
 
 namespace
 {
-	void Patch1_Commit()
+	void* Search(uintptr_t a_base = 0)
 	{
-		auto* scan = dku::Hook::Assembly::search_pattern<
-			"38 05 ?? ?? ?? ?? 0F 84 7D 10 00 00 48 8B 4E 68 8B 05 ?? ?? ?? ?? 39 81 40 01 00 00 0F 84 67 10 00 00 48 8B 99 B8 00 00 00 48 8B CB">();
-		auto addr = AsAddress(scan);
-
-		if (scan) {
-			static constexpr uint8_t data[0xC] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
-			dku::Hook::WriteImm(addr, data);
-			INFO("patch 1 committed : {:X}", addr)
-		}
+		return dku::Hook::Assembly::search_pattern<"38 05 ?? ?? ?? ?? 0F 84 ?? ?? ?? ?? 48 8B ?? ?? 8B 05 ?? ?? ?? ?? 39 81 ?? ?? ?? ?? 0F 84 ?? ?? ?? ?? 48 8B ?? ?? ?? ?? ?? 48 8B">(a_base);
 	}
 
-	void Patch2_Commit()
+	void Patches_Commit()
 	{
-		auto* scan = dku::Hook::Assembly::search_pattern<
-			"38 05 ?? ?? ?? ?? 0F 84 44 01 00 00 48 8B 4B 68 8B 05 ?? ?? 64 04 39 81 40 01 00 00 0F 84 2E 01 00 00 48 8B B9 B8 00 00 00 48 8B CF E8 ?? E5 95 FF">();
-		auto addr = AsAddress(scan);
+		static constexpr uint8_t data[0xC] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
 
-		if (scan) {
-			static constexpr uint8_t data[0xC] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
-			dku::Hook::WriteImm(addr, data);
-			INFO("patch 2 committed : {:X}", addr)
+		auto firstMatch = Search();
+		auto addr1 = AsAddress(firstMatch);
+
+		auto secondMatch = Search(addr1 + 1);
+		auto addr2 = AsAddress(secondMatch);
+
+		if (addr1 && addr2) {
+			dku::Hook::WriteImm(addr1, data);
+			INFO("patch 1 committed : {:X}", addr1)
+
+			dku::Hook::WriteImm(addr2, data);
+			INFO("patch 2 committed : {:X}", addr2)
 		}
 	}
 }
@@ -44,8 +42,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
 		INFO("game type : {}", dku::Hook::GetProcessName())
 
-		Patch1_Commit();
-		Patch2_Commit();
+		Patches_Commit();
 	}
 
 	return TRUE;
