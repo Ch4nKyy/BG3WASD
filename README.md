@@ -34,11 +34,12 @@ and merge the following in there
     * Install AutoHotKey
     * In-game, bind camera controls to arrow keys
 
-### Do every time there is an update of this mod
+### Do once and every time there is an update of this mod
 
-1. On GitHub, click on Code
-2. Click on Download ZIP
-3. Extract ZIP
+1. On https://github.com/Ch4nKyy/BG3WASD, click ```Code``` and then ```Download ZIP```
+2. Extract ZIP
+
+(This way I don't need to create releases all the time.)
 
 ### Do every time you start the game:
 
