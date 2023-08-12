@@ -53,7 +53,7 @@ and add the following entries.
 
 ### Do once and every time there is an update of this mod
 
-1. Download BG3WASD.dll and place it inside `C:\Program Files (x86)\Steam\steamapps\common\Baldurs
+1. [Download](https://github.com/Ch4nKyy/BG3WASD/releases) BG3WASD.dll and place it inside `C:\Program Files (x86)\Steam\steamapps\common\Baldurs
 Gate 3\bin\NativeMods\`
 2. Optionally but recommended:
    * Download WASD_Toggle.ahk. It does not matter where you put it.
