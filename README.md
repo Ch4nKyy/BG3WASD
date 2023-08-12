@@ -17,9 +17,11 @@ and common (MMO) RPG controls.
 
 ### Do once:
 
-1. Edit  
+1. In the game settings, remove WASD from controlling the camera, then close the game.
+
+2. Edit  
 ```C:\Users\xxx\AppData\Local\Larian Studios\Baldur's Gate 3\PlayerProfiles\Public\inputconfig_p1.json```  
-and add the following entries.  
+with a text editor and add the following entries.  
 ```
 {
    "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
@@ -29,10 +31,7 @@ and add the following entries.
 }
 ```
 
-> If the file does not exist yet, go in-game, change a hotkey and exit the game, then the file will be
-> created for you.
-> 
-> This step will be automated  soon.
+> If you followed step 1, this file must already exist!
 > 
 > Editing json can be a bit fiddly if you are no techie.  
 > Please look to it that the syntax is correct. A few hints:
@@ -42,19 +41,20 @@ and add the following entries.
 >  * There should be no tabs, but only spaces!
 >  * There should be a comma after every entry, except for the last!
 
-2. Install NativeModLoader from
+3. Install NativeModLoader from
 [Achievement Enabler](https://www.nexusmods.com/baldursgate3/mods/668)
    * Only download Part-1-NativeModLoader
    * Put bink2w64.dll and bink2w64_original.dll in
  C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\
-3. Optionally but recommended:
+4. Optionally but recommended:
     * Install [AutoHotKey](https://www.autohotkey.com/)
     * In-game, bind camera controls to arrow keys
 
 ### Do once and every time there is an update of this mod
 
 1. [Download](https://github.com/Ch4nKyy/BG3WASD/releases) BG3WASD.dll and place it inside `C:\Program Files (x86)\Steam\steamapps\common\Baldurs
-Gate 3\bin\NativeMods\`
+Gate 3\bin\NativeMods\`  
+   * If the folder does not exist, create it.
 2. Optionally but recommended:
    * Download WASD_Toggle.ahk. It does not matter where you put it.
 
