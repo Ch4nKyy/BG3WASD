@@ -24,9 +24,12 @@ CAMERA := 0
 CHARACTER := 1
 WASDControls := CHARACTER
 
+GroupAdd, BG3Group, ahk_exe bg3.exe
+GroupAdd, BG3Group, ahk_exe bg3_dx11.exe
+
 Return
 
-#IfWinActive ahk_exe bg3.exe
+#IfWinActive ahk_group BG3Group
 
 $CapsLock::
     Send {Up up}
