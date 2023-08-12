@@ -24,8 +24,8 @@ and common (MMO) RPG controls.
 with a text editor and add the following entries.  
 ```
 {
-   "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
-   "CharacterMoveForward" : [ "c:leftstick_yneg", "key:w" ],
+   "CharacterMoveBackward" : [ "c:leftstick_yneg", "key:s" ],
+   "CharacterMoveForward" : [ "c:leftstick_ypos", "key:w" ],
    "CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
    "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
 }
