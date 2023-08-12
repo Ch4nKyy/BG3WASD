@@ -167,5 +167,5 @@ add_custom_command(
 	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy
 		${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/${PROJECT_NAME}.dll
-		"$ENV{BG3PATH}/bin/NativeMods/"
+		"$ENV{BG3PATH}/bin/NativeMods/${PROJECT_NAME}.dll"
 )
