@@ -45,16 +45,18 @@ Please look to it that the syntax is correct. A few hints:
 2. Install NativeModLoader from
 [Achievement Enabler](https://www.nexusmods.com/baldursgate3/mods/668)
  * Only download Part-1-NativeModLoader
- * Put the dlls in C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\
+ * Put bink2w64.dll and bink2w64_original.dll in
+ C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\
 3. Optionally but recommended:
     * Install [AutoHotKey](https://www.autohotkey.com/)
     * In-game, bind camera controls to arrow keys
 
 ### Do once and every time there is an update of this mod
 
-1. Download the release files
-2. Place BG3WASD.dll inside `C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\NativeMods\`
-3. WASD_Toggle.ahk is optional and it does not matter where you put it.
+1. Download BG3WASD.dll and place it inside `C:\Program Files (x86)\Steam\steamapps\common\Baldurs
+Gate 3\bin\NativeMods\`
+2. Optionally but recommended:
+ * Download WASD_Toggle.ahk. It does not matter where you put it.
 
 ### Do every time you start the game:
 
@@ -87,8 +89,10 @@ it reaches its destination or you press Cancel Action (by default, right click).
 ### The mod worked before, but stopped working!
 
 Game updates can break the mod in multiple ways.  
-The Cheat Engine file (or in the future, the DLL file) might need to be adapted.  
-It is also possible that an update resets your input config json, so please check that again!
+The mod files might need to be adapted.  
+It is also possible that an update resets your input config json, so please check that again!  
+Also, Steam or the Launcher might overwrite the NativeModLoader dll files, so you might need to
+re-download them.
 
 # Building
 
