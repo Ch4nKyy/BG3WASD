@@ -22,6 +22,9 @@ and common (MMO) RPG controls.
 2. Edit  
 ```C:\Users\xxx\AppData\Local\Larian Studios\Baldur's Gate 3\PlayerProfiles\Public\inputconfig_p1.json```  
 with a text editor and add the following entries.  
+(The most mistakes happen in this step. To verify you succeeded, start the game and close
+it and see if the file was reset. If it was reset, then you messed up. See
+[JsonTroubleshooting](#jsontroubleshooting) for help.)
 ```
 {
    "CharacterMoveBackward" : [ "c:leftstick_yneg", "key:s" ],
@@ -30,18 +33,6 @@ with a text editor and add the following entries.
    "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
 }
 ```
-
-> If you followed step 1, this file must already exist!
->
-> If your game resets this file, then you messed up the syntax.
-> 
-> Editing json can be a bit fiddly if you are no techie.  
-> Please look to it that the syntax is correct. A few hints:
->  * There should only be one pair of curly braces! They must be at the beginning and the end of the
->  file.
->  * There should be no weird symbols.
->  * There should be no tabs, but only spaces!
->  * There should be a comma after every entry, except for the last!
 
 3. Install NativeModLoader from
 [Achievement Enabler](https://www.nexusmods.com/baldursgate3/mods/668)
@@ -64,9 +55,40 @@ Gate 3\bin\NativeMods\`
 
 1. Optionally but recommended:
     * Start WASD_Toggle.ahk (with AutoHotKey)
-    * I highly recommend starting the ahk script with admin rights. Available in the rightclick
+    * I highly recommend starting the ahk script with **admin rights**. Available in the rightclick
     menu. Because otherwise it won't work on some machines.
     * You can also automate this step! Just google how to start an AHK script on startup!
+
+## JsonTroubleshooting
+
+If you followed step 1, the file inputconfig_p1.json must exist.
+
+If your game resets this file, then you messed up the syntax.
+
+Editing json can be a bit fiddly if you are no techie.  
+Please look to it that the syntax is correct. A few hints:
+ * There should only be one pair of curly braces! They must be at the beginning and the end of the
+ file.
+ * There should be no weird symbols.
+ * There should be no tabs, but only spaces!
+ * There should be a comma after every entry, except for the last!
+
+In the end, the file should look something like this:
+
+```
+{
+  "CameraBackward" : [ "c:leftstick_ypos", "INVALID:unknown", "key:down" ],
+  "CameraForward" : [ "c:leftstick_yneg", "INVALID:unknown", "key:up" ],
+  "CameraLeft" : [ "c:leftstick_xneg", "INVALID:unknown", "key:left" ],
+  "CameraRight" : [ "c:leftstick_xpos", "INVALID:unknown", "key:right" ],
+  "CameraRotateLeft" : [ "c:rightstick_xpos", "key:e", "key:delete" ],
+  "CameraRotateRight" : [ "c:rightstick_xneg", "key:q", "key:end" ],
+  "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
+  "CharacterMoveForward" : [ "c:leftstick_yneg", "key:w" ],
+  "CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
+  "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
+}
+```
 
 ## Hints
 
