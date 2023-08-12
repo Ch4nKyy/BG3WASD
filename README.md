@@ -32,6 +32,8 @@ with a text editor and add the following entries.
 ```
 
 > If you followed step 1, this file must already exist!
+>
+> If your game resets this file, then you messed up the syntax.
 > 
 > Editing json can be a bit fiddly if you are no techie.  
 > Please look to it that the syntax is correct. A few hints:
