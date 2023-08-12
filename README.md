@@ -2,8 +2,8 @@
 
 A mod for Baldur's Gate 3 that allows direct character movement with WASD keys (or others).
 
-Last updated: BG3 v4.1.1.3635601.  
-Newer versions might work, but sometimes stuff breaks.  
+Last updated for: BG3 Hotfix #3.  
+Newer versions might work out of the box, but sometimes stuff breaks.  
 Works with both Vulkan and DX11.
 
 I highly recommend to also use my AutoHotKey script to toggle between WASD Camera movement
@@ -20,9 +20,6 @@ and common (MMO) RPG controls.
 1. Edit  
 ```C:\Users\xxx\AppData\Local\Larian Studios\Baldur's Gate 3\PlayerProfiles\Public\inputconfig_p1.json```  
 and add the following entries.  
-(If the file does not exist yet, create a text file with this name (Be sure to not hide file
-extensions in the explorer!) OR go in-game, change a hotkey and exit the game, then it will be
-created for you.)
 ```
 {
    "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
@@ -31,27 +28,34 @@ created for you.)
    "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
 }
 ```
-2. Install [Cheat Engine](https://www.cheatengine.org/)
+
+If the file does not exist yet, go in-game, change a hotkey and exit the game, then the file will be
+created for you.
+
+This step will be automated  soon.
+
+Editing json can be a bit fiddly if you are no techie.  
+Please look to it that the syntax is correct. A few hints:
+ * There should only be one pair of curly braces! They must be at the beginning and the end of the
+ file.
+ * There should be no weird symbols.
+ * There should be no tabs, but only spaces!
+ * There should be a comma after every entry, except for the last!
+
+2. Install NativeModLoader from
+[Achievement Enabler](https://www.nexusmods.com/baldursgate3/mods/668)
 3. Optionally but recommended:
     * Install [AutoHotKey](https://www.autohotkey.com/)
     * In-game, bind camera controls to arrow keys
 
 ### Do once and every time there is an update of this mod
 
-1. On https://github.com/Ch4nKyy/BG3WASD, click ```Code``` and then ```Download ZIP```
-2. Extract ZIP
-
-Currently, it does not matter where you put these files, you have to start them manually anyway.
-
-(This way I don't need to create releases all the time.)
+1. Download the mod
+2. Place BG3WASD.dll inside `Baldurs Gate 3\bin\NativeMods\`
 
 ### Do every time you start the game:
 
-1. Open WASD.CT (with Cheat Engine)
-2. In Cheat Engine, open the process Baldur's Gate 3 and keep the current code list.
-3. Check the box "Apply WASD Patch". This takes a few seconds!  
-(Please note that unchecking the box will not disable the mod, but restarting the game will.)
-4. Optionally but recommended:
+1. Optionally but recommended:
     * Start WASD_Toggle.ahk (with AutoHotKey)
 
 ## Hints
@@ -81,3 +85,41 @@ It is also possible that an update resets your input config json, so please chec
 
 If you want to update the mod yourself, see /doc.
 Requires some experience in reverse engineering.
+
+# Building
+
+## Requirements
+
+- [CMake](https://cmake.org/)
+  - Add this to your `PATH`
+- [PowerShell](https://github.com/PowerShell/PowerShell/releases/latest)
+- [Vcpkg](https://github.com/microsoft/vcpkg)
+  - Add the environment variable `VCPKG_ROOT` with the value as the path to the folder containing vcpkg
+- [Visual Studio Community 2022](https://visualstudio.microsoft.com/)
+  - Desktop development with C++
+- [Baldur's Gate 3 Steam Distribution](https://store.steampowered.com/app/1086940/Baldurs_Gate_3/)
+  - Add the environment variable `BG3PATH` with the value as path to game install folder
+  
+## Register Visual Studio as a Generator
+
+- Open `x64 Native Tools Command Prompt`
+- Run `cmake`
+- Close the cmd window
+
+## Building
+
+```
+git clone https://github.com/Ch4nKyy/BG3WASD.git
+cd BG3WASD
+git submodule init
+git submodule update
+.\build-release.ps1
+```
+
+### Solution Generation (Optional)
+If you want to generate a Visual Studio solution, run the following command:
+```
+.\generate-sln.ps1
+```
+
+> ***Note:*** *This will generate a `BG3WASD.sln` file in the **build** directory.*
