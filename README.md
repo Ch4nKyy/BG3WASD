@@ -62,6 +62,8 @@ Gate 3\bin\NativeMods\`
 
 1. Optionally but recommended:
     * Start WASD_Toggle.ahk (with AutoHotKey)
+    * I highly recommend starting the ahk script with admin rights. Available in the rightclick
+    menu. Because otherwise it won't work on some machines.
     * You can also automate this step! Just google how to start an AHK script on startup!
 
 ## Hints
