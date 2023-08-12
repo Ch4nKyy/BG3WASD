@@ -29,23 +29,23 @@ and add the following entries.
 }
 ```
 
-If the file does not exist yet, go in-game, change a hotkey and exit the game, then the file will be
-created for you.
-
-This step will be automated  soon.
-
-Editing json can be a bit fiddly if you are no techie.  
-Please look to it that the syntax is correct. A few hints:
- * There should only be one pair of curly braces! They must be at the beginning and the end of the
- file.
- * There should be no weird symbols.
- * There should be no tabs, but only spaces!
- * There should be a comma after every entry, except for the last!
+> If the file does not exist yet, go in-game, change a hotkey and exit the game, then the file will be
+> created for you.
+> 
+> This step will be automated  soon.
+> 
+> Editing json can be a bit fiddly if you are no techie.  
+> Please look to it that the syntax is correct. A few hints:
+>  * There should only be one pair of curly braces! They must be at the beginning and the end of the
+>  file.
+>  * There should be no weird symbols.
+>  * There should be no tabs, but only spaces!
+>  * There should be a comma after every entry, except for the last!
 
 2. Install NativeModLoader from
 [Achievement Enabler](https://www.nexusmods.com/baldursgate3/mods/668)
- * Only download Part-1-NativeModLoader
- * Put bink2w64.dll and bink2w64_original.dll in
+   * Only download Part-1-NativeModLoader
+   * Put bink2w64.dll and bink2w64_original.dll in
  C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\
 3. Optionally but recommended:
     * Install [AutoHotKey](https://www.autohotkey.com/)
@@ -56,7 +56,7 @@ Please look to it that the syntax is correct. A few hints:
 1. Download BG3WASD.dll and place it inside `C:\Program Files (x86)\Steam\steamapps\common\Baldurs
 Gate 3\bin\NativeMods\`
 2. Optionally but recommended:
- * Download WASD_Toggle.ahk. It does not matter where you put it.
+   * Download WASD_Toggle.ahk. It does not matter where you put it.
 
 ### Do every time you start the game:
 
@@ -95,6 +95,9 @@ Also, Steam or the Launcher might overwrite the NativeModLoader dll files, so yo
 re-download them.
 
 # Building
+
+This section is only needed by developers.  
+If you just want to use the mod, see the section above.
 
 ## Requirements
 
