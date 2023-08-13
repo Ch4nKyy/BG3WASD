@@ -29,8 +29,9 @@ place it inside
 Gate 3\bin\NativeMods\`  
    * If the NativeMods folder does not exist, create it.
 
-1. From [this mod](https://github.com/Ch4nKyy/BG3WASD/releases), download Part-1-NativeModLoader,
-extract the zip file and place both bink2w64.dll and bink2w64_original.dll in  
+1. From [this mod](https://www.nexusmods.com/baldursgate3/mods/668?tab=files), download
+Part-1-NativeModLoader, extract the zip file and place both bink2w64.dll and bink2w64_original.dll
+in  
 `C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\`
    * When Windows prompts whether you want to overwrite the existing files, say yes.
 
