@@ -65,10 +65,9 @@ it reaches its destination or you press Cancel Action (by default, right click).
 ### The mod worked before, but stopped working!
 
 Game updates can break the mod in multiple ways.  
-The mod files might need to be adapted.  
-It is also possible that an update resets your input config json, so please check that again!  
-Also, Steam or the Launcher might overwrite the NativeModLoader dll files, so you might need to
-re-download them.
+The mod might need an update.  
+It is also possible that a game update or file verification resets your inputconfig and overwrites
+your modded files! Then you need to copy them again.
 
 ## Editing the inputconfig
 
