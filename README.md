@@ -15,80 +15,30 @@ and common (MMO) RPG controls.
 
 ## How to use
 
-### Do once:
+1. From [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download inputconfig_p1.json and
+place it inside  
+`C:\Users\xxx\AppData\Local\Larian Studios\Baldur's Gate 3\PlayerProfiles\Public\`
+   * Warning: This overwrites any custom hotkeys you set. If you want instructions that preserve
+   your hotkeys, but are a bit more complicated, see
+   [Editing the inputconfig](#editing-the-inputconfig).
+   * This config will put WASD on character movement and Arrow Keys on camera movement
+   * If your keyboard is not QWERTY or QWERTZ, you might have to edit this file.
 
-1. In the game settings, remove WASD from controlling the camera, then close the game.
-
-2. Edit  
-```C:\Users\xxx\AppData\Local\Larian Studios\Baldur's Gate 3\PlayerProfiles\Public\inputconfig_p1.json```  
-with a text editor and add the following entries.  
-(The most mistakes happen in this step. To verify you succeeded, start the game and close
-it and see if the file was reset. If it was reset, then you messed up. See
-[JsonTroubleshooting](#jsontroubleshooting) for help.)
-```
-{
-   "CharacterMoveBackward" : [ "c:leftstick_yneg", "key:s" ],
-   "CharacterMoveForward" : [ "c:leftstick_ypos", "key:w" ],
-   "CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
-   "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
-}
-```
-
-3. Install NativeModLoader from
-[Achievement Enabler](https://www.nexusmods.com/baldursgate3/mods/668)
-   * Only download Part-1-NativeModLoader
-   * Put bink2w64.dll and bink2w64_original.dll in
- C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\
-4. Optionally but recommended:
-    * Install [AutoHotKey](https://www.autohotkey.com/)
-    * In-game, bind camera controls to arrow keys
-
-### Do once and every time there is an update of this mod
-
-1. [Download](https://github.com/Ch4nKyy/BG3WASD/releases) BG3WASD.dll and place it inside `C:\Program Files (x86)\Steam\steamapps\common\Baldurs
+1. From [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download BG3WASD.dll and place it inside  
+`C:\Program Files (x86)\Steam\steamapps\common\Baldurs
 Gate 3\bin\NativeMods\`  
-   * If the folder does not exist, create it.
-2. Optionally but recommended:
-   * Download WASD_Toggle.ahk. It does not matter where you put it.
+   * If the NativeMods folder does not exist, create it.
 
-### Do every time you start the game:
+1. From [this mod](https://github.com/Ch4nKyy/BG3WASD/releases), download Part-1-NativeModLoader,
+extract the zip file and place both bink2w64.dll and bink2w64_original.dll in  
+`C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\`
 
 1. Optionally but recommended:
-    * Start WASD_Toggle.ahk (with AutoHotKey)
-    * I highly recommend starting the ahk script with **admin rights**. Available in the rightclick
-    menu. Because otherwise it won't work on some machines.
-    * You can also automate this step! Just google how to start an AHK script on startup!
-
-## JsonTroubleshooting
-
-If you followed step 1, the file inputconfig_p1.json must exist.
-
-If your game resets this file, then you messed up the syntax.
-
-Editing json can be a bit fiddly if you are no techie.  
-Please look to it that the syntax is correct. A few hints:
- * There should only be one pair of curly braces! They must be at the beginning and the end of the
- file.
- * There should be no weird symbols.
- * There should be no tabs, but only spaces!
- * There should be a comma after every entry, except for the last!
-
-In the end, the file should look something like this:
-
-```
-{
-  "CameraBackward" : [ "c:leftstick_ypos", "INVALID:unknown", "key:down" ],
-  "CameraForward" : [ "c:leftstick_yneg", "INVALID:unknown", "key:up" ],
-  "CameraLeft" : [ "c:leftstick_xneg", "INVALID:unknown", "key:left" ],
-  "CameraRight" : [ "c:leftstick_xpos", "INVALID:unknown", "key:right" ],
-  "CameraRotateLeft" : [ "c:rightstick_xpos", "key:e", "key:delete" ],
-  "CameraRotateRight" : [ "c:rightstick_xneg", "key:q", "key:end" ],
-  "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
-  "CharacterMoveForward" : [ "c:leftstick_yneg", "key:w" ],
-  "CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
-  "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
-}
-```
+    * Install [AutoHotKey](https://www.autohotkey.com/)
+    * From [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download WASD_Toggle.ahk. It does not matter where you put it.
+    * In-game, bind camera controls to only arrow keys, not WASD!
+    * Every time you play the game, run WASD_Toggle.ahk as administrator by right clicking it. You
+    see if it is running in the tray menu, bottom right.
 
 ## Hints
 
@@ -119,6 +69,47 @@ The mod files might need to be adapted.
 It is also possible that an update resets your input config json, so please check that again!  
 Also, Steam or the Launcher might overwrite the NativeModLoader dll files, so you might need to
 re-download them.
+
+## Editing the inputconfig
+
+If you don't want to overwrite the whole inputconfig_p1.json file, you need to manually open it with
+a text editor and add the following:
+
+```
+"CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
+"CharacterMoveForward" : [ "c:leftstick_yneg", "key:w" ],
+"CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
+"CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
+```
+
+Also, you should unbind WASD from the Camera controls, otherwise the hotkeys will conflict and the
+movement will be buggy.
+
+But be careful, json syntax is very delicate.
+ * There must only be one pair of curly braces! They must be at the beginning and the end of the
+ file.
+ * There should be a comma after every entry, except for the last!
+ * There should be no weird symbols.
+
+If inputconfig_p1.json does not exist yet, then you never modified the hotkeys and you can just copy
+paste the provided file.
+
+If your game resets this file after you edited it, then you messed up the syntax.
+
+In the end, the file should look something like this:
+
+```
+{
+  "CameraBackward" : [ "c:leftstick_ypos", "INVALID:unknown", "key:down" ],
+  "CameraForward" : [ "c:leftstick_yneg", "INVALID:unknown", "key:up" ],
+  "CameraLeft" : [ "c:leftstick_xneg", "INVALID:unknown", "key:left" ],
+  "CameraRight" : [ "c:leftstick_xpos", "INVALID:unknown", "key:right" ],
+  "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
+  "CharacterMoveForward" : [ "c:leftstick_yneg", "key:w" ],
+  "CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
+  "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
+}
+```
 
 # Building
 
