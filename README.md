@@ -104,8 +104,8 @@ In the end, the file should look something like this:
   "CameraForward" : [ "c:leftstick_yneg", "INVALID:unknown", "key:up" ],
   "CameraLeft" : [ "c:leftstick_xneg", "INVALID:unknown", "key:left" ],
   "CameraRight" : [ "c:leftstick_xpos", "INVALID:unknown", "key:right" ],
-  "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
-  "CharacterMoveForward" : [ "c:leftstick_yneg", "key:w" ],
+  "CharacterMoveBackward" : [ "c:leftstick_yneg", "key:s" ],
+  "CharacterMoveForward" : [ "c:leftstick_ypos", "key:w" ],
   "CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
   "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
 }
