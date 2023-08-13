@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"Enable Movespeed Divisor"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{ Game   : Baldur's Gate 3 (1920x1080) - (DX11) - (6 + 6 WT)
+  Version:
+  Date   : 2023-08-13
+  Author : ch4nk
+
+  This script does blah blah blah
+}
+
+define(address,"bg3_dx11.exe"+F804AC)
+define(bytes,F3 44 0F 5C 40 04)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"bg3_dx11.exe"+F804AC)
+
+alloc(aobtarget, 8)
+alloc(speed_divisor, 8)
+
+label(code)
+label(return)
+
+registersymbol(aobtarget)
+registersymbol(speed_divisor)
+
+aobtarget:
+  dq (float)1234567890.12345
+
+speed_divisor:
+  dq (float)1.0
+
+newmem:
+
+code:
+  subss xmm8,[rax+04]
+  movss xmm9, dword ptr [aobtarget]
+  movss xmm9, dword ptr [speed_divisor]
+  divss xmm7, xmm9
+  divss xmm8, xmm9
+  jmp return
+
+address:
+  jmp newmem
+  nop
+return:
+
+[DISABLE]
+
+address:
+  db bytes
+  // subss xmm8,[rax+04]
+
+dealloc(newmem)
+
+unregistersymbol(speed_divisor)
+dealloc(speed_divisor)
+unregistersymbol(aobtarget)
+dealloc(aobtarget)
+
+{
+// ORIGINAL CODE - INJECTION POINT: bg3_dx11.exe+F804AC
+
+bg3_dx11.exe+F80477: 44 0F B6 CB              - movzx r9d,bl
+bg3_dx11.exe+F8047B: 4C 8D 44 24 70           - lea r8,[rsp+70]
+bg3_dx11.exe+F80480: 48 8D 54 24 20           - lea rdx,[rsp+20]
+bg3_dx11.exe+F80485: 48 8B CF                 - mov rcx,rdi
+bg3_dx11.exe+F80488: F3 0F 5C FE              - subss xmm7,xmm6
+bg3_dx11.exe+F8048C: F3 44 0F 10 40 04        - movss xmm8,[rax+04]
+bg3_dx11.exe+F80492: C7 44 24 70 8F 00 00 00  - mov [rsp+70],0000008F
+bg3_dx11.exe+F8049A: E8 F1 93 84 02           - call bg3_dx11.exe+37C9890
+bg3_dx11.exe+F8049F: 48 8B BC 24 80 00 00 00  - mov rdi,[rsp+00000080]
+bg3_dx11.exe+F804A7: 48 8B 5C 24 78           - mov rbx,[rsp+78]
+// ---------- INJECTING HERE ----------
+bg3_dx11.exe+F804AC: F3 44 0F 5C 40 04        - subss xmm8,[rax+04]
+// ---------- DONE INJECTING  ----------
+bg3_dx11.exe+F804B2: 41 0F 28 C0              - movaps xmm0,xmm8
+bg3_dx11.exe+F804B6: 0F 28 C8                 - movaps xmm1,xmm0
+bg3_dx11.exe+F804B9: 0F 28 F0                 - movaps xmm6,xmm0
+bg3_dx11.exe+F804BC: F3 0F 59 C8              - mulss xmm1,xmm0
+bg3_dx11.exe+F804C0: 0F 28 C7                 - movaps xmm0,xmm7
+bg3_dx11.exe+F804C3: F3 0F 59 C7              - mulss xmm0,xmm7
+bg3_dx11.exe+F804C7: F3 0F 11 3E              - movss [rsi],xmm7
+bg3_dx11.exe+F804CB: F3 44 0F 11 46 04        - movss [rsi+04],xmm8
+bg3_dx11.exe+F804D1: 44 0F 28 44 24 30        - movaps xmm8,[rsp+30]
+bg3_dx11.exe+F804D7: F3 0F 58 C8              - addss xmm1,xmm0
+}
+
+
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
