@@ -36,7 +36,7 @@ in
    * When Windows prompts whether you want to overwrite the existing files, say yes.
 
 1. Optionally but recommended:
-    * Install [AutoHotKey](https://www.autohotkey.com/)
+    * Install [AutoHotKey v1.1](https://www.autohotkey.com/) (I think v2.0 will not work.)
     * From [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download WASD_Toggle.ahk. It does not matter where you put it.
     * In-game, bind camera controls to only arrow keys, not WASD!
     * Every time you play the game, run WASD_Toggle.ahk as administrator by right clicking it. You
