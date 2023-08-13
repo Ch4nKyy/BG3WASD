@@ -73,13 +73,13 @@ re-download them.
 ## Editing the inputconfig
 
 If you don't want to overwrite the whole inputconfig_p1.json file, you need to manually open it with
-a text editor and add the following:
+a text editor and add the following content at the top, but after the `{` :
 
 ```
 "CharacterMoveBackward" : [ "c:leftstick_ypos", "key:s" ],
 "CharacterMoveForward" : [ "c:leftstick_yneg", "key:w" ],
 "CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
-"CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
+"CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ],
 ```
 
 Also, you should unbind WASD from the Camera controls, otherwise the hotkeys will conflict and the
@@ -94,20 +94,20 @@ But be careful, json syntax is very delicate.
 If inputconfig_p1.json does not exist yet, then you never modified the hotkeys and you can just copy
 paste the provided file.
 
-If your game resets this file after you edited it, then you messed up the syntax.
+If your game resets the hotkeys or this file, after you edited it, then you messed up the syntax.
 
 In the end, the file should look something like this:
 
 ```
 {
-  "CameraBackward" : [ "c:leftstick_ypos", "INVALID:unknown", "key:down" ],
-  "CameraForward" : [ "c:leftstick_yneg", "INVALID:unknown", "key:up" ],
-  "CameraLeft" : [ "c:leftstick_xneg", "INVALID:unknown", "key:left" ],
-  "CameraRight" : [ "c:leftstick_xpos", "INVALID:unknown", "key:right" ],
   "CharacterMoveBackward" : [ "c:leftstick_yneg", "key:s" ],
   "CharacterMoveForward" : [ "c:leftstick_ypos", "key:w" ],
   "CharacterMoveLeft" : [ "c:leftstick_xneg", "key:a" ],
-  "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ]
+  "CharacterMoveRight" : [ "c:leftstick_xpos", "key:d" ],
+  "CameraBackward" : [ "c:leftstick_ypos", "INVALID:unknown", "key:down" ],
+  "CameraForward" : [ "c:leftstick_yneg", "INVALID:unknown", "key:up" ],
+  "CameraLeft" : [ "c:leftstick_xneg", "INVALID:unknown", "key:left" ],
+  "CameraRight" : [ "c:leftstick_xpos", "INVALID:unknown", "key:right" ]
 }
 ```
 
