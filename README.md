@@ -32,6 +32,7 @@ Gate 3\bin\NativeMods\`
 1. From [this mod](https://github.com/Ch4nKyy/BG3WASD/releases), download Part-1-NativeModLoader,
 extract the zip file and place both bink2w64.dll and bink2w64_original.dll in  
 `C:\Program Files (x86)\Steam\steamapps\common\Baldurs Gate 3\bin\`
+   * When Windows prompts whether you want to overwrite the existing files, say yes.
 
 1. Optionally but recommended:
     * Install [AutoHotKey](https://www.autohotkey.com/)
