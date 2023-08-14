@@ -15,7 +15,10 @@ and common (MMO) RPG controls.
 
 ## How to use
 
-1. From [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download inputconfig_p1.json and
+Foreword: Downloads from Nexusmods are appreciated, so we can get better visibility on the site :)
+
+1. From [Nexusmods](https://www.nexusmods.com/baldursgate3/mods/781?tab=files) or
+[Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download inputconfig_p1.json and
 place it inside  
 `C:\Users\xxx\AppData\Local\Larian Studios\Baldur's Gate 3\PlayerProfiles\Public\`
    * Warning: This overwrites any custom hotkeys you set. If you want instructions that preserve
@@ -24,7 +27,8 @@ place it inside
    * This config will put WASD on character movement and Arrow Keys on camera movement
    * If your keyboard is not QWERTY or QWERTZ, you might have to edit this file.
 
-1. From [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download BG3WASD.dll and place it inside  
+1. From [Nexusmods](https://www.nexusmods.com/baldursgate3/mods/781?tab=files) or
+[Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download BG3WASD.dll and place it inside  
 `C:\Program Files (x86)\Steam\steamapps\common\Baldurs
 Gate 3\bin\NativeMods\`  
    * If the NativeMods folder does not exist, create it.
@@ -37,7 +41,7 @@ in
 
 1. Optionally but recommended:
     * Install [AutoHotKey v1.1](https://www.autohotkey.com/) (I think v2.0 will not work.)
-    * From [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download WASD_Toggle.ahk. It does not matter where you put it.
+    * From [Nexusmods](https://www.nexusmods.com/baldursgate3/mods/781?tab=files) or [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download WASD_Toggle.ahk. It does not matter where you put it.
     * In-game, bind camera controls to only arrow keys, not WASD!
     * Every time you play the game, run WASD_Toggle.ahk as administrator by right clicking it. You
     see if it is running in the tray menu, bottom right.
