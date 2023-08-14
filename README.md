@@ -45,6 +45,7 @@ in
     * In-game, bind camera controls to only arrow keys, not WASD!
     * Every time you play the game, run WASD_Toggle.ahk as administrator by right clicking it. You
     see if it is running in the tray menu, bottom right.
+    * If you have an AZERTY keyboard, download and run WASD_Toggle_AZERTY.ahk instead!
 
 ## Hints
 
