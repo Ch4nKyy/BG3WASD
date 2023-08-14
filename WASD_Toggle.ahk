@@ -36,10 +36,10 @@ $CapsLock::
     Send {Left up}
     Send {Down up}
     Send {Right up}
-    Send {W up}
-    Send {A up}
-    Send {S up}
-    Send {D up}
+    Send {w up}
+    Send {a up}
+    Send {s up}
+    Send {d up}
     if (WASDControls = CHARACTER)
     {
 	    WASDControls := CAMERA
