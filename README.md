@@ -25,7 +25,6 @@ place it inside
    your hotkeys, but are a bit more complicated, see
    [Editing the inputconfig](#editing-the-inputconfig).
    * This config will put WASD on character movement and Arrow Keys on camera movement
-   * If your keyboard is not QWERTY or QWERTZ, you might have to edit this file.
 
 1. From [Nexusmods](https://www.nexusmods.com/baldursgate3/mods/781?tab=files) or
 [Releases](https://github.com/Ch4nKyy/BG3WASD/releases), download BG3WASD.dll and place it inside  
