@@ -151,7 +151,7 @@ endif()
 target_precompile_headers(
 	${PROJECT_NAME}
 	PRIVATE
-		src/PCH.h
+		src/PCH.hpp
 )
 
 set_property(
