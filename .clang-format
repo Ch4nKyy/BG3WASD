@@ -21,6 +21,7 @@ AllowShortLoopsOnASingleLine: 'true'
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: 'true'
 AlwaysBreakTemplateDeclarations: 'Yes'
+BasedOnStyle: LLVM
 BinPackArguments: 'true'
 BinPackParameters: 'true'
 BitFieldColonSpacing: After
@@ -43,12 +44,12 @@ BraceWrapping:
     SplitEmptyRecord: 'false'
     SplitEmptyNamespace: 'false'
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Custom
+BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: 'false'
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
 BreakStringLiterals: 'true'
-ColumnLimit: 0
+ColumnLimit: 100
 CompactNamespaces: 'false'
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 ConstructorInitializerIndentWidth: 4
@@ -96,6 +97,6 @@ SpacesInSquareBrackets: 'false'
 Standard: Latest
 TabWidth: 4
 UseCRLF: 'true'
-UseTab: AlignWithSpaces
+UseTab: Never
 
 ...
