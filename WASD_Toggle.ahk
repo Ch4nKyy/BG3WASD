@@ -30,23 +30,67 @@ GroupAdd, BG3Group, ahk_exe bg3_dx11.exe
 Return
 
 #IfWinActive ahk_group BG3Group
-
 $CapsLock::
-    Send {Up up}
-    Send {Left up}
-    Send {Down up}
-    Send {Right up}
-    Send {w up}
-    Send {a up}
-    Send {s up}
-    Send {d up}
-    if (WASDControls = CHARACTER)
-    {
-	    WASDControls := CAMERA
-	}
-    else
-    {
+    if (WASDControls = CHARACTER) {
+        if (GetKeyState("W", "P")) {
+            Send {w up}
+        }
+        if (GetKeyState("A", "P")) {
+            Send {a up}
+        }
+        if (GetKeyState("S", "P")) {
+            Send {s up}
+        }
+        if (GetKeyState("D", "P")) {
+            Send {d up}
+        }
+    } else {
+        if (GetKeyState("W", "P")) {
+            Send {Up up}
+        }
+        if (GetKeyState("A", "P")) {
+            Send {Left up}
+        }
+        if (GetKeyState("S", "P")) {
+            Send {Down up}
+        }
+        if (GetKeyState("D", "P")) {
+            Send {Right up}
+        }
+    }
+    
+    if (WASDControls = CHARACTER) {
+        WASDControls := CAMERA
+    } else {
         WASDControls := CHARACTER
+    }
+
+    if (WASDControls = CHARACTER) {
+        if (GetKeyState("W", "P")) {
+            Send {w down}
+        }
+        if (GetKeyState("A", "P")) {
+            Send {a down}
+        }
+        if (GetKeyState("S", "P")) {
+            Send {s down}
+        }
+        if (GetKeyState("D", "P")) {
+            Send {d down}
+        }
+    } else {
+        if (GetKeyState("W", "P")) {
+            Send {Up down}
+        }
+        if (GetKeyState("A", "P")) {
+            Send {Left down}
+        }
+        if (GetKeyState("S", "P")) {
+            Send {Down down}
+        }
+        if (GetKeyState("D", "P")) {
+            Send {Right down}
+        }
     }
     return
 
