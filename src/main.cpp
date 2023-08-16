@@ -3,27 +3,17 @@ using namespace DKUtil::Alias;
 
 namespace
 {
-	void* Search(uintptr_t a_base = 0)
-	{
-		return dku::Hook::Assembly::search_pattern<"38 05 ?? ?? ?? ?? 0F 84 ?? ?? ?? ?? 48 8B ?? ?? 8B 05 ?? ?? ?? ?? 39 81 ?? ?? ?? ?? 0F 84 ?? ?? ?? ?? 48 8B ?? ?? ?? ?? ?? 48 8B">(a_base);
-	}
-
 	void Patches_Commit()
 	{
-		static constexpr uint8_t data[0xC] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+		static constexpr uint8_t data[0x6] = { 0x31, 0xC0, 0xFF, 0xC0, 0x90, 0x90 };
 
-		auto firstMatch = Search();
-		auto addr1 = AsAddress(firstMatch);
+		auto match1 = dku::Hook::Assembly::search_pattern<
+			"38 ?? ?? ?? ?? ?? 0F ?? ?? ?? ?? ?? 32 C0 48 8B ?? ?? ?? 48 8B ?? ?? ?? 0F ?? ?? ?? ?? 48 ?? ?? ?? 5F C3">();
+		auto addr1 = AsAddress(match1);
 
-		auto secondMatch = Search(addr1 + 1);
-		auto addr2 = AsAddress(secondMatch);
-
-		if (addr1 && addr2) {
+		if (addr1) {
 			dku::Hook::WriteImm(addr1, data);
-			INFO("patch 1 committed : {:X}", addr1)
-
-			dku::Hook::WriteImm(addr2, data);
-			INFO("patch 2 committed : {:X}", addr2)
+			INFO("WASD unlocked : {:X}", addr1);
 		}
 	}
 }
