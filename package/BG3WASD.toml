@@ -1,0 +1,85 @@
+# Default config that is packaged with the mod
+
+# Foreword: Key names are in Larian style, e.g. key:w, shift+key:w, key:lshift or mouse:middle.
+# For the names of all available keys, see the bottom of this config file.
+
+# These hotkeys are automatically patched to the inputconfig_p1.json.
+# E.g. Forward is bound to CharacterMoveForward and CameraForward.
+# To deactivate this feature, leave them empty: '' or ' '
+[GameHotkeys]
+Backward = 'key:s'
+Forward = 'key:w'
+Left = 'key:a'
+Right = 'key:d'
+
+# If a game update breaks the mod so that WASD is still successfully unlocked, but the Toggle
+# feature is not, then these hotkeys are automatically patched to the inputconfig_p1.json.
+# This is done so that you can still move both the character and the camera and avoid conflicts.
+# To deactivate this feature, leave them empty: '' or ' '
+[FallbackHotkeys]
+CameraBackward = 'key:down'
+CameraForward = 'key:up'
+CameraLeft = 'key:left'
+CameraRight = 'key:right'
+
+[ModHotkeys]
+# When you are sprinting, holding this key will make you walk.
+# If you are walking, holding this key will make you run.
+HoldWalkOrSprint = ''
+# This will reload all config values.
+# However, for GameHotkeys and FallbackHotkeys to reload, you have to restart the game.
+ReloadConfig = 'key:f11'
+# Lets you move without holding Forward.
+ToggleAutorun = 'shift+key:w'
+# Key that toggles between character and camera input, when they are bound to the same keys.
+ToggleCharacterOrCamera = 'key:capslock'
+# Toggle between walking and sprinting movespeed
+ToggleWalkOrSprint = 'key:insert'
+
+[Movement]
+# 1.0 would be sprinting speed. 0.5 would be 50% of that. [0.0, 1.0]
+WalkSpeed = 0.3
+# Whether the character walks, when the game starts up. [true, false]
+WalkingIsDefault = false
+
+# List of all available keys:
+# (We try to match Larian's style, but for regional keys, they might not always match.)
+
+# mouse:left            mouse:right             mouse:cancel            mouse:middle
+# mouse:x1              mouse:x2
+
+# key:a                 key:b                   ...                     key:z
+# key:1                 key:2                   ...                     key:0
+# key:f1                key:f2                  ...                     key:f24
+
+# key:left              key:up                  key:right               key:down
+# key:backspace         key:tab                 key:return              key:capslock
+# key:insert            key:delete              key:space               key:end
+# key:home              key:print               key:scroll              key:escape
+# key:pause             key:numlock
+
+# alt                   key:lalt                key:ralt
+# shift                 key:lshift              key:rshift
+# ctrl                  key:lctrl               key:rctrl
+# key:lwin              key:rwin                
+
+# key:;                 key:=                   key:,                   key:'
+# key:-                 key:.                   key:/                   key:`
+# key:[                 key:\                   key:]
+
+# key:numpad0           key:numpad1             ...                     key:numpad9
+# key:multiply          key:add                 key:decimal             key:divide
+# key:separator         key:subtract            
+
+# key:convert           key:nonconvert          key:accept              key:modechange
+# key:prior             key:next                key:clear               key:select
+# key:execute           key:help                key:sleep               key:snapshot 
+# key:browser_back      key:browser_forward     key:browser_refresh     key:browser_stop
+# key:browser_search    key:browser_favorites   key:browser_home        key:volume_mute
+# key:volume_down       key:volume_up           key:media_next_track    key:media_prev_track
+# key:media_stop        key:media_play_pause    key:launch_mail         key:launch_app1
+# key:oem_8             key:oem_102             key:processkey          key:packet
+# key:attn              key:crsel               key:exsel               key:ereof
+# key:play              key:zoom                key:noname              key:pa1
+# key:oem_clear         key:launch_app2         key:kana                key:kanji
+# key:junja             key:final               key:apps

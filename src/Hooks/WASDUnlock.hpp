@@ -3,7 +3,7 @@
 class WASDUnlock
 {
 public:
-    static void Enable();
+    static bool Enable();
 
 private:
     static void* Search(uintptr_t a_base);
