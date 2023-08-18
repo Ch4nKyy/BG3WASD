@@ -27,7 +27,7 @@ CameraRight = 'key:right'
 # If you are walking, holding this key will make you run.
 HoldWalkOrSprint = ''
 # This will reload all config values.
-# However, for GameHotkeys and FallbackHotkeys to reload, you have to restart the game.
+# If possible, it will also force the game to reload the inputconfig.
 ReloadConfig = 'key:f11'
 # Lets you move without holding Forward.
 ToggleAutorun = 'shift+key:w'

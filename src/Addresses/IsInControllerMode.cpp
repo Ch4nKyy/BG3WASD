@@ -8,13 +8,13 @@ bool IsInControllerMode::Prepare()
 
     if (!address)
     {
-        WARN("IsInControllerMode not found");
+        WARN("IsInControllerMode not found. Controller camera input will be broken.");
         return false;
     }
 
     int32_t offset = *reinterpret_cast<int32_t*>(address + 2);
     is_in_controller_mode = reinterpret_cast<bool*>(address + 7 + offset);
-    INFO("Hooked IsInControllerMode {:X}", AsAddress(is_in_controller_mode))
+    INFO("IsInControllerMode found {:X}", AsAddress(is_in_controller_mode))
     return true;
 }
 

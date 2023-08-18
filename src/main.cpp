@@ -1,5 +1,10 @@
 #include "Addresses/IsInControllerMode.hpp"
+#include "Addresses/LoadInputConfig.hpp"
 #include "Hooks/CharacterMoveInputVectorHook.hpp"
+#include "Hooks/CombatEndHook.hpp"
+#include "Hooks/CombatStartHook.hpp"
+#include "Hooks/FTBEndHook.hpp"
+#include "Hooks/FTBStartHook.hpp"
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/KeyboardHook.hpp"
 #include "Hooks/WASDUnlock.hpp"
@@ -43,6 +48,26 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             }
 
             IsInControllerMode::Prepare();
+            LoadInputConfig::Prepare();
+
+            if (FTBStartHook::Prepare() && FTBEndHook::Prepare())
+            {
+                FTBStartHook::Enable();
+                FTBEndHook::Enable();
+            }
+            else
+            {
+                WARN("Auto toggling WASD for FTB start/end disabled.");
+            }
+            if (CombatStartHook::Prepare() && CombatEndHook::Prepare())
+            {
+                CombatStartHook::Enable();
+                CombatEndHook::Enable();
+            }
+            else
+            {
+                WARN("Auto toggling WASD for combat start/end disabled.");
+            }
         }
         else
         {

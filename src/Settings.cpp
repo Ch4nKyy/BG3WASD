@@ -1,4 +1,6 @@
+
 #include "Settings.hpp"
+#include "Addresses/LoadInputConfig.hpp"
 #include "InputconfigPatcher.hpp"
 #include "VirtualKeyMap.hpp"
 
@@ -43,12 +45,24 @@ void Settings::Load() noexcept
     {
         loaded_once = true;
         INFO("Config loaded successfully."sv)
-        // During mod init, the InputconfigPatcher is called from the main function, not here!
+        // During mod init, the InputconfigPatcher is called from the main function, not here,
+        // because it might need to react to failed hooks.
+        // LoadInputConfig will be called by the game.
     }
     else
     {
         InputconfigPatcher::Patch();
         INFO("Config reloaded successfully."sv)
+
+        if (LoadInputConfig::IsValid())
+        {
+            LoadInputConfig::Call(0, 0);
+            INFO("Inputconfig reloaded successfully."sv)
+        }
+        else
+        {
+            WARN("Inputconfig could not be reloaded."sv)
+        }
     }
 }
 
