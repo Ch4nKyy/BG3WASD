@@ -8,7 +8,7 @@ bool KeyboardHook::Enable(HMODULE a_hModule)
     HHOOK hHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, a_hModule, 0);
     if (!hHook)
     {
-        WARN("KeyboardHook failed!");
+        WARN("KeyboardHook not found!");
         return false;
     }
     INFO("KeyboardHook succeeded.");

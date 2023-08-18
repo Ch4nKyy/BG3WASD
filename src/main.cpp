@@ -33,8 +33,10 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
         if (WASDUnlock::Enable())
         {
-            if (GetCameraObjectHook::Prepare() && CharacterMoveInputVectorHook::Prepare() &&
-                KeyboardHook::Enable(a_hModule))
+            bool get_camera_object_hook = GetCameraObjectHook::Prepare();
+            bool character_movement_input_vector_hook = CharacterMoveInputVectorHook::Prepare();
+            bool keyboard_hook = KeyboardHook::Enable(a_hModule);
+            if (get_camera_object_hook && character_movement_input_vector_hook && keyboard_hook)
             {
                 GetCameraObjectHook::Enable();
                 CharacterMoveInputVectorHook::Enable();
@@ -50,7 +52,9 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             IsInControllerMode::Prepare();
             LoadInputConfig::Prepare();
 
-            if (FTBStartHook::Prepare() && FTBEndHook::Prepare())
+            bool ftb_start_hook = FTBStartHook::Prepare();
+            bool ftb_end_hook = FTBEndHook::Prepare();
+            if (ftb_start_hook && ftb_end_hook)
             {
                 FTBStartHook::Enable();
                 FTBEndHook::Enable();
@@ -59,7 +63,10 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             {
                 WARN("Auto toggling WASD for FTB start/end disabled.");
             }
-            if (CombatStartHook::Prepare() && CombatEndHook::Prepare())
+
+            bool combat_start_hook = CombatStartHook::Prepare();
+            bool combat_end_hook = CombatEndHook::Prepare();
+            if (combat_start_hook && combat_end_hook)
             {
                 CombatStartHook::Enable();
                 CombatEndHook::Enable();

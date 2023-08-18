@@ -3,9 +3,9 @@
 
 bool FTBEndHook::Prepare()
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(
-        dku::Hook::Assembly::search_pattern<"8D ?? ?? ?? ?? ?? 48 ?? ?? ?? ?? 48 ?? ?? E8 ?? ?? ?? "
-                                            "?? 4C 8B CD 4C ?? ?? ?? ?? 48 ?? ?? 48 ?? ?? E8">()) };
+    std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
+        "8D ?? ?? ?? ?? ?? 48 ?? ?? ?? 48 ?? ?? E8 ?? ?? ?? ?? 4D ?? ?? 4C ?? ?? ?? 48 ?? ?? 48 ?? "
+        "?? E8 ?? ?? ?? ?? 49 ?? ?? E8">()) };
     addresses = address_array;
 
     all_found = true;
@@ -31,8 +31,8 @@ void FTBEndHook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        OriginalFunc = dku::Hook::write_call<5>(address + 14, OverrideFunc);
-        INFO("Hooked FTBEndHook #{}: {:X}", i, AsAddress(address + 14));
+        OriginalFunc = dku::Hook::write_call<5>(address + 13, OverrideFunc);
+        INFO("Hooked FTBEndHook #{}: {:X}", i, AsAddress(address + 13));
         ++i;
     }
 }

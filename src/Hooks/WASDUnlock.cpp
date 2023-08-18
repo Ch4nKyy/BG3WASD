@@ -20,7 +20,7 @@ bool WASDUnlock::Enable()
 
     if (not(addr1 && addr2))
     {
-        FATAL("Could not unlock WASD! Mod is disabled!");
+        FATAL("WASD unlock not found! Mod is disabled!");
         return false;
     }
 
