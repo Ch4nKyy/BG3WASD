@@ -1,39 +1,87 @@
-
-using namespace DKUtil::Alias;
-
-namespace
-{
-	void Patches_Commit()
-	{
-		static constexpr uint8_t data[0x6] = { 0x31, 0xC0, 0xFF, 0xC0, 0x90, 0x90 };
-
-		auto match1 = dku::Hook::Assembly::search_pattern<
-			"38 ?? ?? ?? ?? ?? 0F ?? ?? ?? ?? ?? 32 C0 48 8B ?? ?? ?? 48 8B ?? ?? ?? 0F ?? ?? ?? ?? 48 ?? ?? ?? 5F C3">();
-		auto addr1 = AsAddress(match1);
-
-		if (addr1) {
-			dku::Hook::WriteImm(addr1, data);
-			INFO("WASD unlocked : {:X}", addr1);
-		}
-	}
-}
+#include "Addresses/IsInControllerMode.hpp"
+#include "Addresses/LoadInputConfig.hpp"
+#include "Hooks/CharacterMoveInputVectorHook.hpp"
+#include "Hooks/CombatEndHook.hpp"
+#include "Hooks/CombatStartHook.hpp"
+#include "Hooks/FTBEndHook.hpp"
+#include "Hooks/FTBStartHook.hpp"
+#include "Hooks/GetCameraObjectHook.hpp"
+#include "Hooks/KeyboardHook.hpp"
+#include "Hooks/WASDUnlock.hpp"
+#include "InputconfigPatcher.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 
 BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lpReserved)
 {
-	if (a_ul_reason_for_call == DLL_PROCESS_ATTACH) {
+    if (a_ul_reason_for_call == DLL_PROCESS_ATTACH)
+    {
 #ifndef NDEBUG
-		while (!IsDebuggerPresent()) {
-			Sleep(100);
-		}
+        while (!IsDebuggerPresent())
+        {
+            Sleep(100);
+        }
 #endif
+        dku::Logger::Init(Plugin::NAME, std::to_string(Plugin::Version));
 
-		// stuff
-		dku::Logger::Init(Plugin::NAME, std::to_string(Plugin::Version));
+        INFO("Game Process Name : {}", dku::Hook::GetProcessName())
 
-		INFO("game type : {}", dku::Hook::GetProcessName())
+        dku::Hook::Trampoline::AllocTrampoline(1 << 7);
 
-		Patches_Commit();
-	}
+        Settings::GetSingleton()->Load();
+        State::GetSingleton()->Load();
 
-	return TRUE;
+        if (WASDUnlock::Enable())
+        {
+            bool get_camera_object_hook = GetCameraObjectHook::Prepare();
+            bool character_movement_input_vector_hook = CharacterMoveInputVectorHook::Prepare();
+            bool keyboard_hook = KeyboardHook::Enable(a_hModule);
+            if (get_camera_object_hook && character_movement_input_vector_hook && keyboard_hook)
+            {
+                GetCameraObjectHook::Enable();
+                CharacterMoveInputVectorHook::Enable();
+            }
+            else
+            {
+                State::GetSingleton()->are_extra_features_degraded = true;
+                WARN(
+                    "Extra features like walking, autorun and toggling between character and "
+                    "camera movement are disabled!");
+            }
+
+            IsInControllerMode::Prepare();
+            LoadInputConfig::Prepare();
+
+            bool ftb_start_hook = FTBStartHook::Prepare();
+            bool ftb_end_hook = FTBEndHook::Prepare();
+            if (ftb_start_hook && ftb_end_hook)
+            {
+                FTBStartHook::Enable();
+                FTBEndHook::Enable();
+            }
+            else
+            {
+                WARN("Auto toggling WASD for FTB start/end disabled.");
+            }
+
+            bool combat_start_hook = CombatStartHook::Prepare();
+            bool combat_end_hook = CombatEndHook::Prepare();
+            if (combat_start_hook && combat_end_hook)
+            {
+                CombatStartHook::Enable();
+                CombatEndHook::Enable();
+            }
+            else
+            {
+                WARN("Auto toggling WASD for combat start/end disabled.");
+            }
+        }
+        else
+        {
+            State::GetSingleton()->is_wasd_unlocked = false;
+        }
+        InputconfigPatcher::Patch();
+    }
+
+    return TRUE;
 }

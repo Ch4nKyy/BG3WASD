@@ -80,6 +80,7 @@ endmacro()
 
 # dependencies
 find_package(spdlog CONFIG REQUIRED)
+find_package(nlohmann_json REQUIRED)
 find_dependency_path(DKUtil include/DKUtil/Logger.hpp)
 
 # cmake target
@@ -109,6 +110,7 @@ target_link_libraries(
 	PRIVATE
 		DKUtil::DKUtil
 		spdlog::spdlog
+		nlohmann_json::nlohmann_json
 )
 
 # compiler def
@@ -151,7 +153,7 @@ endif()
 target_precompile_headers(
 	${PROJECT_NAME}
 	PRIVATE
-		src/PCH.h
+		src/PCH.hpp
 )
 
 set_property(

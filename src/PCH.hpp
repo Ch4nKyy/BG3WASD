@@ -112,5 +112,6 @@ using namespace std::literals;
 
 // DKUtil
 #define PLUGIN_MODE
+#define LOG_PATH "NativeMods\\"
 #include "DKUtil/Hook.hpp"
 #include "DKUtil/Logger.hpp"
