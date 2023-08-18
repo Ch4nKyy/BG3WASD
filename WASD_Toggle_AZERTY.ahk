@@ -36,8 +36,8 @@ $CapsLock::
     Send {Left up}
     Send {Down up}
     Send {Right up}
-    Send {w up}
-    Send {a up}
+    Send {z up}
+    Send {q up}
     Send {s up}
     Send {d up}
     if (WASDControls = CHARACTER)
@@ -50,7 +50,7 @@ $CapsLock::
     }
     return
 
-$+w up::
+$+z up::
     if (WASDControls = CAMERA)
     {
 	}
@@ -58,59 +58,59 @@ $+w up::
     {
         if (AUTOWALK = 0)
         {
-            Send {w down}
+            Send {z down}
             AUTOWALK = 1
         }
         Else
         {
-            Send {w up}
+            Send {z up}
             AUTOWALK = 0
         }
     }
     return
 
-$w::
+$z::
     if (WASDControls = CAMERA)
     {
 	    Send {Up down}
 	}
     else
     {
-        Send {w down}
+        Send {z down}
     }
     return
 
-$w up::
+$z up::
     if (WASDControls = CAMERA)
     {
 	    Send {Up up}
 	}
     else
     {
-        Send {w up}
+        Send {z up}
         AUTOWALK = 0
     }
     return
 
-$a::
+$q::
     if (WASDControls = CAMERA)
     {
 	    Send {Left down}
 	}
     else
     {
-        Send {a down}
+        Send {q down}
     }
     return
 
-$a up::
+$q up::
     if (WASDControls = CAMERA)
     {
 	    Send {Left up}
 	}
     else
     {
-        Send {a up}
+        Send {q up}
     }
     return
 
@@ -135,7 +135,7 @@ $s up::
         Send {s up}
         if (AUTOWALK = 1)
         {
-            Send {w up}
+            Send {z up}
             AUTOWALK = 0
         }
     }
