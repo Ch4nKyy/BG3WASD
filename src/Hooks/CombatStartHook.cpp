@@ -4,7 +4,9 @@
 bool CombatStartHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "8D ?? ?? ?? ?? ?? 48 ?? ?? ?? 48 ?? ?? E8 ?? ?? ?? ?? 4C ?? ?? ?? 4C ?? ?? ?? 49">()) };
+        "72 ?? 48 ?? ?? ?? E8 ?? ?? ?? ?? 90 48 ?? ?? ?? 48 ?? ?? ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 ?? "
+        "?? 74 ?? 48 ?? ?? ?? E8 ?? ?? ?? ?? 48 ?? ?? 48 ?? ?? ?? E8 ?? ?? ?? ?? 90 48 ?? ?? ?? ?? "
+        "?? ?? 48 ?? ?? ?? E8 ?? ?? ?? ?? 48 ?? ?? 48 ?? ?? ?? E8 ?? ?? ?? ?? 90">()) };
     addresses = address_array;
 
     all_found = true;
@@ -30,18 +32,24 @@ void CombatStartHook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        OriginalFunc = dku::Hook::write_call<5>(address + 13, OverrideFunc);
-        INFO("Hooked CombatStartHook #{}: {:X}", i, AsAddress(address + 13));
+        OriginalFunc = dku::Hook::write_call<5>(address + 37, OverrideFunc);
+        INFO("Hooked CombatStartHook #{}: {:X}", i, AsAddress(address + 37));
         ++i;
     }
 }
 
-int64_t CombatStartHook::OverrideFunc(int64_t a1, int64_t a2, char* a3)
+const char* CombatStartHook::OverrideFunc(DWORD* a1)
 {
-    int64_t ret = OriginalFunc(a1, a2, a3);
+    const char* faction_name = OriginalFunc(a1);
 
-    auto* state = State::GetSingleton();
-    state->is_wasd_character_movement = false;
+    char substring[10];
+    memcpy(substring, &faction_name[0], 9);
+    substring[9] = '\0';
+    if (strcmp(substring, "Companion") == 0 || strcmp(substring, "Hero Play") == 0)
+    {
+        auto* state = State::GetSingleton();
+        state->is_wasd_character_movement = false;
+    }
 
-    return ret;
+    return faction_name;
 }
