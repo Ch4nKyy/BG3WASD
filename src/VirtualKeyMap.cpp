@@ -12,7 +12,14 @@ int VirtualKeyMap::GetByName(const std::string name)
     std::string key_without_prefix = name_copy.substr(name_copy.find_last_of(":") + 1);
     if (key_without_prefix.length() == 1)
     {
-        return int(key_without_prefix[0]);
+        // Turn a-z to upper case, because the KeyboardProc codes are all upper case.
+        // I used toupper() before, but it completely bugged other characters, so I do it manually.
+        int code = int(key_without_prefix[0]);
+        if (code >= 97 && code <= 122)
+        {
+            code -= 32;
+        }
+        return code;
     }
     return 0;
 }

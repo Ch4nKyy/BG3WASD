@@ -24,16 +24,12 @@ LRESULT CALLBACK KeyboardHook::KeyboardProc(int a_nCode, WPARAM a_wParam, LPARAM
         GetWindowThreadProcessId(hwnd, &pid);
         if (pid == CURRENT_PROCESS_ID)
         {
-            if (a_nCode >= 0 && a_wParam == WM_KEYDOWN)
+            if (a_nCode >= 0 && a_wParam == WM_KEYDOWN || a_wParam == WM_KEYUP)
             {
-                KBDLLHOOKSTRUCT* pkbhs = (KBDLLHOOKSTRUCT*)a_lParam;
-                // Turn input vk to lowercase, so it does not depend on the Caps status!
-                last_input_vk = pkbhs->vkCode;
-                if (last_input_vk >= 65 && last_input_vk <= 90)
-                {
-                    last_input_vk += 32;
-                }
-
+                // lower key codes conflict with other codes, wtf, so use upper
+                last_input_vk = ((KBDLLHOOKSTRUCT*)a_lParam)->vkCode;
+                last_transition = a_wParam;
+                
                 auto* state = State::GetSingleton();
                 AutoRun(state);
                 ToggleCharacterOrCamera(state);
@@ -45,47 +41,39 @@ LRESULT CALLBACK KeyboardHook::KeyboardProc(int a_nCode, WPARAM a_wParam, LPARAM
     return CallNextHookEx(nullptr, a_nCode, a_wParam, a_lParam);
 }
 
-bool KeyboardHook::IsCommandPressed(Command command)
+bool KeyboardHook::DidCommandChange(Command command, int transition)
 {
-    bool pressed = true;
+    if (last_transition != transition)
+    {
+        return false;
+    }
+    bool changed = true;
     auto* settings = Settings::GetSingleton();
     auto vkcombo = settings->GetVkComboOfCommand(command);
     for (auto vk : vkcombo)
     {
         if (vk == vkcombo.back())
         {
-            pressed &= (last_input_vk == vk);
+            changed &= (last_input_vk == vk);
         }
         else
         {
-            pressed &= ((GetKeyState(vk) & 0x8000) || (last_input_vk == vk));
+            changed &= ((GetAsyncKeyState(vk) & 0x8000) || (last_input_vk == vk));
         }
     }
-    return pressed;
-}
-
-bool KeyboardHook::IsCommandHeld(Command command)
-{
-    bool held = true;
-    auto* settings = Settings::GetSingleton();
-    auto vkcombo = settings->GetVkComboOfCommand(command);
-    for (auto vk : vkcombo)
-    {
-        held &= ((GetKeyState(vk) & 0x8000) || (last_input_vk == vk));
-    }
-    return held;
+    return changed;
 }
 
 void KeyboardHook::AutoRun(State* state)
 {
-    if (IsCommandPressed(TOGGLE_AUTORUN) && state->is_wasd_character_movement)
+    if (DidCommandChange(TOGGLE_AUTORUN, WM_KEYDOWN) && state->is_wasd_character_movement)
     {
         state->autorunning = !state->autorunning;
         return;
     }
 
-    if (IsCommandPressed(FORWARD) || IsCommandPressed(BACKWARD) ||
-        IsCommandPressed(TOGGLE_CHARACTER_OR_CAMERA))
+    if (DidCommandChange(FORWARD, WM_KEYDOWN) || DidCommandChange(BACKWARD, WM_KEYDOWN) ||
+        DidCommandChange(TOGGLE_CHARACTER_OR_CAMERA, WM_KEYDOWN))
     {
         state->autorunning = false;
         return;
@@ -94,7 +82,7 @@ void KeyboardHook::AutoRun(State* state)
 
 void KeyboardHook::ToggleCharacterOrCamera(State* state)
 {
-    if (IsCommandPressed(TOGGLE_CHARACTER_OR_CAMERA))
+    if (DidCommandChange(TOGGLE_CHARACTER_OR_CAMERA, WM_KEYDOWN))
     {
         state->is_wasd_character_movement = !state->is_wasd_character_movement;
         return;
@@ -103,18 +91,28 @@ void KeyboardHook::ToggleCharacterOrCamera(State* state)
 
 void KeyboardHook::WalkOrSprint(State* state)
 {
-    if (IsCommandPressed(TOGGLE_WALK_OR_SPRINT) && state->is_wasd_character_movement)
+    if (DidCommandChange(TOGGLE_WALK_OR_SPRINT, WM_KEYDOWN) && state->is_wasd_character_movement)
     {
         state->walking = !state->walking;
         return;
     }
 
-    state->walking_or_sprint_held = IsCommandHeld(HOLD_WALK_OR_SPRINT);
+    if (DidCommandChange(HOLD_WALK_OR_SPRINT, WM_KEYDOWN) && state->is_wasd_character_movement)
+    {
+        state->walking_or_sprint_held = true;
+        return;
+    }
+
+    if (DidCommandChange(HOLD_WALK_OR_SPRINT, WM_KEYUP) && state->is_wasd_character_movement)
+    {
+        state->walking_or_sprint_held = false;
+        return;
+    }
 }
 
 void KeyboardHook::ReloadConfig()
 {
-    if (IsCommandPressed(RELOAD_CONFIG))
+    if (DidCommandChange(RELOAD_CONFIG, WM_KEYDOWN))
     {
         Settings::GetSingleton()->Load();
     }
