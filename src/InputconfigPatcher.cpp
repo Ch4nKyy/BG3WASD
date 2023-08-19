@@ -84,41 +84,33 @@ json InputconfigPatcher::UpdateData(json data, String& key, String& fallback_key
     std::string controller_key, std::string controller_camera_key, std::string move_command,
     std::string camera_command)
 {
-    bool changed = false;
-
     auto* state = State::GetSingleton();
 
-    if (state->is_wasd_unlocked)
-    {
-        if (state->are_extra_features_degraded)
-        {
-            if (not IsStringEmptyOrWhitespace(*fallback_key))
-            {
-                data[move_command] = { controller_key, std::format("{}", *key) };
-                data[camera_command] = { controller_camera_key, "INVALID:unknown",
-                    std::format("{}", *fallback_key) };
-                changed = true;
-            }
-        }
-        else
-        {
-            if (not IsStringEmptyOrWhitespace(*key))
-            {
-                data[move_command] = { controller_key, std::format("{}", *key) };
-                data[camera_command] = { controller_camera_key, "INVALID:unknown",
-                    std::format("{}", *key) };
-                changed = true;
-            }
-        }
-    }
-    else
+    if (!state->is_wasd_unlocked)
     {
         if (not IsStringEmptyOrWhitespace(*key))
         {
             data[camera_command] = { controller_camera_key, "INVALID:unknown",
                 std::format("{}", *key) };
-            changed = true;
         }
+        return data;
+    }
+
+    if (state->are_extra_features_degraded)
+    {
+        if (not IsStringEmptyOrWhitespace(*fallback_key))
+        {
+            data[move_command] = { controller_key, std::format("{}", *key) };
+            data[camera_command] = { controller_camera_key, "INVALID:unknown",
+                std::format("{}", *fallback_key) };
+        }
+        return data;
+    }
+
+    if (not IsStringEmptyOrWhitespace(*key))
+    {
+        data[move_command] = { controller_key, std::format("{}", *key) };
+        data[camera_command] = { controller_camera_key, "INVALID:unknown", std::format("{}", *key) };
     }
 
     return data;
