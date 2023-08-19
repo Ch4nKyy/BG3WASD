@@ -45,9 +45,6 @@ WalkingIsDefault = false
 # List of all available keys:
 # (We try to match Larian's style, but for regional keys, they might not always match.)
 
-# mouse:left            mouse:right             mouse:cancel            mouse:middle
-# mouse:x1              mouse:x2
-
 # key:a                 key:b                   ...                     key:z
 # key:1                 key:2                   ...                     key:0
 # key:f1                key:f2                  ...                     key:f24
