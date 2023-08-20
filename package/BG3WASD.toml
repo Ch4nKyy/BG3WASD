@@ -45,6 +45,8 @@ WalkingIsDefault = false
 # List of all available keys:
 # (We try to match Larian's style, but for regional keys, they might not always match.)
 
+# Modifiers: ctrl, shift, alt. E.g. "ctrl+shift+key:w"
+
 # key:a                 key:b                   ...                     key:z
 # key:1                 key:2                   ...                     key:0
 # key:f1                key:f2                  ...                     key:f24
@@ -55,9 +57,9 @@ WalkingIsDefault = false
 # key:home              key:print               key:scroll              key:escape
 # key:pause             key:numlock
 
-# alt                   key:lalt                key:ralt
-# shift                 key:lshift              key:rshift
-# ctrl                  key:lctrl               key:rctrl
+# key:lalt              key:ralt
+# key:lshift            key:rshift
+# key:lctrl             key:rctrl
 # key:lwin              key:rwin                
 
 # key:;                 key:=                   key:,                   key:'
