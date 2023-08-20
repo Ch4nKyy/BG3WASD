@@ -6,6 +6,7 @@
 # These hotkeys are automatically patched to the inputconfig_p1.json.
 # E.g. Forward is bound to CharacterMoveForward and CameraForward.
 # To deactivate this feature, leave them empty: '' or ' '
+# The GameHotkeys are region independant, so AZERTY keyboard users DON'T need to change them.
 [GameHotkeys]
 Backward = 'key:s'
 Forward = 'key:w'
@@ -16,12 +17,14 @@ Right = 'key:d'
 # feature is not, then these hotkeys are automatically patched to the inputconfig_p1.json.
 # This is done so that you can still move both the character and the camera and avoid conflicts.
 # To deactivate this feature, leave them empty: '' or ' '
+# The FallbackHotkeys are region independant, so AZERTY keyboard users DON'T need to change them.
 [FallbackHotkeys]
 CameraBackward = 'key:down'
 CameraForward = 'key:up'
 CameraLeft = 'key:left'
 CameraRight = 'key:right'
 
+# The ModHotkeys are region DEPENDANT!!! AZERTY keyboard users must adapt them!
 [ModHotkeys]
 # When you are sprinting, holding this key will make you walk.
 # If you are walking, holding this key will make you sprint.
