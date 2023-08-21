@@ -9,5 +9,6 @@ public:
     bool is_wasd_character_movement = true;
     bool is_wasd_unlocked = true;
     bool are_extra_features_degraded = false;
+    bool last_dying_character_is_player = false;
     void Load();
 };

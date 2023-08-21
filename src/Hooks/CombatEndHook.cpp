@@ -44,7 +44,9 @@ const char* CombatEndHook::OverrideFunc(DWORD* a1)
     char substring[10];
     memcpy(substring, &faction_name[0], 9);
     substring[9] = '\0';
-    if (strcmp(substring, "Companion") == 0 || strcmp(substring, "Hero Play") == 0)
+    auto* state = State::GetSingleton();
+    if (!state->last_dying_character_is_player &&
+        (strcmp(substring, "Companion") == 0 || strcmp(substring, "Hero Play") == 0))
     {
         auto* state = State::GetSingleton();
         state->is_wasd_character_movement = true;

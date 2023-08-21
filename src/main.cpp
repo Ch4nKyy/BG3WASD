@@ -1,5 +1,6 @@
 #include "Addresses/IsInControllerMode.hpp"
 #include "Addresses/LoadInputConfig.hpp"
+#include "Hooks/CharacterDeathHook.hpp"
 #include "Hooks/CharacterMoveInputVectorHook.hpp"
 #include "Hooks/CombatEndHook.hpp"
 #include "Hooks/CombatStartHook.hpp"
@@ -64,12 +65,14 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 WARN("Auto toggling WASD for FTB start/end disabled.");
             }
 
+            bool character_death_hook = CharacterDeathHook::Prepare();
             bool combat_start_hook = CombatStartHook::Prepare();
             bool combat_end_hook = CombatEndHook::Prepare();
-            if (combat_start_hook && combat_end_hook)
+            if (character_death_hook && combat_start_hook && combat_end_hook)
             {
                 CombatStartHook::Enable();
                 CombatEndHook::Enable();
+                CharacterDeathHook::Enable();
             }
             else
             {
