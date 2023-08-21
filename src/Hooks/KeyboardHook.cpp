@@ -85,6 +85,10 @@ void KeyboardHook::ToggleCharacterOrCamera(State* state)
     if (DidCommandChange(TOGGLE_CHARACTER_OR_CAMERA, WM_KEYDOWN))
     {
         state->is_wasd_character_movement = !state->is_wasd_character_movement;
+        if (state->is_wasd_character_movement)
+        {
+            state->frames_to_hold_forward_to_center_camera = 10;
+        }
         return;
     }
 }

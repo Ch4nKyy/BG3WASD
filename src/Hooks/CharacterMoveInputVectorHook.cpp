@@ -5,12 +5,14 @@
 
 bool CharacterMoveInputVectorHook::Prepare()
 {
-    std::array<uintptr_t, 3> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-                      "E8 ?? ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? F3 0F ?? ?? 80 ?? ?? ?? F3">()),
+    std::array<uintptr_t, 3> address_array = {
+        AsAddress(dku::Hook::Assembly::search_pattern<
+            "E8 ?? ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? F3 0F ?? ?? 80 ?? ?? ?? F3">()),
         AsAddress(dku::Hook::Assembly::search_pattern<
             "E8 ?? ?? ?? ?? 0F ?? ?? 48 ?? ?? F3 ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? E8">()),
         AsAddress(dku::Hook::Assembly::search_pattern<
-            "E8 ?? ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? 80">()) };
+            "E8 ?? ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? 80">())
+    };
     addresses = address_array;
 
     all_found = true;
@@ -64,6 +66,15 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
     {
         yx_v->x = 0.0f;
         yx_v->y = 0.0f;
+    }
+    if (state->frames_to_hold_forward_to_center_camera > 0)
+    {
+        --(state->frames_to_hold_forward_to_center_camera);
+        // Send a move input for a few frames, so the camera moves back to the character.
+        // The game has a center camera command, but it sucks, because it always faces north.
+        // There is center logic that doesn't do that, e.g. when you press F1, but I didn't find it
+        // yet.
+        yx_v->y = 1.0f;
     }
 
     return yx;
