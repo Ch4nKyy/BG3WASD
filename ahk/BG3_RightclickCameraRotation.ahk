@@ -68,3 +68,5 @@ bg3_RightClickShortOrHoldDown:
 		Send {blind}{%bg3_ghk_Short%}
 	}
 	return
+
+LAlt::LAlt
