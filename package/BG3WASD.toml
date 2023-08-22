@@ -1,6 +1,6 @@
 # Default config that is packaged with the mod
 
-# Foreword: Key names are in Larian style, e.g. key:w, shift+key:w, key:lshift or mouse:middle.
+# Foreword: Key names are in Larian style, e.g. key:w, shift+key:w or key:lshift.
 # For the names of all available keys, see the bottom of this config file.
 
 # These hotkeys are automatically patched to the inputconfig_p1.json.
@@ -47,6 +47,9 @@ WalkingIsDefault = false
 
 # List of all available keys:
 # (We try to match Larian's style, but for regional keys, they might not always match.)
+
+# Hint for left-handed gamers that use PL;'
+# You have to surround the single quote key with double quotes, like this: xxxxx = "key:'"
 
 # Modifiers: ctrl, shift, alt. E.g. "ctrl+shift+key:w"
 
