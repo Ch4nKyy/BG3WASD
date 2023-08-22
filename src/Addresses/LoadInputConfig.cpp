@@ -9,6 +9,7 @@ bool LoadInputConfig::Prepare()
 
     if (!address)
     {
+        State::GetSingleton()->mod_found_all_addresses = false;
         WARN("LoadInputConfig not found. Hotreloading the inputconfig will be disabled!");
         return false;
     }

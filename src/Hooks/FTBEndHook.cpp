@@ -14,6 +14,7 @@ bool FTBEndHook::Prepare()
     {
         if (!address)
         {
+            State::GetSingleton()->mod_found_all_addresses = false;
             WARN("FTBEndHook #{} not found", i);
             all_found = false;
         }

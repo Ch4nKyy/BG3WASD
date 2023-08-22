@@ -21,6 +21,7 @@ bool CharacterMoveInputVectorHook::Prepare()
     {
         if (!address)
         {
+            State::GetSingleton()->mod_found_all_addresses = false;
             WARN("CharacterMoveInputVector #{} not found", i);
             all_found = false;
         }

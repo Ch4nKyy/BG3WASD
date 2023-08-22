@@ -14,6 +14,7 @@ bool CharacterDeathHook::Prepare()
     {
         if (!address)
         {
+            State::GetSingleton()->mod_found_all_addresses = false;
             WARN("CharacterDeathHook #{} not found", i);
             all_found = false;
         }

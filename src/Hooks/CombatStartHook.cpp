@@ -15,6 +15,7 @@ bool CombatStartHook::Prepare()
     {
         if (!address)
         {
+            State::GetSingleton()->mod_found_all_addresses = false;
             WARN("CombatStartHook #{} not found", i);
             all_found = false;
         }

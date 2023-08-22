@@ -11,5 +11,6 @@ public:
     bool is_wasd_unlocked = true;
     bool are_extra_features_degraded = false;
     bool last_dying_character_is_player = false;
+    bool mod_found_all_addresses = true;
     void Load();
 };

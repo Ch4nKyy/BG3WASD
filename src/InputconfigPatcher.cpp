@@ -13,7 +13,12 @@ void InputconfigPatcher::Patch()
     }
     catch (...)  // TODO does this catch anything?
     {
-        WARN("Runtime exception. Inputconfig could not be patched!");
+        WARN(
+            "Critical error. Inputconfig could not be patched! The mod will "
+            "probably not work. This can often be fixed by renaming or deleting "
+            "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
+            "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
+            "Win+R and typing %localappdata%");
     }
 }
 
@@ -28,7 +33,9 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     if (SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, NULL,
             &localAppDataFolder_wchar) != S_OK)
     {
-        WARN("Could not find LocalAppData. Inputconfig could not be patched!");
+        WARN(
+            "Critical error. Could not find LocalAppData. Inputconfig could not be patched! The "
+            "mod will probably not work.");
     }
 
     std::wstring localAppDataFolder = localAppDataFolder_wchar;
@@ -110,7 +117,8 @@ json InputconfigPatcher::UpdateData(json data, String& key, String& fallback_key
     if (not IsStringEmptyOrWhitespace(*key))
     {
         data[move_command] = { controller_key, std::format("{}", *key) };
-        data[camera_command] = { controller_camera_key, "INVALID:unknown", std::format("{}", *key) };
+        data[camera_command] = { controller_camera_key, "INVALID:unknown",
+            std::format("{}", *key) };
     }
 
     return data;

@@ -8,6 +8,7 @@ bool IsInControllerMode::Prepare()
 
     if (!address)
     {
+        State::GetSingleton()->mod_found_all_addresses = false;
         WARN("IsInControllerMode not found. Controller camera input will be broken.");
         return false;
     }

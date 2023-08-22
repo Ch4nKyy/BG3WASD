@@ -14,6 +14,7 @@ bool FTBStartHook::Prepare()
     {
         if (!address)
         {
+            State::GetSingleton()->mod_found_all_addresses = false;
             WARN("FTBStartHook #{} not found", i);
             all_found = false;
         }

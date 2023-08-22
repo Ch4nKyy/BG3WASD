@@ -1,4 +1,5 @@
 #include "WASDUnlock.hpp"
+#include "../State.hpp"
 
 void* WASDUnlock::Search(uintptr_t a_base = 0)
 {
@@ -20,6 +21,7 @@ bool WASDUnlock::Enable()
 
     if (not(addr1 && addr2))
     {
+        State::GetSingleton()->mod_found_all_addresses = false;
         WARN("WASD unlock not found! Mod is disabled!");
         return false;
     }

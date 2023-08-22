@@ -41,49 +41,55 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             {
                 GetCameraObjectHook::Enable();
                 CharacterMoveInputVectorHook::Enable();
+
+                IsInControllerMode::Prepare();
+                LoadInputConfig::Prepare();
+
+                bool ftb_start_hook = FTBStartHook::Prepare();
+                bool ftb_end_hook = FTBEndHook::Prepare();
+                if (ftb_start_hook && ftb_end_hook)
+                {
+                    FTBStartHook::Enable();
+                    FTBEndHook::Enable();
+                }
+                else
+                {
+                    WARN("Auto toggling WASD for FTB start/end disabled.");
+                }
+
+                bool character_death_hook = CharacterDeathHook::Prepare();
+                bool combat_start_hook = CombatStartHook::Prepare();
+                bool combat_end_hook = CombatEndHook::Prepare();
+                if (character_death_hook && combat_start_hook && combat_end_hook)
+                {
+                    CombatStartHook::Enable();
+                    CombatEndHook::Enable();
+                    CharacterDeathHook::Enable();
+                }
+                else
+                {
+                    WARN("Auto toggling WASD for combat start/end disabled.");
+                }
             }
             else
             {
                 State::GetSingleton()->are_extra_features_degraded = true;
                 WARN(
-                    "Extra features like walking, autorun and toggling between character and "
+                    "Extra features like walking, autorun and toggling WASD between character and "
                     "camera movement are disabled!");
-            }
-
-            IsInControllerMode::Prepare();
-            LoadInputConfig::Prepare();
-
-            bool ftb_start_hook = FTBStartHook::Prepare();
-            bool ftb_end_hook = FTBEndHook::Prepare();
-            if (ftb_start_hook && ftb_end_hook)
-            {
-                FTBStartHook::Enable();
-                FTBEndHook::Enable();
-            }
-            else
-            {
-                WARN("Auto toggling WASD for FTB start/end disabled.");
-            }
-
-            bool character_death_hook = CharacterDeathHook::Prepare();
-            bool combat_start_hook = CombatStartHook::Prepare();
-            bool combat_end_hook = CombatEndHook::Prepare();
-            if (character_death_hook && combat_start_hook && combat_end_hook)
-            {
-                CombatStartHook::Enable();
-                CombatEndHook::Enable();
-                CharacterDeathHook::Enable();
-            }
-            else
-            {
-                WARN("Auto toggling WASD for combat start/end disabled.");
             }
         }
         else
         {
             State::GetSingleton()->is_wasd_unlocked = false;
         }
+        
         InputconfigPatcher::Patch();
+
+        if (!State::GetSingleton()->mod_found_all_addresses)
+        {
+            WARN("Your game version is not completely compatible with the mod version!");
+        }
     }
 
     return TRUE;
