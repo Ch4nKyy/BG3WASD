@@ -18,6 +18,7 @@ void Settings::Load() noexcept
             config.Bind(toggle_autorun, "shift+key:w");
             config.Bind(hold_walk_or_sprint, "");
             config.Bind(reload_config, "key:f11");
+            config.Bind(rotate, "key:end"); // TODO delete here and hook game fct?
 
             config.Bind<0.0, 1.0>(walk_speed, 0.3);
             config.Bind(walking_is_default, FALSE);

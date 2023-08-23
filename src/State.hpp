@@ -13,4 +13,11 @@ public:
     bool mod_found_all_addresses = true;
     std::vector<std::string> character_forward_keys;
     std::vector<std::string> character_backward_keys;
+    std::vector<std::string> rotate_keys;
+    int64_t sdl_window_ptr = 0;
+    HMODULE sdl2_dll;
+    bool is_mouselook = false;
+    POINT cursor_position_to_restore;
+    bool mouselook_changed = false;
+    int frames_to_restore_cursor_pos = 0;
 };

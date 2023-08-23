@@ -23,4 +23,6 @@ private:
     static void ToggleCharacterOrCamera(State* state);
     static void WalkOrSprint(State* state);
     static void ReloadConfig();
+    // TODO delete here and hook game fct?
+    static void Rotate();
 };

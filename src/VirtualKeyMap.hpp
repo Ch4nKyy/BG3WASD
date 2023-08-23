@@ -16,7 +16,8 @@ enum Command
     TOGGLE_CHARACTER_OR_CAMERA,
     RELOAD_CONFIG,
     FORWARD,
-    BACKWARD
+    BACKWARD,
+    ROTATE  // TODO delete here and hook game fct?
 };
 
 class VirtualKeyMap

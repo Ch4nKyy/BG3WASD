@@ -35,6 +35,7 @@ LRESULT CALLBACK KeyboardHook::KeyboardProc(int a_nCode, WPARAM a_wParam, LPARAM
                 ToggleCharacterOrCamera(state);
                 WalkOrSprint(state);
                 ReloadConfig();
+                Rotate();
             }
         }
     }
@@ -125,5 +126,23 @@ void KeyboardHook::ReloadConfig()
     if (DidCommandChange(RELOAD_CONFIG, WM_KEYDOWN))
     {
         Settings::GetSingleton()->Load();
+    }
+}
+
+// TODO delete here and hook game fct?
+void KeyboardHook::Rotate()
+{
+    auto state = State::GetSingleton();
+    if (DidCommandChange(ROTATE, WM_KEYDOWN) && !state->is_mouselook)
+    {
+        state->is_mouselook = true;
+        state->mouselook_changed = true;
+        GetCursorPos(&state->cursor_position_to_restore);
+    }
+    if (DidCommandChange(ROTATE, WM_KEYUP) && state->is_mouselook)
+    {
+        state->is_mouselook = false;
+        state->mouselook_changed = true;
+        state->frames_to_restore_cursor_pos = 2;
     }
 }

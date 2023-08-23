@@ -58,4 +58,5 @@ void VirtualKeyMap::UpdateVkCombosOfCommandMap()
     AddKeyComboForCommand(RELOAD_CONFIG, std::vector{ *settings->reload_config });
     AddKeyComboForCommand(FORWARD, state->character_forward_keys);
     AddKeyComboForCommand(BACKWARD, state->character_backward_keys);
+    AddKeyComboForCommand(ROTATE, state->rotate_keys);  // TODO delete here and hook game fct?
 }

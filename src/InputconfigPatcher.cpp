@@ -70,6 +70,7 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     auto* state = State::GetSingleton();
     state->character_forward_keys = GetBoundKeysOfCommand(data, "CharacterMoveForward");
     state->character_backward_keys = GetBoundKeysOfCommand(data, "CharacterMoveBackward");
+    state->rotate_keys = GetBoundKeysOfCommand(data, "CameraToggleMouseRotate");
     VirtualKeyMap::UpdateVkCombosOfCommandMap();
 }
 
