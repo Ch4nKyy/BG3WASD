@@ -7,6 +7,7 @@
 #include "Hooks/FTBEndHook.hpp"
 #include "Hooks/FTBStartHook.hpp"
 #include "Hooks/GetCameraObjectHook.hpp"
+#include "Hooks/GetCharacterName.hpp"
 #include "Hooks/KeyboardHook.hpp"
 #include "Hooks/WASDUnlock.hpp"
 #include "InputconfigPatcher.hpp"
@@ -27,7 +28,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
         INFO("Game Process Name : {}", dku::Hook::GetProcessName())
 
-        dku::Hook::Trampoline::AllocTrampoline(1 << 7);
+        dku::Hook::Trampoline::AllocTrampoline(1 << 8);
 
         Settings::GetSingleton()->Load();
         State::GetSingleton()->Load();
@@ -60,11 +61,14 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 bool character_death_hook = CharacterDeathHook::Prepare();
                 bool combat_start_hook = CombatStartHook::Prepare();
                 bool combat_end_hook = CombatEndHook::Prepare();
-                if (character_death_hook && combat_start_hook && combat_end_hook)
+                bool get_character_name = GetCharacterName::Prepare();
+                if (character_death_hook && combat_start_hook && combat_end_hook &&
+                    get_character_name)
                 {
                     CombatStartHook::Enable();
                     CombatEndHook::Enable();
                     CharacterDeathHook::Enable();
+                    GetCharacterName::Enable();
                 }
                 else
                 {
@@ -83,7 +87,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         {
             State::GetSingleton()->is_wasd_unlocked = false;
         }
-        
+
         InputconfigPatcher::Patch();
 
         if (!State::GetSingleton()->mod_found_all_addresses)
