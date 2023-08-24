@@ -6,6 +6,7 @@ Remove-Item $PSScriptRoot\package\bin -Force -Recurse -ErrorAction:SilentlyConti
 Remove-Item $PSScriptRoot\package\*.zip -Force -Recurse -ErrorAction:SilentlyContinue | Out-Null
 New-Item -ItemType Directory -Path $PSScriptRoot\package\bin | Out-Null
 New-Item -ItemType Directory -Path $PSScriptRoot\package\bin\NativeMods | Out-Null
+Copy-Item $PSScriptRoot\extern\SDL2\* $PSScriptRoot\package\bin\
 Copy-Item $PSScriptRoot\build\Release\* $PSScriptRoot\package\bin\NativeMods\
 Copy-Item $PSScriptRoot\package\*.toml $PSScriptRoot\package\bin\NativeMods\
 Compress-Archive -Path $PSScriptRoot\package\bin -DestinationPath $PSScriptRoot\package\BG3WASD.zip -Force
