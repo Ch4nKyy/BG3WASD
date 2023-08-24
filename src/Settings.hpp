@@ -39,6 +39,9 @@ public:
     Double walk_speed{ "WalkSpeed", "Movement" };
     Boolean walking_is_default{ "WalkingIsDefault", "Movement" };
 
+    Boolean enable_core_features{ "CoreFeatures", "EnableFeatures" };
+    Boolean enable_auto_toggling_wasd_mode{ "AutoTogglingWasdMode", "EnableFeatures" };
+
     void Load() noexcept;
     std::vector<std::uint32_t> GetVkComboOfCommand(Command command);
 

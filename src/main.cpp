@@ -30,25 +30,32 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
         dku::Hook::Trampoline::AllocTrampoline(1 << 8);
 
-        Settings::GetSingleton()->Load();
+        auto settings = Settings::GetSingleton();
+
+        settings->Load();
         State::GetSingleton()->Load();
 
         if (WASDUnlock::Enable())
         {
+            bool keyboard_hook = KeyboardHook::Enable(a_hModule);
+            if (keyboard_hook)
+            {
+                LoadInputConfig::Prepare();
+            }
+
             bool get_camera_object_hook = GetCameraObjectHook::Prepare();
             bool character_movement_input_vector_hook = CharacterMoveInputVectorHook::Prepare();
-            bool keyboard_hook = KeyboardHook::Enable(a_hModule);
-            if (get_camera_object_hook && character_movement_input_vector_hook && keyboard_hook)
+            if (settings->enable_core_features && get_camera_object_hook &&
+                character_movement_input_vector_hook && keyboard_hook)
             {
                 GetCameraObjectHook::Enable();
                 CharacterMoveInputVectorHook::Enable();
 
                 IsInControllerMode::Prepare();
-                LoadInputConfig::Prepare();
 
                 bool ftb_start_hook = FTBStartHook::Prepare();
                 bool ftb_end_hook = FTBEndHook::Prepare();
-                if (ftb_start_hook && ftb_end_hook)
+                if (settings->enable_auto_toggling_wasd_mode && ftb_start_hook && ftb_end_hook)
                 {
                     FTBStartHook::Enable();
                     FTBEndHook::Enable();
@@ -62,8 +69,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 bool combat_start_hook = CombatStartHook::Prepare();
                 bool combat_end_hook = CombatEndHook::Prepare();
                 bool get_character_name = GetCharacterName::Prepare();
-                if (character_death_hook && combat_start_hook && combat_end_hook &&
-                    get_character_name)
+                if (settings->enable_auto_toggling_wasd_mode && character_death_hook &&
+                    combat_start_hook && combat_end_hook && get_character_name)
                 {
                     CombatStartHook::Enable();
                     CombatEndHook::Enable();

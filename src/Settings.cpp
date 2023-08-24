@@ -35,6 +35,9 @@ void Settings::Load() noexcept
 
             config.Bind<0.0, 1.0>(walk_speed, 0.3);
             config.Bind(walking_is_default, FALSE);
+
+            config.Bind(enable_core_features, TRUE);
+            config.Bind(enable_auto_toggling_wasd_mode, TRUE);
         });
 
     config.Load();
