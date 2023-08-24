@@ -3,52 +3,74 @@
 # Foreword: Key names are in Larian style, e.g. key:w, shift+key:w or key:lshift.
 # For the names of all available keys, see the bottom of this config file.
 
-# These hotkeys are automatically patched to the inputconfig_p1.json.
+
+[GameHotkeys]
+# These hotkeys are automatically patched to the game's inputconfig_p1.json.
 # E.g. Forward is bound to CharacterMoveForward and CameraForward.
 # To deactivate this feature, leave them empty: '' or ' '
 # The GameHotkeys are region independant, so AZERTY keyboard users DON'T need to change them.
-[GameHotkeys]
+
 Backward = 'key:s'
+
 Forward = 'key:w'
+
 Left = 'key:a'
+
 Right = 'key:d'
 
+
+[FallbackHotkeys]
 # If a game update breaks the mod so that WASD is still successfully unlocked, but the Toggle
 # feature is not, then these hotkeys are automatically patched to the inputconfig_p1.json.
 # This is done so that you can still move both the character and the camera and avoid conflicts.
 # To deactivate this feature, leave them empty: '' or ' '
 # The FallbackHotkeys are region independant, so AZERTY keyboard users DON'T need to change them.
-[FallbackHotkeys]
+
 CameraBackward = 'key:down'
+
 CameraForward = 'key:up'
+
 CameraLeft = 'key:left'
+
 CameraRight = 'key:right'
 
-# The ModHotkeys are region DEPENDANT!!! AZERTY keyboard users must adapt them!
+
 [ModHotkeys]
+# The ModHotkeys are region DEPENDANT!!! AZERTY keyboard users must adapt them!
+
+HoldWalkOrSprint = ''
 # When you are sprinting, holding this key will make you walk.
 # If you are walking, holding this key will make you sprint.
-HoldWalkOrSprint = ''
+
+ReloadConfig = 'key:f11'
 # This will reload all config values.
 # If possible, it will also force the game to reload the inputconfig.
-ReloadConfig = 'key:f11'
-# Lets you move without holding Forward.
+
 ToggleAutorun = 'shift+key:w'
-# Key that toggles between Character and Camera movement mode.
+# Lets you move without holding Forward.
+
 ToggleCharacterOrCamera = 'key:capslock'
-# Toggle between walking and sprinting movespeed.
+# Key that toggles between Character and Camera movement mode.
+
 ToggleWalkOrSprint = 'key:insert'
+# Toggle between walking and sprinting movespeed.
+
 
 [Movement]
-# 1.0 would be sprinting speed. 0.5 would be 50% of that. [0.0, 1.0]
-WalkSpeed = 0.3
-# Whether the character walks, when the game starts up. [true, false]
-WalkingIsDefault = false
 
+WalkSpeed = 0.3
+# 1.0 would be sprinting speed. 0.5 would be 50% of that. [0.0, 1.0]
+
+WalkingIsDefault = false
+# Whether the character walks, when the game starts up. [true, false]
+
+
+[EnableFeatures]
 # Allows to enable or disable features of this mod.
 # These settings can NOT be hot reloaded, but require a game restart!
 # (The mod will always try to enable WASD movement. This cannot be disabled.)
-[EnableFeatures]
+
+CoreFeatures = true
 # Core Features include:
 #    -ToggleCharacterOrCamera
 #    -ToggleWalkOrSprint and HoldWalkOrSprint
@@ -56,13 +78,14 @@ WalkingIsDefault = false
 # Disabling Core Features causes the mod to bind the Camera keys to the FallbackHotkeys.
 # Pressing Character and Camera keys at the same time is buggy, be warned!
 # [true, false]
-CoreFeatures = true
+
+AutoTogglingWasdMode = true
 # Automatically toggle WASD mode depending on the context. 
 # Toggle to Camera movement, when combat starts, and back to Character movement, when combat ends.
 # Doesn't work perfectly yet. Sometimes you have to toggle manually.
 # Requires CoreFeatures to be enabled!
 # [true, false]
-AutoTogglingWasdMode = true
+
 
 # List of all available keys:
 # (We try to match Larian's style, but for regional keys, they might not always match.)
