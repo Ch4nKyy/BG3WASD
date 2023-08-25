@@ -1,4 +1,6 @@
 #include "VirtualKeyMap.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 #include <algorithm>
 
 int VirtualKeyMap::GetByName(const std::string name)
@@ -22,4 +24,38 @@ int VirtualKeyMap::GetByName(const std::string name)
         return code;
     }
     return 0;
+}
+
+void VirtualKeyMap::AddKeyComboForCommand(Command command, std::vector<std::string> setting)
+{
+    std::vector<std::vector<std::uint32_t>> vkcombos;
+    for (auto key : setting)
+    {
+        auto vkcombo = dku::string::split(key, "+"sv) |
+                       std::views::transform(
+                           [](auto key_part) { return VirtualKeyMap::GetByName(key_part); }) |
+                       std::ranges::to<std::vector<std::uint32_t>>();
+        vkcombos.push_back(vkcombo);
+    }
+    vkcombos_of_command.insert({ command, vkcombos });
+}
+
+std::vector<std::vector<std::uint32_t>> VirtualKeyMap::GetVkCombosOfCommand(Command command)
+{
+    return vkcombos_of_command.at(command);
+}
+
+void VirtualKeyMap::UpdateVkCombosOfCommandMap()
+{
+    auto* settings = Settings::GetSingleton();
+    auto* state = State::GetSingleton();
+    vkcombos_of_command = {};
+    AddKeyComboForCommand(TOGGLE_WALK_OR_SPRINT, std::vector{ *settings->toggle_walk_or_sprint });
+    AddKeyComboForCommand(HOLD_WALK_OR_SPRINT, std::vector{ *settings->hold_walk_or_sprint });
+    AddKeyComboForCommand(TOGGLE_AUTORUN, std::vector{ *settings->toggle_autorun });
+    AddKeyComboForCommand(TOGGLE_CHARACTER_OR_CAMERA,
+        std::vector{ *settings->toggle_character_or_camera });
+    AddKeyComboForCommand(RELOAD_CONFIG, std::vector{ *settings->reload_config });
+    AddKeyComboForCommand(FORWARD, state->character_forward_keys);
+    AddKeyComboForCommand(BACKWARD, state->character_backward_keys);
 }

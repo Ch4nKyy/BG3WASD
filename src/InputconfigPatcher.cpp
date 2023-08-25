@@ -13,9 +13,9 @@ void InputconfigPatcher::Patch()
     }
     catch (...)  // TODO does this catch anything?
     {
-        WARN(
-            "Critical error. Inputconfig could not be patched! The mod will "
-            "probably not work. This can often be fixed by renaming or deleting "
+        FATAL(
+            "Inputconfig could not be patched! "
+            "This can often be fixed by renaming or deleting "
             "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
             "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
             "Win+R and typing %localappdata%");
@@ -51,75 +51,72 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     }
 
     auto* settings = Settings::GetSingleton();
-    data = UpdateData(data, settings->backward, settings->backward_fallback, "c:leftstick_yneg",
-        "c:leftstick_ypos", "CharacterMoveBackward", "CameraBackward");
-    data = UpdateData(data, settings->forward, settings->forward_fallback, "c:leftstick_ypos",
-        "c:leftstick_yneg", "CharacterMoveForward", "CameraForward");
-    data = UpdateData(data, settings->left, settings->left_fallback, "c:leftstick_xneg",
-        "c:leftstick_xneg", "CharacterMoveLeft", "CameraLeft");
-    data = UpdateData(data, settings->right, settings->right_fallback, "c:leftstick_xpos",
-        "c:leftstick_xpos", "CharacterMoveRight", "CameraRight");
+    data = UpdateData(data, "CharacterMoveBackward", "CameraBackward",
+        { "c:leftstick_ypos", "key:s", "key:down" });
+    data = UpdateData(data, "CharacterMoveForward", "CameraForward",
+        { "c:leftstick_yneg", "key:w", "key:up" });
+    data = UpdateData(data, "CharacterMoveLeft", "CameraLeft",
+        { "c:leftstick_xneg", "key:a", "key:left" });
+    data = UpdateData(data, "CharacterMoveRight", "CameraRight",
+        { "c:leftstick_xpos", "key:d", "key:right" });
 
     std::ofstream output_stream(config_path_absolute);
+    if (output_stream.fail())
+    {
+        throw std::runtime_error("Can't write file.");
+    }
     output_stream << std::setw(4) << data << std::endl;
 
     auto* state = State::GetSingleton();
-    if (state->is_wasd_unlocked)
+    state->character_forward_keys = GetBoundKeysOfCommand(data, "CharacterMoveForward");
+    state->character_backward_keys = GetBoundKeysOfCommand(data, "CharacterMoveBackward");
+    VirtualKeyMap::UpdateVkCombosOfCommandMap();
+}
+
+std::vector<std::string> InputconfigPatcher::GetBoundKeysOfCommand(json data, std::string command)
+{
+    auto key_list = data[command];
+    std::vector<std::string> ret_keys;
+    for (json::iterator it = key_list.begin(); it != key_list.end(); ++it)
     {
-        if (state->are_extra_features_degraded)
+        auto split = dku::string::split(*it, ":"sv);
+        if (dku::string::iequals(split[0], "c"))  // ignore controller mappings
         {
-            INFO(
-                "Inputconfig patched character controls to main keys and camera controls to "
-                "fallback keys.");
+            continue;
         }
-        else
+        if (dku::string::iequals(split[1], "unknown"))
         {
-            INFO("Inputconfig patched character and camera controls to main keys.");
+            continue;
         }
+        ret_keys.push_back(*it);
     }
-    else
-    {
-        INFO("Inputconfig patched camera controls to main keys.");
-    }
+    return ret_keys;
 }
 
 /*
- Bind a third key for the camera to INVALID:unknown, otherwise the game will generate a default
- value.
+ Read Camera input key and write it to the Character input key.
+ If Camera input key is not set, use default.
 */
-json InputconfigPatcher::UpdateData(json data, String& key, String& fallback_key,
-    std::string controller_key, std::string controller_camera_key, std::string move_command,
-    std::string camera_command)
+json InputconfigPatcher::UpdateData(json data, std::string character_command,
+    std::string camera_command, json camera_default_keys)
 {
-    auto* state = State::GetSingleton();
-
-    if (!state->is_wasd_unlocked)
+    auto keys_to_bind = camera_default_keys;
+    if (data.contains(camera_command))
     {
-        if (not IsStringEmptyOrWhitespace(*key))
+        keys_to_bind = data[camera_command];
+        // Camera and Character input have flipped y axis.
+        for (json::iterator it = keys_to_bind.begin(); it != keys_to_bind.end(); ++it)
         {
-            data[camera_command] = { controller_camera_key, "INVALID:unknown",
-                std::format("{}", *key) };
+            if (*it == "c:leftstick_yneg")
+            {
+                *it = "c:leftstick_ypos";
+            }
+            else if (*it == "c:leftstick_ypos")
+            {
+                *it = "c:leftstick_yneg";
+            }
         }
-        return data;
     }
-
-    if (state->are_extra_features_degraded)
-    {
-        if (not IsStringEmptyOrWhitespace(*fallback_key))
-        {
-            data[move_command] = { controller_key, std::format("{}", *key) };
-            data[camera_command] = { controller_camera_key, "INVALID:unknown",
-                std::format("{}", *fallback_key) };
-        }
-        return data;
-    }
-
-    if (not IsStringEmptyOrWhitespace(*key))
-    {
-        data[move_command] = { controller_key, std::format("{}", *key) };
-        data[camera_command] = { controller_camera_key, "INVALID:unknown",
-            std::format("{}", *key) };
-    }
-
+    data[character_command] = keys_to_bind;
     return data;
 }

@@ -8,27 +8,37 @@ void* WASDUnlock::Search(uintptr_t a_base = 0)
         "0F 84 ?? ?? ?? ?? 48 8B ?? ?? ?? ?? ?? 48 8B">(a_base);
 }
 
-bool WASDUnlock::Enable()
+bool WASDUnlock::Prepare()
 {
-    static constexpr uint8_t data[0xC] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
-        0x90, 0x90, 0x90 };
-
     auto match1 = Search();
-    auto addr1 = AsAddress(match1);
+    address1 = AsAddress(match1);
 
-    auto match2 = Search(addr1 + 1);
-    auto addr2 = AsAddress(match2);
+    auto match2 = Search(address1 + 1);
+    address2 = AsAddress(match2);
 
-    if (not(addr1 && addr2))
+    if (not(address1 && address2))
     {
         State::GetSingleton()->mod_found_all_addresses = false;
-        WARN("WASD unlock not found! Mod is disabled!");
+        WARN("WASD unlock not found!");
         return false;
     }
 
-    dku::Hook::WriteImm(addr1, data);
-    dku::Hook::WriteImm(addr2, data);
-    INFO("WASD unlocked : {:X} and {:X}", addr1, addr2);
-
     return true;
+}
+
+void WASDUnlock::Enable()
+{
+    if (not(address1 && address2))
+    {
+        return;
+    }
+
+    static constexpr uint8_t data[0xC] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90 };
+
+    dku::Hook::WriteImm(address1, data);
+    dku::Hook::WriteImm(address2, data);
+    INFO("WASD unlocked : {:X} and {:X}", address1, address2);
+
+    return;
 }

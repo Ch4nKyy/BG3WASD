@@ -4,12 +4,31 @@
 #include <string>
 #include <winuser.rh>
 
+#include "DKUtil/Config.hpp"
+
+using namespace DKUtil::Alias;
+
+enum Command
+{
+    TOGGLE_WALK_OR_SPRINT,
+    HOLD_WALK_OR_SPRINT,
+    TOGGLE_AUTORUN,
+    TOGGLE_CHARACTER_OR_CAMERA,
+    RELOAD_CONFIG,
+    FORWARD,
+    BACKWARD
+};
+
 class VirtualKeyMap
 {
 public:
     static int GetByName(const std::string name);
+    static std::vector<std::vector<std::uint32_t>> GetVkCombosOfCommand(Command command);
+    static void UpdateVkCombosOfCommandMap();
 
 private:
+    static void AddKeyComboForCommand(Command command, std::vector<std::string> setting);
+    static inline std::map<Command, std::vector<std::vector<std::uint32_t>>> vkcombos_of_command;
     // clang-format off
 
     /*

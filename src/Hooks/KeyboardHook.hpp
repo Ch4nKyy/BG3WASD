@@ -2,13 +2,14 @@
 
 #include "../Settings.hpp"
 #include "../State.hpp"
+#include "../VirtualKeyMap.hpp"
 
 #include <string>
 
 class KeyboardHook
 {
 public:
-    static bool Enable(HMODULE a_hModule);
+    static bool PrepareAndEnable(HMODULE a_hModule);
 
 private:
     static inline const DWORD CURRENT_PROCESS_ID = GetCurrentProcessId();

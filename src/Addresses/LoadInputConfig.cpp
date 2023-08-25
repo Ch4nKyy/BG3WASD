@@ -23,5 +23,10 @@ bool LoadInputConfig::IsValid() { return Func != nullptr; }
 
 int64_t LoadInputConfig::Call(int64_t a1, char a2)
 {
+    if (!IsValid())
+    {
+        return 0;
+    }
+
     return Func(a1, a2);
 }

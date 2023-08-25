@@ -3,7 +3,7 @@
 
 using enum Command;
 
-bool KeyboardHook::Enable(HMODULE a_hModule)
+bool KeyboardHook::PrepareAndEnable(HMODULE a_hModule)
 {
     HHOOK hHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, a_hModule, 0);
     if (!hHook)
@@ -29,7 +29,7 @@ LRESULT CALLBACK KeyboardHook::KeyboardProc(int a_nCode, WPARAM a_wParam, LPARAM
                 // lower key codes conflict with other codes, wtf, so use upper
                 last_input_vk = ((KBDLLHOOKSTRUCT*)a_lParam)->vkCode;
                 last_transition = a_wParam;
-                
+
                 auto* state = State::GetSingleton();
                 AutoRun(state);
                 ToggleCharacterOrCamera(state);
@@ -47,21 +47,27 @@ bool KeyboardHook::DidCommandChange(Command command, int transition)
     {
         return false;
     }
-    bool changed = true;
-    auto* settings = Settings::GetSingleton();
-    auto vkcombo = settings->GetVkComboOfCommand(command);
-    for (auto vk : vkcombo)
+    auto vkcombos = VirtualKeyMap::GetVkCombosOfCommand(command);
+    for (auto vkcombo : vkcombos)
     {
-        if (vk == vkcombo.back())
+        bool changed = true;
+        for (auto vk : vkcombo)
         {
-            changed &= (last_input_vk == vk);
+            if (vk == vkcombo.back())
+            {
+                changed &= (last_input_vk == vk);
+            }
+            else
+            {
+                changed &= ((GetAsyncKeyState(vk) & 0x8000) || (last_input_vk == vk));
+            }
         }
-        else
+        if(changed)
         {
-            changed &= ((GetAsyncKeyState(vk) & 0x8000) || (last_input_vk == vk));
+            return true;
         }
     }
-    return changed;
+    return false;
 }
 
 void KeyboardHook::AutoRun(State* state)
