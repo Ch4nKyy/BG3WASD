@@ -63,7 +63,7 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
             SDL_SetRelativeMouseMode(true);
             Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
             int w = 0;
-            int h = -1000.0;
+            int h = -1000000;
             SDL_GetWindowSize(state->sdl_window_ptr, &w, NULL); // TODO can be removed if I manage to block interact
             xy_v->x = w/2;
             xy_v->y = h;
