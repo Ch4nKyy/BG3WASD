@@ -1,12 +1,13 @@
 #include "SDL_GetWindowGrabHook.hpp"
 #include "../State.hpp"
 
-
 bool SDL_GetWindowGrabHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 F1 1F 13 02 3B C7 74 0B 48 8B 4E 08 8B D7 E8 DC 1F 13 02">()) };
-    addresses = address_array; // TODO pattern?
+        "E8 ?? ?? ?? ?? 3B ?? 74 ?? 48 ?? ?? ?? 8B ?? E8 ?? ?? ?? ?? 48 ?? ?? ?? ?? 74 ?? 8B ?? ?? "
+        "2B ?? ?? 8B ?? ?? 44 ?? ?? 2B ?? ?? 44 ?? ?? E9 ?? ?? ?? ?? 48 ?? ?? ?? 4C ?? ?? ?? ?? "
+        "66">()) };
+    addresses = address_array;
 
     all_found = true;
     int i = 0;
@@ -40,6 +41,7 @@ void SDL_GetWindowGrabHook::Enable()
 
 int64_t SDL_GetWindowGrabHook::OverrideFunc(int64_t a1)
 {
-    State::GetSingleton()->sdl_window_ptr = a1; // TODO hook is only used for this. rename class accordingly?
+    State::GetSingleton()->sdl_window_ptr =
+        a1;  // TODO hook is only used for this. rename class accordingly?
     return OriginalFunc(a1);
 }
