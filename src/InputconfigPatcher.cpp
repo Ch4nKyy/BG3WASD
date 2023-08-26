@@ -52,9 +52,9 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
 
     auto* settings = Settings::GetSingleton();
     data = UpdateData(data, "CharacterMoveBackward", "CameraBackward",
-        { "c:leftstick_ypos", "key:s", "key:down" });
+        { "c:leftstick_yneg", "key:s", "key:down" });
     data = UpdateData(data, "CharacterMoveForward", "CameraForward",
-        { "c:leftstick_yneg", "key:w", "key:up" });
+        { "c:leftstick_ypos", "key:w", "key:up" });
     data = UpdateData(data, "CharacterMoveLeft", "CameraLeft",
         { "c:leftstick_xneg", "key:a", "key:left" });
     data = UpdateData(data, "CharacterMoveRight", "CameraRight",
