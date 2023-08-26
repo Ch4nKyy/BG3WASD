@@ -93,22 +93,22 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                     errors.append("Auto toggling WASD at combat start/end disabled.\n");
                 }
             }
+
+            bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
+            bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
+            if (set_virtual_cursor_pos_hook && get_window_grab_hook)
+            {
+                SetVirtualCursorPosHook::Enable();
+                SDL_GetWindowGrabHook::Enable();
+            }
+            else
+            {
+                WARN("Mouse look disabled.");
+            }
         }
         else
         {
             errors.append("WASD could not be unlocked at all! Mod will be inactive.\n");
-        }
-
-        bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
-        bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
-        if (set_virtual_cursor_pos_hook && get_window_grab_hook)
-        {
-            SetVirtualCursorPosHook::Enable();
-            SDL_GetWindowGrabHook::Enable();
-        }
-        else
-        {
-            WARN("Mouse look disabled.");
         }
 
         if (!State::GetSingleton()->mod_found_all_addresses)
