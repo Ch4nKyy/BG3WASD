@@ -1,10 +1,8 @@
 #include "SetVirtualCursorPosHook.hpp"
+#include "../SdlWrapper.hpp"
 #include "../State.hpp"
 #include "../Structs/Vector2.hpp"
 
-using tSDL_SetRelativeMouseMode = int (*)(bool enabled);
-using tSDL_WarpMouseInWindow = void (*)(int64_t window, int x, int y);
-using tSDL_GetWindowSize = void (*)(int64_t window, int* x, int* y);
 
 bool SetVirtualCursorPosHook::Prepare()
 {
@@ -46,26 +44,20 @@ void SetVirtualCursorPosHook::Enable()
 
 void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
 {
+    SdlWrapper sdl;
     auto state = State::GetSingleton();
-    state->sdl2_dll = GetModuleHandle(L"SDL2.dll");
-    tSDL_SetRelativeMouseMode SDL_SetRelativeMouseMode = (tSDL_SetRelativeMouseMode)GetProcAddress(
-        state->sdl2_dll, "SDL_SetRelativeMouseMode");  // TODO move
-    tSDL_GetWindowSize SDL_GetWindowSize =
-        (tSDL_GetWindowSize)GetProcAddress(state->sdl2_dll, "SDL_GetWindowSize");  // TODO move
-    tSDL_WarpMouseInWindow SDL_WarpMouseInWindow = (tSDL_WarpMouseInWindow)GetProcAddress(
-        state->sdl2_dll, "SDL_WarpMouseInWindow");  // TODO move
-
     if (state->is_mouselook)
     {
         if (state->mouselook_changed)
         {
             state->mouselook_changed = false;
-            SDL_SetRelativeMouseMode(true);
+            sdl.SetRelativeMouseMode(true);
             Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
             int w = 0;
             int h = -1000000;
-            SDL_GetWindowSize(state->sdl_window_ptr, &w, NULL); // TODO can be removed if I manage to block interact
-            xy_v->x = w/2;
+            sdl.GetWindowSize(state->sdl_window_ptr, &w,
+                NULL);  // TODO can be removed if I manage to block interact
+            xy_v->x = w / 2;
             xy_v->y = h;
             return OriginalFunc(a1, xy);
         }
@@ -76,14 +68,14 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
         if (state->mouselook_changed)
         {
             state->mouselook_changed = false;
-            SDL_SetRelativeMouseMode(false);
+            sdl.SetRelativeMouseMode(false);
         }
         // If we only set the pos once there is some kind of race condition.
         if (state->frames_to_restore_cursor_pos > 0)
         {
             POINT p = state->cursor_position_to_restore;
             --state->frames_to_restore_cursor_pos;
-            SDL_WarpMouseInWindow(state->sdl_window_ptr, (int)p.x, (int)p.y);
+            sdl.WarpMouseInWindow(state->sdl_window_ptr, (int)p.x, (int)p.y);
             return;
         }
     }
