@@ -69,7 +69,9 @@ AutoTogglingWasdMode = true
 
 # key:;                 key:=                   key:,                   key:'
 # key:-                 key:.                   key:/                   key:`
-# key:[                 key:\                   key:]
+# key:[                 key:]
+# key:\\ (Backslash is a very special character in the toml format. You must either
+# write xxx="key:\\" or xxx='key:\' for it to work.)
 
 # key:numpad0           key:numpad1             ...                     key:numpad9
 # key:multiply          key:add                 key:decimal             key:divide
