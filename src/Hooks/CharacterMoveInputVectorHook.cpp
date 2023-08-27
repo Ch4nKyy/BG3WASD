@@ -52,7 +52,7 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
     Vector2* yx_v = reinterpret_cast<Vector2*>(yx);
 
     auto* state = State::GetSingleton();
-    if (state->autorunning)
+    if (state->autorunning || (state->is_mouseleft_pressed && state->is_mouselook))
     {
         // This causes the input vector to not be normalized anymore, but it doesn't matter.
         yx_v->y = 1.0f;

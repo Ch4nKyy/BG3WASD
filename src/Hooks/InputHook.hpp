@@ -29,4 +29,5 @@ private:
     static void ReloadConfig();
     // TODO delete here and hook game fct?
     static void Rotate();
+    static void MouseLeftDown();
 };

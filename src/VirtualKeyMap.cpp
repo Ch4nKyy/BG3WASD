@@ -59,4 +59,5 @@ void VirtualKeyMap::UpdateVkCombosOfCommandMap()
     AddKeyComboForCommand(FORWARD, state->character_forward_keys);
     AddKeyComboForCommand(BACKWARD, state->character_backward_keys);
     AddKeyComboForCommand(ROTATE, state->rotate_keys);  // TODO delete here and hook game fct?
+    AddKeyComboForCommand(MOUSE_LEFT_DOWN, std::vector{ std::string("mouse:left") });
 }

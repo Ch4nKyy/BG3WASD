@@ -17,7 +17,8 @@ enum Command
     RELOAD_CONFIG,
     FORWARD,
     BACKWARD,
-    ROTATE  // TODO delete here and hook game fct?
+    ROTATE,  // TODO delete here and hook game fct?
+    MOUSE_LEFT_DOWN
 };
 
 class VirtualKeyMap

@@ -79,6 +79,7 @@ void InputHook::HandleInput()
     WalkOrSprint(state);
     ReloadConfig();
     Rotate();
+    MouseLeftDown();
 }
 
 bool InputHook::DidCommandChange(Command command, int transition)
@@ -183,6 +184,19 @@ void InputHook::Rotate()
         state->is_mouselook = false;
         state->mouselook_changed = true;
         state->frames_to_restore_cursor_pos = 2;
+    }
+}
+
+void InputHook::MouseLeftDown()
+{
+    auto state = State::GetSingleton();
+    if (DidCommandChange(MOUSE_LEFT_DOWN, WM_KEYDOWN))
+    {
+        state->is_mouseleft_pressed = true;
+    }
+    if (DidCommandChange(MOUSE_LEFT_DOWN, WM_KEYUP))
+    {
+        state->is_mouseleft_pressed = false;
     }
 }
 

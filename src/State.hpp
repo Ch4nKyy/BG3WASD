@@ -19,4 +19,5 @@ public:
     POINT cursor_position_to_restore;
     bool mouselook_changed = false;
     int frames_to_restore_cursor_pos = 0;
+    bool is_mouseleft_pressed = false;
 };
