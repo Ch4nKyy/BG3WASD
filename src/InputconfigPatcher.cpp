@@ -11,14 +11,9 @@ void InputconfigPatcher::Patch()
     {
         ReadAndWriteInputconfig();
     }
-    catch (...)  // TODO does this catch anything?
+    catch (...)
     {
-        FATAL(
-            "Inputconfig could not be patched! "
-            "This can often be fixed by renaming or deleting "
-            "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
-            "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
-            "Win+R and typing %localappdata%");
+        FATAL("Inputconfig could not be patched!");
     }
 }
 
@@ -33,9 +28,8 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     if (SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, NULL,
             &localAppDataFolder_wchar) != S_OK)
     {
-        WARN(
-            "Critical error. Could not find LocalAppData. Inputconfig could not be patched! The "
-            "mod will probably not work.");
+        FATAL(
+            "Critical error. Could not find LocalAppData.");
     }
 
     std::wstring localAppDataFolder = localAppDataFolder_wchar;
@@ -63,7 +57,12 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     std::ofstream output_stream(config_path_absolute);
     if (output_stream.fail())
     {
-        throw std::runtime_error("Can't write file.");
+        FATAL(
+            "Inputconfig could not be patched! "
+            "This can often be fixed by renaming or deleting "
+            "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
+            "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
+            "Win+R and typing %localappdata%");
     }
     output_stream << std::setw(4) << data << std::endl;
 

@@ -105,13 +105,13 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             {
                 if (settings->enable_improved_mouse_rotation)
                 {
-                    WARN("Improved mouse rotation disabled.");
+                    errors.append("Improved mouse rotation disabled.");
                 }
             }
         }
         else
         {
-            errors.append("WASD could not be unlocked at all! Mod will be inactive.\n");
+            errors.append("WASD could not be unlocked! Mod will be inactive.\n");
         }
 
         if (!State::GetSingleton()->mod_found_all_addresses)
