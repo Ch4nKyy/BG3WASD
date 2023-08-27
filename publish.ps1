@@ -9,5 +9,5 @@ New-Item -ItemType Directory -Path $PSScriptRoot\package\bin\NativeMods | Out-Nu
 Copy-Item $PSScriptRoot\extern\SDL2\* $PSScriptRoot\package\bin\
 Copy-Item $PSScriptRoot\build\Release\* $PSScriptRoot\package\bin\NativeMods\
 Copy-Item $PSScriptRoot\package\*.toml $PSScriptRoot\package\bin\NativeMods\
-Compress-Archive -Path $PSScriptRoot\package\bin -DestinationPath $PSScriptRoot\package\BG3WASD.zip -Force
+& "C:\Program Files\7-Zip\7z.exe" a -tzip $PSScriptRoot\package\BG3WASD.zip $PSScriptRoot\package\bin
 Remove-Item $PSScriptRoot\package\bin -Force -Recurse  -ErrorAction:SilentlyContinue | Out-Null
