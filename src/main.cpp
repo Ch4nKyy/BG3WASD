@@ -47,9 +47,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         bool load_input_config = LoadInputConfig::Prepare();
         bool after_changing_keybind_in_menu_hook = AfterChangingKeybindInMenuHook::Prepare();
         bool after_initial_load_inputconfig_hook = AfterInitialLoadInputConfigHook::Prepare();
-        if (wasd_unlock && get_camera_object_hook &&
-            character_movement_input_vector_hook && is_in_controller_mode &&
-            after_changing_keybind_in_menu_hook && load_input_config &&
+        if (wasd_unlock && get_camera_object_hook && character_movement_input_vector_hook &&
+            is_in_controller_mode && after_changing_keybind_in_menu_hook && load_input_config &&
             after_initial_load_inputconfig_hook)
         {
             InputHook::Enable(a_hModule); // throws on error
@@ -96,14 +95,18 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
             bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
             bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
-            if (set_virtual_cursor_pos_hook && get_window_grab_hook)
+            if (settings->enable_improved_mouse_rotation && set_virtual_cursor_pos_hook &&
+                get_window_grab_hook)
             {
                 SetVirtualCursorPosHook::Enable();
                 SDL_GetWindowGrabHook::Enable();
             }
             else
             {
-                WARN("Mouse look disabled.");
+                if (settings->enable_improved_mouse_rotation)
+                {
+                    WARN("Improved mouse rotation disabled.");
+                }
             }
         }
         else

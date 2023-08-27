@@ -46,6 +46,10 @@ AutoTogglingWasdMode = true
 # Requires CoreFeatures to be enabled!
 # [true, false]
 
+ImprovedMouseRotation = true
+# Hide the mouse cursor during rotation.
+# [true, false]
+
 
 # List of all available keys:
 # (We try to match Larian's style, but for regional keys, they might not always match.)

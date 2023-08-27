@@ -23,6 +23,7 @@ void Settings::Load() noexcept
             config.Bind(walking_is_default, FALSE);
 
             config.Bind(enable_auto_toggling_wasd_mode, TRUE);
+            config.Bind(enable_improved_mouse_rotation, TRUE);
         });
 
     config.Load();

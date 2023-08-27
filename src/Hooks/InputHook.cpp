@@ -169,20 +169,21 @@ void InputHook::ReloadConfig()
     }
 }
 
-// TODO delete here and hook game fct?
 void InputHook::Rotate()
 {
     auto state = State::GetSingleton();
-    if (DidCommandChange(ROTATE, WM_KEYDOWN) && !state->is_mouselook)
+    if (DidCommandChange(ROTATE, WM_KEYDOWN) && !state->is_rotating &&
+        Settings::GetSingleton()->enable_improved_mouse_rotation)
     {
-        state->is_mouselook = true;
-        state->mouselook_changed = true;
+        state->is_rotating = true;
+        state->is_rotating_changed = true;
         GetCursorPos(&state->cursor_position_to_restore);
     }
-    if (DidCommandChange(ROTATE, WM_KEYUP) && state->is_mouselook)
+    if (DidCommandChange(ROTATE, WM_KEYUP) && state->is_rotating &&
+        Settings::GetSingleton()->enable_improved_mouse_rotation)
     {
-        state->is_mouselook = false;
-        state->mouselook_changed = true;
+        state->is_rotating = false;
+        state->is_rotating_changed = true;
         state->frames_to_restore_cursor_pos = 2;
     }
 }

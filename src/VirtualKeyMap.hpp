@@ -17,7 +17,7 @@ enum Command
     RELOAD_CONFIG,
     FORWARD,
     BACKWARD,
-    ROTATE,  // TODO delete here and hook game fct?
+    ROTATE,
     MOUSE_LEFT_DOWN
 };
 

@@ -12,12 +12,12 @@ public:
     String toggle_autorun{ "ToggleAutorun", "ModHotkeys" };
     String hold_walk_or_sprint{ "HoldWalkOrSprint", "ModHotkeys" };
     String reload_config{ "ReloadConfig", "ModHotkeys" };
-    String rotate{ "Rotate", "ModHotkeys" }; // TODO delete here and hook game fct? otherwise it must patch inputconfig, which will override it for many...
 
     Double walk_speed{ "WalkSpeed", "Movement" };
     Boolean walking_is_default{ "WalkingIsDefault", "Movement" };
 
     Boolean enable_auto_toggling_wasd_mode{ "AutoTogglingWasdMode", "EnableFeatures" };
+    Boolean enable_improved_mouse_rotation{ "ImprovedMouseRotation", "EnableFeatures" };
 
     void Load() noexcept;
 

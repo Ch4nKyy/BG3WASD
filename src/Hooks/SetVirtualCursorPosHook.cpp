@@ -46,11 +46,11 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
 {
     SdlWrapper sdl;
     auto state = State::GetSingleton();
-    if (state->is_mouselook)
+    if (state->is_rotating)
     {
-        if (state->mouselook_changed)
+        if (state->is_rotating_changed)
         {
-            state->mouselook_changed = false;
+            state->is_rotating_changed = false;
             sdl.SetRelativeMouseMode(true);
             Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
             int w = 0;
@@ -65,9 +65,9 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
     }
     else
     {
-        if (state->mouselook_changed)
+        if (state->is_rotating_changed)
         {
-            state->mouselook_changed = false;
+            state->is_rotating_changed = false;
             sdl.SetRelativeMouseMode(false);
         }
         // If we only set the pos once there is some kind of race condition.
