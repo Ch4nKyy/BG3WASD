@@ -1,6 +1,6 @@
 # Default config that is packaged with the mod
 
-# Foreword: Key names are in Larian style, e.g. key:w, shift+key:w or key:lshift.
+# Foreword: Key names are in Larian style, e.g. key:w, shift+key:w, mouse:middle or key:lshift.
 # For the names of all available keys, see the bottom of this config file.
 
 
@@ -51,6 +51,9 @@ AutoTogglingWasdMode = true
 # (We try to match Larian's style, but for regional keys, they might not always match.)
 
 # Modifiers: ctrl, shift, alt. E.g. "ctrl+shift+key:w"
+
+# mouse:left            mouse:right             mouse:middle
+# mouse:x1              mouse:x2
 
 # key:a                 key:b                   ...                     key:z
 # key:1                 key:2                   ...                     key:0

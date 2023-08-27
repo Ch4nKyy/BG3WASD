@@ -10,7 +10,7 @@
 #include "Hooks/FTBStartHook.hpp"
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetCharacterName.hpp"
-#include "Hooks/KeyboardHook.hpp"
+#include "Hooks/InputHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
 #include "Hooks/SetVirtualCursorPosHook.hpp"
 #include "Hooks/WASDUnlock.hpp"
@@ -52,7 +52,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             after_changing_keybind_in_menu_hook && load_input_config &&
             after_initial_load_inputconfig_hook)
         {
-            bool keyboard_hook = KeyboardHook::Enable(a_hModule);
+            InputHook::Enable(a_hModule); // throws on error
             WASDUnlock::Enable();
             GetCameraObjectHook::Enable();
             CharacterMoveInputVectorHook::Enable();
