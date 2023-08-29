@@ -78,8 +78,8 @@ void InputHook::HandleInput()
     ToggleCharacterOrCamera(state);
     WalkOrSprint(state);
     ReloadConfig();
-    Rotate();
     MouseLeftDown();
+    ToggleCameraRotate();
 }
 
 bool InputHook::DidCommandChange(Command command, int transition)
@@ -113,7 +113,7 @@ bool InputHook::DidCommandChange(Command command, int transition)
 
 void InputHook::AutoRun(State* state)
 {
-    if (DidCommandChange(TOGGLE_AUTORUN, WM_KEYDOWN) && state->is_wasd_character_movement)
+    if (DidCommandChange(TOGGLE_AUTORUN, WM_KEYDOWN) && state->IsWasdCharacterMovement())
     {
         state->autorunning = !state->autorunning;
         return;
@@ -131,30 +131,26 @@ void InputHook::ToggleCharacterOrCamera(State* state)
 {
     if (DidCommandChange(TOGGLE_CHARACTER_OR_CAMERA, WM_KEYDOWN))
     {
-        state->is_wasd_character_movement = !state->is_wasd_character_movement;
-        if (state->is_wasd_character_movement)
-        {
-            state->frames_to_hold_forward_to_center_camera = 10;
-        }
+        state->SetIsWasdCharacterMovement(!state->IsWasdCharacterMovement());
         return;
     }
 }
 
 void InputHook::WalkOrSprint(State* state)
 {
-    if (DidCommandChange(TOGGLE_WALK_OR_SPRINT, WM_KEYDOWN) && state->is_wasd_character_movement)
+    if (DidCommandChange(TOGGLE_WALK_OR_SPRINT, WM_KEYDOWN) && state->IsWasdCharacterMovement())
     {
         state->walking = !state->walking;
         return;
     }
 
-    if (DidCommandChange(HOLD_WALK_OR_SPRINT, WM_KEYDOWN) && state->is_wasd_character_movement)
+    if (DidCommandChange(HOLD_WALK_OR_SPRINT, WM_KEYDOWN) && state->IsWasdCharacterMovement())
     {
         state->walking_or_sprint_held = true;
         return;
     }
 
-    if (DidCommandChange(HOLD_WALK_OR_SPRINT, WM_KEYUP) && state->is_wasd_character_movement)
+    if (DidCommandChange(HOLD_WALK_OR_SPRINT, WM_KEYUP) && state->IsWasdCharacterMovement())
     {
         state->walking_or_sprint_held = false;
         return;
@@ -169,25 +165,6 @@ void InputHook::ReloadConfig()
     }
 }
 
-void InputHook::Rotate()
-{
-    auto state = State::GetSingleton();
-    if (DidCommandChange(ROTATE, WM_KEYDOWN) && !state->is_rotating &&
-        Settings::GetSingleton()->enable_improved_mouse_rotation)
-    {
-        state->is_rotating = true;
-        state->is_rotating_changed = true;
-        GetCursorPos(&state->cursor_position_to_restore);
-    }
-    if (DidCommandChange(ROTATE, WM_KEYUP) && state->is_rotating &&
-        Settings::GetSingleton()->enable_improved_mouse_rotation)
-    {
-        state->is_rotating = false;
-        state->is_rotating_changed = true;
-        state->frames_to_restore_cursor_pos = 2;
-    }
-}
-
 void InputHook::MouseLeftDown()
 {
     auto state = State::GetSingleton();
@@ -198,6 +175,15 @@ void InputHook::MouseLeftDown()
     if (DidCommandChange(MOUSE_LEFT_DOWN, WM_KEYUP))
     {
         state->is_mouseleft_pressed = false;
+    }
+}
+
+void InputHook::ToggleCameraRotate()
+{
+    auto state = State::GetSingleton();
+    if (DidCommandChange(TOGGLE_CAMERA_ROTATE, WM_KEYDOWN))
+    {
+        state->SetIsRotating(!state->IsRotating());
     }
 }
 

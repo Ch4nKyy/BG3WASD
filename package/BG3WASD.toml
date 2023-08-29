@@ -25,6 +25,15 @@ ToggleCharacterOrCamera = "key:capslock"
 ToggleWalkOrSprint = "key:insert"
 # Toggle between walking and sprinting movespeed.
 
+ToggleCameraRotate = ""
+# The Camera Rotate command from the main menu must be held, but this key allows a real toggle for
+# a semi mouselook.
+# For this key to work, Camera Rotate must still be bound to another key without modifiers in the
+# game menu!
+# Unfortunately, the toggle does not work inversely. So if you toggle to mouselook, holding
+# Camera Rotate will not show the cursor when held.
+# Requires ImprovedMouseRotation = true.
+
 
 [Movement]
 
@@ -33,6 +42,14 @@ WalkSpeed = 0.3
 
 WalkingIsDefault = false
 # Whether the character walks, when the game starts up. [true, false]
+
+ToggleCharacterOrCameraAlsoTogglesCameraRotate = false
+# When true, toggling the movement mode will also toggle camera rotate. 
+# This works together with AutoTogglingWasdMode!
+# Small hint: Usually the mod starts in Character mode. But when this option is true, it will start
+# in Camera mode due to technical reasons.
+# Requires ImprovedMouseRotation = true.
+# [true, false]
 
 
 [EnableFeatures]
@@ -47,7 +64,9 @@ AutoTogglingWasdMode = true
 # [true, false]
 
 ImprovedMouseRotation = true
-# Hide the mouse cursor during rotation.
+# Hide the mouse cursor and disable Interact (usually left click) during rotation.
+# Enable Rotate+LeftClick = Move Forward
+# Provide key ToggleCameraRotate and option ToggleCharacterOrCameraAlsoTogglesCameraRotate.
 # [true, false]
 
 
@@ -84,15 +103,8 @@ ImprovedMouseRotation = true
 # key:multiply          key:add                 key:decimal             key:divide
 # key:separator         key:subtract            
 
-# key:convert           key:nonconvert          key:accept              key:modechange
-# key:prior             key:next                key:clear               key:select
-# key:execute           key:help                key:sleep               key:snapshot 
-# key:browser_back      key:browser_forward     key:browser_refresh     key:browser_stop
-# key:browser_search    key:browser_favorites   key:browser_home        key:volume_mute
-# key:volume_down       key:volume_up           key:media_next_track    key:media_prev_track
-# key:media_stop        key:media_play_pause    key:launch_mail         key:launch_app1
-# key:oem_8             key:oem_102             key:processkey          key:packet
-# key:attn              key:crsel               key:exsel               key:ereof
-# key:play              key:zoom                key:noname              key:pa1
-# key:oem_clear         key:launch_app2         key:kana                key:kanji
-# key:junja             key:final               key:apps
+# key:modechange        key:prior               key:clear               key:select
+# key:execute           key:help                key:sleep
+# key:volume_down       key:volume_up           key:volume_mute         key:media_next_track
+# key:media_prev_track  key:media_stop          key:media_play_pause    key:launch_mail
+# key:crsel             key:exsel               key:apps

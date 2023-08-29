@@ -43,7 +43,7 @@ int64_t FTBStartHook::OverrideFunc(int64_t a1, int64_t a2, char* a3)
     int64_t ret = OriginalFunc(a1, a2, a3);
 
     auto* state = State::GetSingleton();
-    state->is_wasd_character_movement = false;
+    state->SetIsWasdCharacterMovement(false);
 
     return ret;
 }

@@ -1,11 +1,11 @@
-#include "FTBEndHook.hpp"
+#include "SetCursorRotateHook.hpp"
 #include "../State.hpp"
 
-bool FTBEndHook::Prepare()
+bool SetCursorRotateHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? ?? 4D ?? ?? 4C ?? ?? ?? 48 ?? ?? 48 ?? ?? E8 ?? ?? ?? ?? 49 ?? ?? E8 ?? ?? ?? "
-        "?? 41 ?? ?? 48 ?? ?? ?? 48 ?? ?? E8 ?? ?? ?? ?? 90">()) };
+        "E8 ?? ?? ?? ?? EB ?? E8 ?? ?? ?? ?? 45 ?? ?? ?? 75 ?? 40 ?? ?? 40 ?? ?? ?? ?? ?? ?? 44 ?? "
+        "?? ?? 40 ?? ?? 0F ?? ?? ?? ?? ?? E9 ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? ?? ?? 0F ?? ?? 76">()) };
     addresses = address_array;
 
     all_found = true;
@@ -15,7 +15,7 @@ bool FTBEndHook::Prepare()
         if (!address)
         {
             State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("FTBEndHook #{} not found", i);
+            WARN("SetCursorRotateHook #{} not found", i);
             all_found = false;
         }
         ++i;
@@ -23,7 +23,7 @@ bool FTBEndHook::Prepare()
     return all_found;
 }
 
-void FTBEndHook::Enable()
+void SetCursorRotateHook::Enable()
 {
     if (not all_found)
     {
@@ -33,17 +33,16 @@ void FTBEndHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked FTBEndHook #{}: {:X}", i, AsAddress(address));
+        INFO("Hooked SetCursorRotateHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }
 
-int64_t FTBEndHook::OverrideFunc(int64_t a1, int64_t a2, char* a3)
+void SetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
 {
-    int64_t ret = OriginalFunc(a1, a2, a3);
-
     auto* state = State::GetSingleton();
-    state->SetIsWasdCharacterMovement(true);
-
-    return ret;
+    state->is_rotating_changed = true;
+    state->SetIsRotating(true, false);
+    GetCursorPos(&state->cursor_position_to_restore);
+    return OriginalFunc(a1, a2);
 }

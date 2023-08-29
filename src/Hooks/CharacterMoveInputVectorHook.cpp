@@ -52,7 +52,7 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
     Vector2* yx_v = reinterpret_cast<Vector2*>(yx);
 
     auto* state = State::GetSingleton();
-    if (state->autorunning || (state->is_mouseleft_pressed && state->is_rotating))
+    if (state->autorunning || (state->is_mouseleft_pressed && state->IsRotating()))
     {
         // This causes the input vector to not be normalized anymore, but it doesn't matter.
         yx_v->y = 1.0f;
@@ -63,7 +63,7 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
         yx_v->x *= *settings->walk_speed;
         yx_v->y *= *settings->walk_speed;
     }
-    if (not state->is_wasd_character_movement)
+    if (not state->IsWasdCharacterMovement())
     {
         yx_v->x = 0.0f;
         yx_v->y = 0.0f;

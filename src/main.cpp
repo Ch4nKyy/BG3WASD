@@ -11,7 +11,9 @@
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetCharacterName.hpp"
 #include "Hooks/InputHook.hpp"
+#include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
+#include "Hooks/SetCursorRotateHook.hpp"
 #include "Hooks/SetVirtualCursorPosHook.hpp"
 #include "Hooks/WASDUnlock.hpp"
 #include "InputconfigPatcher.hpp"
@@ -41,7 +43,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 "SDL2.dll version mismatch. This usually means that you must re-install the mod!");
         }
 
-        dku::Hook::Trampoline::AllocTrampoline(1 << 8);
+        dku::Hook::Trampoline::AllocTrampoline(1 << 9);
 
         auto settings = Settings::GetSingleton();
 
@@ -104,11 +106,15 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
             bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
             bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
+            bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
+            bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
             if (settings->enable_improved_mouse_rotation && set_virtual_cursor_pos_hook &&
-                get_window_grab_hook)
+                get_window_grab_hook && set_cursor_rotate_hook && reset_cursor_rotate_hook)
             {
                 SetVirtualCursorPosHook::Enable();
                 SDL_GetWindowGrabHook::Enable();
+                SetCursorRotateHook::Enable();
+                ResetCursorRotateHook::Enable();
             }
             else
             {

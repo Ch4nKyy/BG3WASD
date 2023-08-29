@@ -45,7 +45,7 @@ void SetVirtualCursorPosHook::Enable()
 void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
 {
     auto state = State::GetSingleton();
-    if (state->is_rotating)
+    if (state->IsRotating())
     {
         if (state->is_rotating_changed)
         {

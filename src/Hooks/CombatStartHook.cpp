@@ -49,7 +49,7 @@ const char* CombatStartHook::OverrideFunc(DWORD* a1)
     if (strcmp(substring, "Companion") == 0 || strcmp(substring, "Hero Play") == 0)
     {
         auto* state = State::GetSingleton();
-        state->is_wasd_character_movement = false;
+        state->SetIsWasdCharacterMovement(false);
     }
 
     return faction_name;

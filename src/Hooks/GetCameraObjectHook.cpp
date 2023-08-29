@@ -43,7 +43,7 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
     int64_t camera_object_ptr = OriginalFunc(a1);
 
     auto* state = State::GetSingleton();
-    if (state->is_wasd_character_movement && not IsInControllerMode::Read())
+    if (state->IsWasdCharacterMovement() && not IsInControllerMode::Read())
     {
         *(float*)(camera_object_ptr + 148) = 0.0f;  // x input
         *(float*)(camera_object_ptr + 152) = 0.0f;  // y input

@@ -8,7 +8,6 @@ public:
     bool autorunning = false;
     bool walking = false;
     bool walking_or_sprint_held = false;
-    bool is_wasd_character_movement = true;
     int frames_to_hold_forward_to_center_camera = 0;
     bool last_dying_character_is_player = false;
     std::string combat_end_character_name;
@@ -17,9 +16,17 @@ public:
     std::vector<std::string> character_backward_keys;
     std::vector<std::string> rotate_keys;
     SDL_Window* sdl_window = 0;
-    bool is_rotating = false;
     bool is_rotating_changed = false;
     POINT cursor_position_to_restore;
     int frames_to_restore_cursor_pos = 0;
     bool is_mouseleft_pressed = false;
+
+    void SetIsRotating(bool in_value, bool send_fake_key = true);
+    bool IsRotating();
+    void SetIsWasdCharacterMovement(bool in_value);
+    bool IsWasdCharacterMovement();
+
+private:
+    bool is_rotating = false;
+    bool is_wasd_character_movement = true;
 };

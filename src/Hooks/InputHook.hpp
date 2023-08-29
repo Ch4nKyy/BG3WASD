@@ -27,6 +27,6 @@ private:
     static void ToggleCharacterOrCamera(State* state);
     static void WalkOrSprint(State* state);
     static void ReloadConfig();
-    static void Rotate();
     static void MouseLeftDown();
+    static void ToggleCameraRotate();
 };
