@@ -1,7 +1,7 @@
 #include "SetVirtualCursorPosHook.hpp"
-#include "../SdlWrapper.hpp"
 #include "../State.hpp"
 #include "../Structs/Vector2.hpp"
+#include "SDL.h"
 
 
 bool SetVirtualCursorPosHook::Prepare()
@@ -44,18 +44,17 @@ void SetVirtualCursorPosHook::Enable()
 
 void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
 {
-    SdlWrapper sdl;
     auto state = State::GetSingleton();
     if (state->is_rotating)
     {
         if (state->is_rotating_changed)
         {
             state->is_rotating_changed = false;
-            sdl.SetRelativeMouseMode(true);
+            SDL_SetRelativeMouseMode(SDL_TRUE);
             Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
             int w = 0;
             int h = -1000000;
-            sdl.GetWindowSize(state->sdl_window_ptr, &w,
+            SDL_GetWindowSize(state->sdl_window, &w,
                 NULL);  // TODO can be removed if I manage to block interact
             xy_v->x = w / 2;
             xy_v->y = h;
@@ -68,14 +67,14 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
         if (state->is_rotating_changed)
         {
             state->is_rotating_changed = false;
-            sdl.SetRelativeMouseMode(false);
+            SDL_SetRelativeMouseMode(SDL_FALSE);
         }
         // If we only set the pos once there is some kind of race condition.
         if (state->frames_to_restore_cursor_pos > 0)
         {
             POINT p = state->cursor_position_to_restore;
             --state->frames_to_restore_cursor_pos;
-            sdl.WarpMouseInWindow(state->sdl_window_ptr, (int)p.x, (int)p.y);
+            SDL_WarpMouseInWindow(state->sdl_window, (int)p.x, (int)p.y);
             return;
         }
     }

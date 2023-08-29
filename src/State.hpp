@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SDL.h"
+
 class State : public DKUtil::model::Singleton<State>
 {
 public:
@@ -14,7 +16,7 @@ public:
     std::vector<std::string> character_forward_keys;
     std::vector<std::string> character_backward_keys;
     std::vector<std::string> rotate_keys;
-    int64_t sdl_window_ptr = 0;
+    SDL_Window* sdl_window = 0;
     bool is_rotating = false;
     bool is_rotating_changed = false;
     POINT cursor_position_to_restore;

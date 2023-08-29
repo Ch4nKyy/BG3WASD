@@ -1,5 +1,6 @@
 #include "SDL_GetWindowGrabHook.hpp"
 #include "../State.hpp"
+#include "SDL.h"
 
 bool SDL_GetWindowGrabHook::Prepare()
 {
@@ -41,7 +42,8 @@ void SDL_GetWindowGrabHook::Enable()
 
 int64_t SDL_GetWindowGrabHook::OverrideFunc(int64_t a1)
 {
-    State::GetSingleton()->sdl_window_ptr =
-        a1;  // TODO hook is only used for this. rename class accordingly?
+    // TODO hook is only used for this. rename class accordingly?
+    State::GetSingleton()->sdl_window = reinterpret_cast<SDL_Window*>(a1);
+
     return OriginalFunc(a1);
 }
