@@ -84,6 +84,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 }
             }
 
+            // I tried to use combat camera flag to decide this, but it was not really better.
             bool character_death_hook = CharacterDeathHook::Prepare();
             bool combat_start_hook = CombatStartHook::Prepare();
             bool combat_end_hook = CombatEndHook::Prepare();
