@@ -73,6 +73,9 @@ LRESULT CALLBACK InputHook::KeyboardProc(int a_nCode, WPARAM a_wParam, LPARAM a_
 
 void InputHook::HandleInput()
 {
+    is_shift_down = (GetAsyncKeyState(VK_SHIFT) & 0x8000);
+    is_ctrl_down = (GetAsyncKeyState(VK_CONTROL) & 0x8000);
+    is_alt_down = (GetAsyncKeyState(VK_MENU) & 0x8000);
     auto* state = State::GetSingleton();
     AutoRun(state);
     ToggleCharacterOrCamera(state);
@@ -92,6 +95,9 @@ bool InputHook::DidCommandChange(Command command, int transition)
     for (auto vkcombo : vkcombos)
     {
         bool changed = true;
+        bool combo_includes_shift = false;
+        bool combo_includes_ctrl = false;
+        bool combo_includes_alt = false;
         for (auto vk : vkcombo)
         {
             if (vk == vkcombo.back())
@@ -102,6 +108,14 @@ bool InputHook::DidCommandChange(Command command, int transition)
             {
                 changed &= ((GetAsyncKeyState(vk) & 0x8000) || (last_input_vk == vk));
             }
+            combo_includes_shift |= (vk == VK_SHIFT);
+            combo_includes_ctrl |= (vk == VK_CONTROL);
+            combo_includes_alt |= (vk == VK_MENU);
+        }
+        if (!combo_includes_shift && is_shift_down || !combo_includes_ctrl && is_ctrl_down ||
+            !combo_includes_alt && is_alt_down)
+        {
+            changed = false;
         }
         if (changed)
         {
