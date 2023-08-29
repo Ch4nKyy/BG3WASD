@@ -15,6 +15,7 @@
 #include "Hooks/SetVirtualCursorPosHook.hpp"
 #include "Hooks/WASDUnlock.hpp"
 #include "InputconfigPatcher.hpp"
+#include "SDL.h"
 #include "Settings.hpp"
 #include "State.hpp"
 
@@ -31,6 +32,14 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         dku::Logger::Init(Plugin::NAME, std::to_string(Plugin::Version));
 
         INFO("Game Process Name : {}", dku::Hook::GetProcessName())
+
+        SDL_version linked;
+        SDL_GetVersion(&linked);
+        if (linked.major != 2 || linked.minor != 24)
+        {
+            FATAL(
+                "SDL2.dll version mismatch. This usually means that you must re-install the mod!");
+        }
 
         dku::Hook::Trampoline::AllocTrampoline(1 << 8);
 
