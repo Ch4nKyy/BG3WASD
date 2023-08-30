@@ -60,7 +60,6 @@ AutoTogglingWasdMode = true
 # Automatically toggle WASD mode depending on the context. 
 # Toggle to Camera movement, when combat starts, and back to Character movement, when combat ends.
 # Doesn't work perfectly yet. Sometimes you have to toggle manually.
-# Requires CoreFeatures to be enabled!
 # [true, false]
 
 ImprovedMouseRotation = true

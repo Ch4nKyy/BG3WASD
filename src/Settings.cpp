@@ -30,6 +30,12 @@ void Settings::Load() noexcept
 
     config.Load();
 
+    if (!*enable_improved_mouse_rotation)
+    {
+        *toggle_camera_rotate = "";
+        *wasd_toggles_rotate = false;
+    }
+
     if (!loaded_once)
     {
         InitState();
