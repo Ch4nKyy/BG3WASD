@@ -20,6 +20,7 @@ public:
     POINT cursor_position_to_restore;
     int frames_to_restore_cursor_pos = 0;
     bool is_mouseleft_pressed = false;
+    bool old_combat_state = false;
 
     void SetIsRotating(bool in_value, bool send_fake_key = true);
     bool IsRotating();

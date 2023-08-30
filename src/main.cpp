@@ -84,26 +84,26 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 }
             }
 
-            // I tried to use combat camera flag to decide this, but it was not really better.
-            bool character_death_hook = CharacterDeathHook::Prepare();
-            bool combat_start_hook = CombatStartHook::Prepare();
-            bool combat_end_hook = CombatEndHook::Prepare();
-            bool get_character_name = GetCharacterName::Prepare();
-            if (settings->enable_auto_toggling_wasd_mode && character_death_hook &&
-                combat_start_hook && combat_end_hook && get_character_name)
-            {
-                CombatStartHook::Enable();
-                CombatEndHook::Enable();
-                CharacterDeathHook::Enable();
-                GetCharacterName::Enable();
-            }
-            else
-            {
-                if (settings->enable_auto_toggling_wasd_mode)
-                {
-                    errors.append("Auto toggling WASD at combat start/end disabled.\n");
-                }
-            }
+            // Legacy combat auto toggle. Now we check the cameras combat flag.
+            // bool character_death_hook = CharacterDeathHook::Prepare();
+            // bool combat_start_hook = CombatStartHook::Prepare();
+            // bool combat_end_hook = CombatEndHook::Prepare();
+            // bool get_character_name = GetCharacterName::Prepare();
+            // if (settings->enable_auto_toggling_wasd_mode && character_death_hook &&
+            //     combat_start_hook && combat_end_hook && get_character_name)
+            // {
+            //     CombatStartHook::Enable();
+            //     CombatEndHook::Enable();
+            //     CharacterDeathHook::Enable();
+            //     GetCharacterName::Enable();
+            // }
+            // else
+            // {
+            //     if (settings->enable_auto_toggling_wasd_mode)
+            //     {
+            //         errors.append("Auto toggling WASD at combat start/end disabled.\n");
+            //     }
+            // }
 
             bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
             bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
