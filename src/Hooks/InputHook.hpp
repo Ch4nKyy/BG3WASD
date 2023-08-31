@@ -31,5 +31,5 @@ private:
     static void WalkOrSprint(State* state);
     static void ReloadConfig();
     static void MouseLeftDown();
-    static void ToggleCameraRotate();
+    static void ToggleMouselook();
 };

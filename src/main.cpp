@@ -80,7 +80,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             {
                 if (settings->enable_auto_toggling_wasd_mode)
                 {
-                    errors.append("Auto toggling WASD at FTB start/end disabled.\n");
+                    errors.append("Auto toggling WASD at FTB start/end could not be enabled.\n");
                 }
             }
 
@@ -121,13 +121,13 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             {
                 if (settings->enable_improved_mouse_rotation)
                 {
-                    errors.append("Improved mouse rotation disabled.");
+                    errors.append("Improved mouse rotation could not be enabled.\n");
                 }
             }
         }
         else
         {
-            errors.append("WASD could not be unlocked! Mod will be inactive.\n");
+            errors.append("WASD could not be enabled at all! Mod will be inactive.\n");
         }
 
         if (!State::GetSingleton()->mod_found_all_addresses)
@@ -138,7 +138,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         if (!errors.empty())
         {
             WARN(errors);
-            // TODO also display a box to the player at main menu.
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "BG3WASD", errors.c_str(), NULL);
         }
     }
 

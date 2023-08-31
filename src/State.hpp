@@ -21,6 +21,7 @@ public:
     int frames_to_restore_cursor_pos = 0;
     bool is_mouseleft_pressed = false;
     bool old_combat_state = false;
+    bool combat_state_initiliazed = false;
 
     void SetIsRotating(bool in_value, bool send_fake_key = true);
     bool IsRotating();

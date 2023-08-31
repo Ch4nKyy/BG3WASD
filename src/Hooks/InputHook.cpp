@@ -82,7 +82,7 @@ void InputHook::HandleInput()
     WalkOrSprint(state);
     ReloadConfig();
     MouseLeftDown();
-    ToggleCameraRotate();
+    ToggleMouselook();
 }
 
 bool InputHook::DidCommandChange(Command command, int transition)
@@ -192,10 +192,10 @@ void InputHook::MouseLeftDown()
     }
 }
 
-void InputHook::ToggleCameraRotate()
+void InputHook::ToggleMouselook()
 {
     auto state = State::GetSingleton();
-    if (DidCommandChange(TOGGLE_CAMERA_ROTATE, WM_KEYDOWN))
+    if (DidCommandChange(TOGGLE_MOUSELOOK, WM_KEYDOWN))
     {
         state->SetIsRotating(!state->IsRotating());
     }

@@ -1,6 +1,3 @@
-# Default config that is packaged with the mod
-
-# Foreword: Key names are in Larian style, e.g. key:w, shift+key:w, mouse:middle or key:lshift.
 # For the names of all available keys, see the bottom of this config file.
 
 
@@ -12,8 +9,7 @@ HoldWalkOrSprint = ""
 # If you are walking, holding this key will make you sprint.
 
 ReloadConfig = "key:f11"
-# This will reload all config values.
-# If possible, it will also force the game to reload its inputconfig.
+# This will hot reload all config values and the inputconfig.
 
 ToggleAutorun = "shift+key:w"
 # Lets you move without holding Forward.
@@ -25,12 +21,12 @@ ToggleCharacterOrCamera = "key:capslock"
 ToggleWalkOrSprint = "key:insert"
 # Toggle between walking and sprinting movespeed.
 
-ToggleCameraRotate = ""
-# The Camera Rotate command from the main menu must be held, but this key allows a real toggle for
-# a semi mouselook.
+ToggleMouselook = ""
+# The Camera Rotate command from the main menu must be held, but this key offers a real toggle for
+# mouselook.
 # For this key to work, Camera Rotate must still be bound to another key without modifiers in the
 # game menu!
-# Unfortunately, the toggle does not work inversely. So if you toggle to mouselook, holding
+# Unfortunately, the toggle does not work inversely, yet. So if you toggle to mouselook, holding
 # Camera Rotate will not show the cursor when held.
 # Requires ImprovedMouseRotation = true.
 
@@ -43,11 +39,9 @@ WalkSpeed = 0.3
 WalkingIsDefault = false
 # Whether the character walks, when the game starts up. [true, false]
 
-ToggleCharacterOrCameraAlsoTogglesCameraRotate = false
-# When true, toggling the movement mode will also toggle camera rotate. 
+ToggleCharacterOrCameraAlsoTogglesMouselook = false
+# When true, toggling the movement mode will also toggle mouselook. 
 # This works together with AutoTogglingWasdMode!
-# Small hint: Usually the mod starts in Character mode. But when this option is true, it will start
-# in Camera mode due to technical reasons.
 # Requires ImprovedMouseRotation = true.
 # [true, false]
 
@@ -65,7 +59,7 @@ AutoTogglingWasdMode = true
 ImprovedMouseRotation = true
 # Hide the mouse cursor and disable Interact (usually left click) during rotation.
 # Enable Rotate+LeftClick = Move Forward
-# Provide key ToggleCameraRotate and option ToggleCharacterOrCameraAlsoTogglesCameraRotate.
+# Provide key ToggleMouselook and option ToggleCharacterOrCameraAlsoTogglesMouselook.
 # [true, false]
 
 
@@ -84,13 +78,13 @@ ImprovedMouseRotation = true
 # key:left              key:up                  key:right               key:down
 # key:backspace         key:tab                 key:return              key:capslock
 # key:insert            key:delete              key:space               key:end
-# key:home              key:print               key:scroll              key:escape
+# key:home              key:printscreen         key:scrolllock          key:escape
 # key:pause             key:numlock
 
 # key:lalt              key:ralt
 # key:lshift            key:rshift
 # key:lctrl             key:rctrl
-# key:lwin              key:rwin                
+# key:lgui              key:rgui (Windows keys)                
 
 # key:;                 key:=                   key:,                   key:'
 # key:-                 key:.                   key:/                   key:`
@@ -98,12 +92,12 @@ ImprovedMouseRotation = true
 # key:\\ (Backslash is a very special character in the toml format. You must either
 # write xxx="key:\\" or xxx='key:\' for it to work.)
 
-# key:numpad0           key:numpad1             ...                     key:numpad9
-# key:multiply          key:add                 key:decimal             key:divide
-# key:separator         key:subtract            
+# key:kp_0              key:kp_1                ...                     key:kp_9
+# key:kp_multiply       key:kp_plus             key:kp_period           key:kp_divide
+# key:kp_minus            
 
 # key:modechange        key:prior               key:clear               key:select
 # key:execute           key:help                key:sleep
-# key:volume_down       key:volume_up           key:volume_mute         key:media_next_track
-# key:media_prev_track  key:media_stop          key:media_play_pause    key:launch_mail
+# key:volume_down       key:volume_up           key:audio_mute          key:audio_next
+# key:audio_prev        key:audio_stop          key:audio_play
 # key:crsel             key:exsel               key:apps

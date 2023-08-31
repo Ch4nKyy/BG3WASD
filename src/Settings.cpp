@@ -3,7 +3,6 @@
 #include "Addresses/LoadInputConfig.hpp"
 #include "InputconfigPatcher.hpp"
 #include "State.hpp"
-#include "VirtualKeyMap.hpp"
 
 using enum Command;
 
@@ -18,11 +17,11 @@ void Settings::Load() noexcept
             config.Bind(toggle_autorun, "shift+key:w");
             config.Bind(hold_walk_or_sprint, "");
             config.Bind(reload_config, "key:f11");
-            config.Bind(toggle_camera_rotate, "");
+            config.Bind(toggle_mouselook, "");
 
             config.Bind<0.0, 1.0>(walk_speed, 0.3);
             config.Bind(walking_is_default, FALSE);
-            config.Bind(wasd_toggles_rotate, FALSE);
+            config.Bind(wasd_toggles_mouselook, FALSE);
 
             config.Bind(enable_auto_toggling_wasd_mode, TRUE);
             config.Bind(enable_improved_mouse_rotation, TRUE);
@@ -32,17 +31,18 @@ void Settings::Load() noexcept
 
     if (!*enable_improved_mouse_rotation)
     {
-        *toggle_camera_rotate = "";
-        *wasd_toggles_rotate = false;
+        *toggle_mouselook = "";
+        *wasd_toggles_mouselook = false;
     }
 
     if (!loaded_once)
     {
         InitState();
     }
+    // This means the user hot reloaded the toml config!
     else
     {
-        VirtualKeyMap::UpdateVkCombosOfCommandMap();  // called through inputconfig init hook anyway
+        InputconfigPatcher::Patch();
     }
 
     loaded_once = true;
@@ -54,12 +54,6 @@ void Settings::InitState()
     auto* state = State::GetSingleton();
 
     state->walking = walking_is_default;
-
-    if (wasd_toggles_rotate)
-    {
-        // Usually it is true, but then the two toggle states would not start in sync.
-        state->SetIsWasdCharacterMovement(false);
-    }
 
     // Flag invalid to react later.
     state->cursor_position_to_restore.x = -1;

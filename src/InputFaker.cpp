@@ -10,19 +10,24 @@ void InputFaker::SendKeyDownAndUp(std::string keyname)
 
 void InputFaker::SendKey(std::string keyname, bool down)
 {
-    auto split = dku::string::split(keyname, ":"sv);
-    auto prefix = split[0];
+    auto split = dku::string::split(keyname, "+"sv);
+    auto main_key = split.back();
+    split.pop_back();
+    auto modifiers = split;
+
+    auto main_key_split = dku::string::split(main_key, ":"sv);
+    auto prefix = main_key_split[0];
     if (prefix == "mouse")
     {
-        SendKeyMouseOnly(keyname, down);
+        SendKeyMouse(main_key, down);
     }
     else if (prefix == "key")
     {
-        SendKeyKeyboardOnly(keyname, down);
+        SendKeyKeyboard(main_key, down, modifiers);
     }
 }
 
-void InputFaker::SendKeyMouseOnly(std::string keyname, bool down)
+void InputFaker::SendKeyMouse(std::string keyname, bool down)
 {
     SDL_Event event;
     event.button.timestamp = SDL_GetTicks();
@@ -41,7 +46,7 @@ void InputFaker::SendKeyMouseOnly(std::string keyname, bool down)
     SDL_PushEvent(&event);
 }
 
-void InputFaker::SendKeyKeyboardOnly(std::string keyname, bool down)
+void InputFaker::SendKeyKeyboard(std::string keyname, bool down, std::vector<std::string> modifiers)
 {
     SDL_Event event;
     event.key.timestamp = SDL_GetTicks();
@@ -59,7 +64,23 @@ void InputFaker::SendKeyKeyboardOnly(std::string keyname, bool down)
     event.key.keysym.scancode =
         static_cast<SDL_Scancode>(VirtualKeyMap::GetScancodeByName(keyname));
     event.key.keysym.sym = VirtualKeyMap::GetKeycodeByName(keyname);
-    event.key.keysym.mod = 0;  // TODO might support this in the future
+    event.key.keysym.mod = 0;
+    // Unfortunately, modifiers don't seem to be detected this way by the game, so it doesn't work.
+    for (auto modifier : modifiers)
+    {
+        if (modifier == "ctrl")
+        {
+            event.key.keysym.mod |= KMOD_LCTRL;
+        }
+        else if (modifier == "alt")
+        {
+            event.key.keysym.mod |= KMOD_LALT;
+        }
+        else if (modifier == "shift")
+        {
+            event.key.keysym.mod |= KMOD_LSHIFT;
+        }
+    }
     SDL_PushEvent(&event);
 }
 
