@@ -3,12 +3,12 @@
 
 using enum Command;
 
-bool KeyboardHook::PrepareAndEnable(HMODULE a_hModule)
+bool KeyboardHook::Enable(HMODULE a_hModule)
 {
     HHOOK hHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, a_hModule, 0);
     if (!hHook)
     {
-        WARN("Critical error. KeyboardHook failed! ModHotkeys will not work.");
+        FATAL("Critical error. KeyboardHook failed! ModHotkeys will not work.");
         return false;
     }
     INFO("KeyboardHook succeeded.");

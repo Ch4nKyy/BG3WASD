@@ -39,18 +39,18 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         std::string errors;
 
         bool wasd_unlock = WASDUnlock::Prepare();
-        bool keyboard_hook = KeyboardHook::PrepareAndEnable(a_hModule);
         bool get_camera_object_hook = GetCameraObjectHook::Prepare();
         bool character_movement_input_vector_hook = CharacterMoveInputVectorHook::Prepare();
         bool is_in_controller_mode = IsInControllerMode::Prepare();
         bool load_input_config = LoadInputConfig::Prepare();
         bool after_changing_keybind_in_menu_hook = AfterChangingKeybindInMenuHook::Prepare();
         bool after_initial_load_inputconfig_hook = AfterInitialLoadInputConfigHook::Prepare();
-        if (wasd_unlock && keyboard_hook && get_camera_object_hook &&
+        if (wasd_unlock && get_camera_object_hook &&
             character_movement_input_vector_hook && is_in_controller_mode &&
             after_changing_keybind_in_menu_hook && load_input_config &&
             after_initial_load_inputconfig_hook)
         {
+            bool keyboard_hook = KeyboardHook::Enable(a_hModule);
             WASDUnlock::Enable();
             GetCameraObjectHook::Enable();
             CharacterMoveInputVectorHook::Enable();
