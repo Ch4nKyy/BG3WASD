@@ -9,7 +9,7 @@
 class InputHook
 {
 public:
-    static bool Enable(HMODULE a_hModule);
+    static void Enable(HMODULE a_hModule);
 
 private:
     static inline const DWORD CURRENT_PROCESS_ID = GetCurrentProcessId();
