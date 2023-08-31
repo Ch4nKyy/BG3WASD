@@ -12,8 +12,8 @@ public:
     static void Patch();
 
 private:
-    static std::vector<std::string> GetKeycombosOfCommand(json data, std::string command,
-        std::vector<std::string>& command_list);
+    static std::vector<std::string> GetKeycombosOfCommandFromInputconfig(json data,
+        std::string command, std::vector<std::string>& command_list, json default_keycombos);
     static bool IsStringEmptyOrWhitespace(const std::string string);
     static void ReadAndWriteInputconfig();
     static json UpdateData(json data, std::string move_command, std::string camera_command,

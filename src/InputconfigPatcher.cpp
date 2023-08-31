@@ -67,11 +67,17 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     UpdateAndValidateKeys(data);
 }
 
-std::vector<std::string> InputconfigPatcher::GetKeycombosOfCommand(json data, std::string command,
-    std::vector<std::string>& command_list)
+std::vector<std::string> InputconfigPatcher::GetKeycombosOfCommandFromInputconfig(json data,
+    std::string command, std::vector<std::string>& command_list, json default_keycombos)
 {
     command_list.push_back(command);
-    auto keycombo_list = data[command];
+
+    auto keycombo_list = default_keycombos;
+    if (data.contains(command))
+    {
+        keycombo_list = data[command];
+    }
+
     std::vector<std::string> ret_keys;
     for (json::iterator it = keycombo_list.begin(); it != keycombo_list.end(); ++it)
     {
@@ -128,9 +134,12 @@ void InputconfigPatcher::UpdateAndValidateKeys(json data)
     std::vector<std::string> commands;
 
     auto* state = State::GetSingleton();
-    state->character_forward_keys = GetKeycombosOfCommand(data, "CharacterMoveForward", commands);
-    state->character_backward_keys = GetKeycombosOfCommand(data, "CharacterMoveBackward", commands);
-    state->rotate_keys = GetKeycombosOfCommand(data, "CameraToggleMouseRotate", commands);
+    state->character_forward_keys =
+        GetKeycombosOfCommandFromInputconfig(data, "CharacterMoveForward", commands, { "" });
+    state->character_backward_keys =
+        GetKeycombosOfCommandFromInputconfig(data, "CharacterMoveBackward", commands, { "" });
+    state->rotate_keys = GetKeycombosOfCommandFromInputconfig(data, "CameraToggleMouseRotate",
+        commands, { "mouse:middle" });
     VirtualKeyMap::UpdateVkCombosOfCommandMap();
 
     std::vector<std::string> unbound_commands;
@@ -183,7 +192,8 @@ void InputconfigPatcher::UpdateAndValidateKeys(json data)
     }
 }
 
-void InputconfigPatcher::ValidateModHotkeys(std::vector<std::string>& mod_hotkeys_not_found_keycombos)
+void InputconfigPatcher::ValidateModHotkeys(
+    std::vector<std::string>& mod_hotkeys_not_found_keycombos)
 {
     auto* settings = Settings::GetSingleton();
     // Create a fake inputconfig so we can use the validator for ModHotkeys and game Commands.
