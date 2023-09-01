@@ -47,7 +47,7 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
     {
         *(float*)(camera_object_ptr + 152) = 0.0f;  // x input
         *(float*)(camera_object_ptr + 156) = 0.0f;  // y input
-        *(char*)(camera_object_ptr + 320) = 0;      // should move
+        *(char*)(camera_object_ptr + 324) = 0;      // should move
     }
 
     return camera_object_ptr;
