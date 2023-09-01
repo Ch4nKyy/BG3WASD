@@ -46,12 +46,12 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
     auto* state = State::GetSingleton();
     if (state->IsWasdCharacterMovement() && not IsInControllerMode::Read())
     {
-        *(float*)(camera_object_ptr + 148) = 0.0f;  // x input
-        *(float*)(camera_object_ptr + 152) = 0.0f;  // y input
-        *(char*)(camera_object_ptr + 324) = 0;      // should move
+        *(float*)(camera_object_ptr + 152) = 0.0f;  // x input
+        *(float*)(camera_object_ptr + 156) = 0.0f;  // y input
+        *(char*)(camera_object_ptr + 320) = 0;      // should move
     }
 
-    bool new_combat_state = (*reinterpret_cast<bool*>(camera_object_ptr + 168) & 1 ) != 0;
+    bool new_combat_state = (*reinterpret_cast<bool*>(camera_object_ptr + 172) & 1 ) != 0;
     if (!state->combat_state_initiliazed || Settings::GetSingleton()->enable_auto_toggling_wasd_mode && new_combat_state!= state->old_combat_state)
     {
         state->SetIsWasdCharacterMovement(!new_combat_state);
