@@ -1,4 +1,6 @@
 #include "SetCursorRotateHook.hpp"
+#include "../InputFaker.hpp"
+#include "../Settings.hpp"
 #include "../State.hpp"
 
 bool SetCursorRotateHook::Prepare()
@@ -38,11 +40,20 @@ void SetCursorRotateHook::Enable()
     }
 }
 
+// Called on Camera Rotate down
 void SetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
 {
     auto* state = State::GetSingleton();
     state->is_rotating_changed = true;
     state->SetIsRotating(true, false);
     GetCursorPos(&state->cursor_position_to_restore);
+    if (Settings::GetSingleton()->enable_rightclick_mouselook_fix)
+    {
+        state->rotate_start_time = SDL_GetTicks();
+    }
+    else
+    {
+        InputFaker::SendMouseMotion(0, 0);
+    }
     return OriginalFunc(a1, a2);
 }

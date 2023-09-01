@@ -27,7 +27,7 @@ private:
     static void StartHookAsOwnThread(HMODULE a_hModule);
 
     static void AutoRun(State* state);
-    static void ToggleCharacterOrCamera(State* state);
+    static void ToggleMovementMode(State* state);
     static void WalkOrSprint(State* state);
     static void ReloadConfig();
     static void MouseLeftDown();

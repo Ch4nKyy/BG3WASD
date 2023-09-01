@@ -40,9 +40,9 @@ void SDL_GetWindowGrabHook::Enable()
     }
 }
 
+// Called every frame that has a mouse motion event
 int64_t SDL_GetWindowGrabHook::OverrideFunc(int64_t a1)
 {
-    // TODO hook is only used for this. rename class accordingly?
     State::GetSingleton()->sdl_window = reinterpret_cast<SDL_Window*>(a1);
 
     return OriginalFunc(a1);

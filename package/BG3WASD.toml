@@ -1,25 +1,24 @@
-# For the names of all available keys, see the bottom of this config file.
-
-
 [ModHotkeys]
+# For the names of all available keys, see the bottom of this config file.
 # The ModHotkeys are region DEPENDANT!!! AZERTY keyboard users must adapt them!
 
-HoldWalkOrSprint = ""
-# When you are sprinting, holding this key will make you walk.
-# If you are walking, holding this key will make you sprint.
+
+ToggleMovementMode = "key:capslock"
+# Key that toggles between Character and Camera movement mode.
+
+HoldWalkspeed = ""
+# When you are jogging, holding this key will make you walk.
+# If you are walking, holding this key will make you jog.
+
+ToggleWalkspeed = "key:insert"
+# Toggles between walking and jogging movespeed.
 
 ReloadConfig = "key:f11"
 # This will hot reload all config values and the inputconfig.
 
-ToggleAutorun = "shift+key:w"
-# Lets you move without holding Forward.
+ToggleAutoforward = "shift+key:w"
+# Lets you move forward without holding Forward.
 # AZERTY users should set it to shift+key:z.
-
-ToggleCharacterOrCamera = "key:capslock"
-# Key that toggles between Character and Camera movement mode.
-
-ToggleWalkOrSprint = "key:insert"
-# Toggle between walking and sprinting movespeed.
 
 ToggleMouselook = ""
 # The Camera Rotate command from the main menu must be held, but this key offers a real toggle for
@@ -28,39 +27,49 @@ ToggleMouselook = ""
 # game menu!
 # Unfortunately, the toggle does not work inversely, yet. So if you toggle to mouselook, holding
 # Camera Rotate will not show the cursor when held.
-# Requires ImprovedMouseRotation = true.
+# Requires EnableMouselook = true.
 
 
-[Movement]
+[Core]
 
 WalkSpeed = 0.3
-# 1.0 would be sprinting speed. 0.5 would be 50% of that. [0.0, 1.0]
+# 1.0 would be jog speed. 0.5 would be 50% of that. [0.0, 1.0]
 
 WalkingIsDefault = false
 # Whether the character walks, when the game starts up. [true, false]
 
-ToggleCharacterOrCameraAlsoTogglesMouselook = false
+
+[AutoToggleMovementMode]
+
+EnableAutoTogglingMovementMode = true
+# Automatically toggle movement mode depending on the context. 
+# Toggle to Camera movement, when combat starts, and back to Character movement, when combat ends.
+# [true, false]
+
+
+[Mouselook]
+
+EnableMouselook = true
+# Hides the mouse cursor and disable Interact (usually left click) during rotation.
+# Enable Rotate+LeftClick = Move Forward
+# [true, false]
+
+ToggleMovementModeAlsoTogglesMouselook = false
 # When true, toggling the movement mode will also toggle mouselook. 
 # This works together with AutoTogglingWasdMode!
-# Requires ImprovedMouseRotation = true.
+# Requires EnableMouselook = true.
 # [true, false]
 
-
-[EnableFeatures]
-# Allows to enable or disable certain features of this mod.
-# These settings can NOT be hot reloaded, but require a game restart!
-
-AutoTogglingWasdMode = true
-# Automatically toggle WASD mode depending on the context. 
-# Toggle to Camera movement, when combat starts, and back to Character movement, when combat ends.
-# Doesn't work perfectly yet. Sometimes you have to toggle manually.
+EnableRightclickMouselookFix = true
+# Improves the gameplay for players that bind Camera Rotate to Right Mouse Button.
+# Without this feature enabled, Camera Rotate will collide with Cancel Action and Context Menu.
+# Also works with any other key than Rightclick, but Rightclick is most commonly used.
 # [true, false]
 
-ImprovedMouseRotation = true
-# Hide the mouse cursor and disable Interact (usually left click) during rotation.
-# Enable Rotate+LeftClick = Move Forward
-# Provide key ToggleMouselook and option ToggleCharacterOrCameraAlsoTogglesMouselook.
-# [true, false]
+RightclickThreshold = 200
+# Threshold in milliseconds where the mod distinguishes between Camera Rotate and Context Menu.
+# Requires EnableRightclickMouselookFix = true;
+# [25, 2000]
 
 
 # List of all available keys:

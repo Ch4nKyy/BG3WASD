@@ -19,8 +19,6 @@ void State::SetIsRotating(bool in_value, bool send_fake_key)
             InputFaker::SendKey(rotate_keys[0], SDL_RELEASED);
         }
     }
-    // Also send a fake mouse motion to instantly hide the cursor.
-    InputFaker::SendMouseMotion(0, 0);
 }
 
 bool State::IsRotating() { return is_rotating; }

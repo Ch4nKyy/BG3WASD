@@ -45,6 +45,7 @@ void CharacterMoveInputVectorHook::Enable()
     }
 }
 
+// Called most frames, but not if the player cannot move!
 int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
 {
     yx = OriginalFunc(yx);
@@ -52,12 +53,12 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
     Vector2* yx_v = reinterpret_cast<Vector2*>(yx);
 
     auto* state = State::GetSingleton();
-    if (state->autorunning || (state->is_mouseleft_pressed && state->IsRotating()))
+    if (state->autoforward_toggled || (state->is_mouseleft_pressed && state->IsRotating()))
     {
         // This causes the input vector to not be normalized anymore, but it doesn't matter.
         yx_v->y = 1.0f;
     }
-    if (state->walking ^ state->walking_or_sprint_held)
+    if (state->walking_toggled^ state->walking_held)
     {
         auto* settings = Settings::GetSingleton();
         yx_v->x *= *settings->walk_speed;

@@ -78,7 +78,7 @@ void InputHook::HandleInput()
     is_alt_down = (GetAsyncKeyState(VK_MENU) & 0x8000);
     auto* state = State::GetSingleton();
     AutoRun(state);
-    ToggleCharacterOrCamera(state);
+    ToggleMovementMode(state);
     WalkOrSprint(state);
     ReloadConfig();
     MouseLeftDown();
@@ -127,23 +127,23 @@ bool InputHook::DidCommandChange(Command command, int transition)
 
 void InputHook::AutoRun(State* state)
 {
-    if (DidCommandChange(TOGGLE_AUTORUN, WM_KEYDOWN) && state->IsWasdCharacterMovement())
+    if (DidCommandChange(TOGGLE_AUTOFORWARD, WM_KEYDOWN) && state->IsWasdCharacterMovement())
     {
-        state->autorunning = !state->autorunning;
+        state->autoforward_toggled = !state->autoforward_toggled;
         return;
     }
 
     if (DidCommandChange(FORWARD, WM_KEYDOWN) || DidCommandChange(BACKWARD, WM_KEYDOWN) ||
-        DidCommandChange(TOGGLE_CHARACTER_OR_CAMERA, WM_KEYDOWN))
+        DidCommandChange(TOGGLE_MOVEMENT_MODE, WM_KEYDOWN))
     {
-        state->autorunning = false;
+        state->autoforward_toggled = false;
         return;
     }
 }
 
-void InputHook::ToggleCharacterOrCamera(State* state)
+void InputHook::ToggleMovementMode(State* state)
 {
-    if (DidCommandChange(TOGGLE_CHARACTER_OR_CAMERA, WM_KEYDOWN))
+    if (DidCommandChange(TOGGLE_MOVEMENT_MODE, WM_KEYDOWN))
     {
         state->SetIsWasdCharacterMovement(!state->IsWasdCharacterMovement());
         return;
@@ -152,21 +152,21 @@ void InputHook::ToggleCharacterOrCamera(State* state)
 
 void InputHook::WalkOrSprint(State* state)
 {
-    if (DidCommandChange(TOGGLE_WALK_OR_SPRINT, WM_KEYDOWN) && state->IsWasdCharacterMovement())
+    if (DidCommandChange(TOGGLE_WALKSPEED, WM_KEYDOWN) && state->IsWasdCharacterMovement())
     {
-        state->walking = !state->walking;
+        state->walking_toggled= !state->walking_toggled
         return;
     }
 
-    if (DidCommandChange(HOLD_WALK_OR_SPRINT, WM_KEYDOWN) && state->IsWasdCharacterMovement())
+    if (DidCommandChange(HOLD_WALKSPEED, WM_KEYDOWN) && state->IsWasdCharacterMovement())
     {
-        state->walking_or_sprint_held = true;
+        state->walking_held = true;
         return;
     }
 
-    if (DidCommandChange(HOLD_WALK_OR_SPRINT, WM_KEYUP) && state->IsWasdCharacterMovement())
+    if (DidCommandChange(HOLD_WALKSPEED, WM_KEYUP) && state->IsWasdCharacterMovement())
     {
-        state->walking_or_sprint_held = false;
+        state->walking_held = false;
         return;
     }
 }

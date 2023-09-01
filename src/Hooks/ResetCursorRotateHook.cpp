@@ -1,5 +1,6 @@
 #include "ResetCursorRotateHook.hpp"
 #include "../State.hpp"
+#include "../InputFaker.hpp"
 
 bool ResetCursorRotateHook::Prepare()
 {
@@ -50,15 +51,16 @@ void ResetCursorRotateHook::Enable()
     }
 }
 
+// Called on Camera Rotate up. Also when the game disables Camera Rotation, e.g. on dialog!
 void ResetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
 {
     auto* state = State::GetSingleton();
-    // Guard value so this isn't executed, when the function is once called during init.
     if (state->cursor_position_to_restore.x != -1)
     {
         state->is_rotating_changed = true;
         state->SetIsRotating(false, false);
         state->frames_to_restore_cursor_pos = 2;
     }
+    InputFaker::SendMouseMotion(0, 0);
     return OriginalFunc(a1, a2);
 }

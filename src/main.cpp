@@ -4,6 +4,7 @@
 #include "Hooks/AfterInitialLoadInputConfigHook.hpp"
 #include "Hooks/CharacterDeathHook.hpp"
 #include "Hooks/CharacterMoveInputVectorHook.hpp"
+#include "Hooks/CheckContextMenuOrCancelActionHook.hpp"
 #include "Hooks/CombatEndHook.hpp"
 #include "Hooks/CombatStartHook.hpp"
 #include "Hooks/FTBEndHook.hpp"
@@ -11,6 +12,7 @@
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetCharacterName.hpp"
 #include "Hooks/InputHook.hpp"
+#include "Hooks/PollEventHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
 #include "Hooks/SetCursorRotateHook.hpp"
@@ -62,7 +64,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             is_in_controller_mode && after_changing_keybind_in_menu_hook && load_input_config &&
             after_initial_load_inputconfig_hook)
         {
-            InputHook::Enable(a_hModule); // throws on error
+            InputHook::Enable(a_hModule);  // throws on error
             WASDUnlock::Enable();
             GetCameraObjectHook::Enable();
             CharacterMoveInputVectorHook::Enable();
@@ -71,57 +73,42 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
             bool ftb_start_hook = FTBStartHook::Prepare();
             bool ftb_end_hook = FTBEndHook::Prepare();
-            if (settings->enable_auto_toggling_wasd_mode && ftb_start_hook && ftb_end_hook)
+            if (*settings->enable_auto_toggling_wasd_mode && ftb_start_hook && ftb_end_hook)
             {
                 FTBStartHook::Enable();
                 FTBEndHook::Enable();
             }
             else
             {
-                if (settings->enable_auto_toggling_wasd_mode)
+                if (*settings->enable_auto_toggling_wasd_mode)
                 {
                     errors.append("Auto toggling WASD at FTB start/end could not be enabled.\n");
                 }
             }
 
-            // Legacy combat auto toggle. Now we check the cameras combat flag.
-            // bool character_death_hook = CharacterDeathHook::Prepare();
-            // bool combat_start_hook = CombatStartHook::Prepare();
-            // bool combat_end_hook = CombatEndHook::Prepare();
-            // bool get_character_name = GetCharacterName::Prepare();
-            // if (settings->enable_auto_toggling_wasd_mode && character_death_hook &&
-            //     combat_start_hook && combat_end_hook && get_character_name)
-            // {
-            //     CombatStartHook::Enable();
-            //     CombatEndHook::Enable();
-            //     CharacterDeathHook::Enable();
-            //     GetCharacterName::Enable();
-            // }
-            // else
-            // {
-            //     if (settings->enable_auto_toggling_wasd_mode)
-            //     {
-            //         errors.append("Auto toggling WASD at combat start/end disabled.\n");
-            //     }
-            // }
-
             bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
             bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
             bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
             bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
-            if (settings->enable_improved_mouse_rotation && set_virtual_cursor_pos_hook &&
-                get_window_grab_hook && set_cursor_rotate_hook && reset_cursor_rotate_hook)
+            bool poll_event_hook = PollEventHook::Prepare();
+            bool check_context_menu_or_cancel_action_hook =
+                CheckContextMenuOrCancelActionHook::Prepare();
+            if (*settings->enable_improved_mouselook && set_virtual_cursor_pos_hook &&
+                get_window_grab_hook && set_cursor_rotate_hook && reset_cursor_rotate_hook &&
+                poll_event_hook && check_context_menu_or_cancel_action_hook)
             {
                 SetVirtualCursorPosHook::Enable();
                 SDL_GetWindowGrabHook::Enable();
                 SetCursorRotateHook::Enable();
                 ResetCursorRotateHook::Enable();
+                PollEventHook::Enable();
+                CheckContextMenuOrCancelActionHook::Enable();
             }
             else
             {
-                if (settings->enable_improved_mouse_rotation)
+                if (*settings->enable_improved_mouselook)
                 {
-                    errors.append("Improved mouse rotation could not be enabled.\n");
+                    errors.append("Improved Mouselook could not be enabled.\n");
                 }
             }
         }

@@ -169,7 +169,7 @@ void InputconfigPatcher::UpdateAndValidateKeys(json data)
             error.append(
                 "The following game commands are not bound to any unmodified key. Please bind the "
                 "game commands in the game menu to at least one key that is not modified by "
-                "ctrl/shift/alt:\n");  //TODO
+                "ctrl/shift/alt:\n");
             for (auto command : unbound_commands)
             {
                 error.append(command + "\n");
@@ -200,10 +200,10 @@ void InputconfigPatcher::ValidateModHotkeys(
     // clang-format off
     json data =
         {
-            { "ToggleWalkOrSprint", { *settings->toggle_walk_or_sprint } },
-            { "ToggleCharacterOrCamera", { *settings->toggle_character_or_camera } },
-            { "ToggleAutorun", { *settings->toggle_autorun } },
-            { "HoldWalkOrSprint", { *settings->hold_walk_or_sprint } },
+            { "ToggleWalkspeed", { *settings->toggle_walkspeed } },
+            { "ToggleMovementMode", { *settings->toggle_movement_mode } },
+            { "ToggleAutoforward", { *settings->toggle_autoforward } },
+            { "HoldWalkspeed", { *settings->hold_walkspeed } },
             { "ReloadConfig", { *settings->reload_config } },
             { "ToggleMouselook", { *settings->toggle_mouselook } }
         };

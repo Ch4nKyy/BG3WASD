@@ -113,11 +113,11 @@ void VirtualKeyMap::UpdateVkCombosOfCommandMap()
     auto* settings = Settings::GetSingleton();
     auto* state = State::GetSingleton();
     vkcombos_of_command = {};
-    AddKeyComboForCommand(TOGGLE_WALK_OR_SPRINT, std::vector{ *settings->toggle_walk_or_sprint });
-    AddKeyComboForCommand(HOLD_WALK_OR_SPRINT, std::vector{ *settings->hold_walk_or_sprint });
-    AddKeyComboForCommand(TOGGLE_AUTORUN, std::vector{ *settings->toggle_autorun });
-    AddKeyComboForCommand(TOGGLE_CHARACTER_OR_CAMERA,
-        std::vector{ *settings->toggle_character_or_camera });
+    AddKeyComboForCommand(TOGGLE_WALKSPEED, std::vector{ *settings->toggle_walkspeed });
+    AddKeyComboForCommand(HOLD_WALKSPEED, std::vector{ *settings->hold_walkspeed });
+    AddKeyComboForCommand(TOGGLE_AUTOFORWARD, std::vector{ *settings->toggle_autoforward });
+    AddKeyComboForCommand(TOGGLE_MOVEMENT_MODE,
+        std::vector{ *settings->toggle_movement_mode });
     AddKeyComboForCommand(RELOAD_CONFIG, std::vector{ *settings->reload_config });
     AddKeyComboForCommand(FORWARD, state->character_forward_keys);
     AddKeyComboForCommand(BACKWARD, state->character_backward_keys);
