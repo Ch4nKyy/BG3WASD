@@ -73,14 +73,14 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
             bool ftb_start_hook = FTBStartHook::Prepare();
             bool ftb_end_hook = FTBEndHook::Prepare();
-            if (*settings->enable_auto_toggling_wasd_mode && ftb_start_hook && ftb_end_hook)
+            if (*settings->enable_auto_toggling_movement_mode && ftb_start_hook && ftb_end_hook)
             {
                 FTBStartHook::Enable();
                 FTBEndHook::Enable();
             }
             else
             {
-                if (*settings->enable_auto_toggling_wasd_mode)
+                if (*settings->enable_auto_toggling_movement_mode)
                 {
                     errors.append("Auto toggling WASD at FTB start/end could not be enabled.\n");
                 }

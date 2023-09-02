@@ -17,13 +17,14 @@ public:
     Double walk_speed{ "WalkSpeed", "Core" };
     Boolean walking_is_default{ "WalkingIsDefault", "Core" };
 
-    Boolean enable_auto_toggling_wasd_mode{ "EnableAutoTogglingMovementMode",
+    Boolean enable_auto_toggling_movement_mode{ "EnableAutoTogglingMovementMode",
         "AutoToggleMovementMode" };
 
     Boolean enable_improved_mouselook{ "EnableMouselook", "Mouselook" };
-    Boolean wasd_toggles_mouselook{ "ToggleMovementModeAlsoTogglesMouselook", "Mouselook" };
+    Boolean toggle_movement_toggles_mouselook{ "ToggleMovementModeAlsoTogglesMouselook",
+        "Mouselook" };
     Boolean enable_rightclick_mouselook_fix{ "EnableRightclickMouselookFix", "Mouselook" };
-    Integer improved_rightclick_threshold{ "RightclickThreshold", "Mouselook" };
+    Integer rightclick_threshold{ "RightclickThreshold", "Mouselook" };
 
     void Load() noexcept;
 

@@ -22,12 +22,12 @@ void Settings::Load() noexcept
             config.Bind<0.0, 1.0>(walk_speed, 0.3);
             config.Bind(walking_is_default, FALSE);
 
-            config.Bind(enable_auto_toggling_wasd_mode, TRUE);
+            config.Bind(enable_auto_toggling_movement_mode, TRUE);
             
             config.Bind(enable_improved_mouselook, TRUE);
-            config.Bind(wasd_toggles_mouselook, FALSE);
+            config.Bind(toggle_movement_toggles_mouselook, FALSE);
             config.Bind(enable_rightclick_mouselook_fix, TRUE);
-            config.Bind(improved_rightclick_threshold, 200);
+            config.Bind(rightclick_threshold, 200);
         });
 
     config.Load();
@@ -35,7 +35,7 @@ void Settings::Load() noexcept
     if (!*enable_improved_mouselook)
     {
         *toggle_mouselook = "";
-        *wasd_toggles_mouselook = false;
+        *toggle_movement_toggles_mouselook = false;
     }
 
     if (!loaded_once)

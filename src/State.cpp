@@ -27,7 +27,7 @@ bool State::IsRotating() { return is_rotating; }
 void State::SetIsWasdCharacterMovement(bool in_value)
 {
     is_wasd_character_movement = in_value;
-    if (Settings::GetSingleton()->wasd_toggles_mouselook)
+    if (Settings::GetSingleton()->toggle_movement_toggles_mouselook)
     {
         SetIsRotating(is_wasd_character_movement);
     }
