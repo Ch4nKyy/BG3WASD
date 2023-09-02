@@ -2,17 +2,23 @@
 #include "Addresses/LoadInputConfig.hpp"
 #include "Hooks/AfterChangingKeybindInMenuHook.hpp"
 #include "Hooks/AfterInitialLoadInputConfigHook.hpp"
-#include "Hooks/CharacterDeathHook.hpp"
 #include "Hooks/CharacterMoveInputVectorHook.hpp"
+#include "Hooks/CheckCommandInputsHook.hpp"
+#include "Hooks/CheckContextMenuOrCancelActionHook.hpp"
 #include "Hooks/CombatEndHook.hpp"
 #include "Hooks/CombatStartHook.hpp"
 #include "Hooks/FTBEndHook.hpp"
 #include "Hooks/FTBStartHook.hpp"
 #include "Hooks/GetCameraObjectHook.hpp"
-#include "Hooks/GetCharacterName.hpp"
-#include "Hooks/KeyboardHook.hpp"
+#include "Hooks/InputHook.hpp"
+#include "Hooks/ResetCursorRotateHook.hpp"
+#include "Hooks/SDL_GetWindowGrabHook.hpp"
+#include "Hooks/SetCursorRotateHook.hpp"
+#include "Hooks/SetVirtualCursorPosHook.hpp"
 #include "Hooks/WASDUnlock.hpp"
+#include "Hooks/WindowGainFocusHook.hpp"
 #include "InputconfigPatcher.hpp"
+#include "SDL.h"
 #include "Settings.hpp"
 #include "State.hpp"
 
@@ -30,7 +36,15 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
         INFO("Game Process Name : {}", dku::Hook::GetProcessName())
 
-        dku::Hook::Trampoline::AllocTrampoline(1 << 8);
+        SDL_version linked;
+        SDL_GetVersion(&linked);
+        if (linked.major != 2 || linked.minor != 24)
+        {
+            FATAL(
+                "SDL2.dll version mismatch. This usually means that you must re-install the mod!");
+        }
+
+        dku::Hook::Trampoline::AllocTrampoline(1 << 9);
 
         auto settings = Settings::GetSingleton();
 
@@ -45,12 +59,11 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         bool load_input_config = LoadInputConfig::Prepare();
         bool after_changing_keybind_in_menu_hook = AfterChangingKeybindInMenuHook::Prepare();
         bool after_initial_load_inputconfig_hook = AfterInitialLoadInputConfigHook::Prepare();
-        if (wasd_unlock && get_camera_object_hook &&
-            character_movement_input_vector_hook && is_in_controller_mode &&
-            after_changing_keybind_in_menu_hook && load_input_config &&
+        if (wasd_unlock && get_camera_object_hook && character_movement_input_vector_hook &&
+            is_in_controller_mode && after_changing_keybind_in_menu_hook && load_input_config &&
             after_initial_load_inputconfig_hook)
         {
-            bool keyboard_hook = KeyboardHook::Enable(a_hModule);
+            InputHook::Enable(a_hModule);  // throws on error
             WASDUnlock::Enable();
             GetCameraObjectHook::Enable();
             CharacterMoveInputVectorHook::Enable();
@@ -59,42 +72,46 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
             bool ftb_start_hook = FTBStartHook::Prepare();
             bool ftb_end_hook = FTBEndHook::Prepare();
-            if (settings->enable_auto_toggling_wasd_mode && ftb_start_hook && ftb_end_hook)
+            if (ftb_start_hook && ftb_end_hook)
             {
                 FTBStartHook::Enable();
                 FTBEndHook::Enable();
             }
             else
             {
-                if (settings->enable_auto_toggling_wasd_mode)
-                {
-                    errors.append("Auto toggling WASD at FTB start/end disabled.\n");
-                }
+                errors.append("Auto toggling WASD at FTB start/end could not be enabled.\n");
             }
 
-            bool character_death_hook = CharacterDeathHook::Prepare();
-            bool combat_start_hook = CombatStartHook::Prepare();
-            bool combat_end_hook = CombatEndHook::Prepare();
-            bool get_character_name = GetCharacterName::Prepare();
-            if (settings->enable_auto_toggling_wasd_mode && character_death_hook &&
-                combat_start_hook && combat_end_hook && get_character_name)
+            bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
+            bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
+            bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
+            bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
+            bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
+            bool check_context_menu_or_cancel_action_hook =
+                CheckContextMenuOrCancelActionHook::Prepare();
+            // TODO ToggleMouselook
+            // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
+            if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
+                reset_cursor_rotate_hook && check_command_inputs_hook &&
+                check_context_menu_or_cancel_action_hook)
             {
-                CombatStartHook::Enable();
-                CombatEndHook::Enable();
-                CharacterDeathHook::Enable();
-                GetCharacterName::Enable();
+                SetVirtualCursorPosHook::Enable();
+                SDL_GetWindowGrabHook::Enable();
+                SetCursorRotateHook::Enable();
+                ResetCursorRotateHook::Enable();
+                CheckCommandInputsHook::Enable();
+                CheckContextMenuOrCancelActionHook::Enable();
+                // TODO ToggleMouselook
+                // WindowGainFocusHook::Enable();
             }
             else
             {
-                if (settings->enable_auto_toggling_wasd_mode)
-                {
-                    errors.append("Auto toggling WASD at combat start/end disabled.\n");
-                }
+                errors.append("Improved Mouselook could not be enabled.\n");
             }
         }
         else
         {
-            errors.append("WASD could not be unlocked at all! Mod will be inactive.\n");
+            errors.append("WASD could not be enabled at all! Mod will be inactive.\n");
         }
 
         if (!State::GetSingleton()->mod_found_all_addresses)
@@ -105,7 +122,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         if (!errors.empty())
         {
             WARN(errors);
-            // TODO also display a box to the player at main menu.
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "BG3WASD", errors.c_str(), NULL);
         }
     }
 

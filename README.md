@@ -21,6 +21,8 @@ Find it on [Nexusmods](https://www.nexusmods.com/baldursgate3/mods/781).
   - Desktop development with C++
 - [Baldur's Gate 3 Steam Distribution](https://store.steampowered.com/app/1086940/Baldurs_Gate_3/)
   - Add the environment variable `BG3PATH` with the value as path to game install folder
+- [7zip](https://www.7-zip.org/)
+  - Install to default dir
   
 ### Register Visual Studio as a Generator
 
