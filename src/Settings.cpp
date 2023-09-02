@@ -36,6 +36,7 @@ void Settings::Load() noexcept
     {
         *toggle_mouselook = "";
         *toggle_movement_toggles_mouselook = false;
+        *enable_rightclick_mouselook_fix = false;
     }
 
     if (!loaded_once)

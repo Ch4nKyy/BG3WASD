@@ -154,7 +154,7 @@ void InputHook::WalkOrSprint(State* state)
 {
     if (DidCommandChange(TOGGLE_WALKSPEED, WM_KEYDOWN) && state->IsWasdCharacterMovement())
     {
-        state->walking_toggled= !state->walking_toggled
+        state->walking_toggled = !state->walking_toggled;
         return;
     }
 
@@ -181,7 +181,7 @@ void InputHook::ReloadConfig()
 
 void InputHook::MouseLeftDown()
 {
-    auto state = State::GetSingleton();
+    auto state = State::GetSingleton();//*
     if (DidCommandChange(MOUSE_LEFT_DOWN, WM_KEYDOWN))
     {
         state->is_mouseleft_pressed = true;
@@ -197,7 +197,8 @@ void InputHook::ToggleMouselook()
     auto state = State::GetSingleton();
     if (DidCommandChange(TOGGLE_MOUSELOOK, WM_KEYDOWN))
     {
-        state->SetIsRotating(!state->IsRotating());
+        state->mouselook_toggled = !state->mouselook_toggled;
+        state->SetIsRotating(state->mouselook_toggled);
     }
 }
 

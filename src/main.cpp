@@ -4,6 +4,7 @@
 #include "Hooks/AfterInitialLoadInputConfigHook.hpp"
 #include "Hooks/CharacterDeathHook.hpp"
 #include "Hooks/CharacterMoveInputVectorHook.hpp"
+#include "Hooks/CheckCommandInputsHook.hpp"
 #include "Hooks/CheckContextMenuOrCancelActionHook.hpp"
 #include "Hooks/CombatEndHook.hpp"
 #include "Hooks/CombatStartHook.hpp"
@@ -12,7 +13,6 @@
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetCharacterName.hpp"
 #include "Hooks/InputHook.hpp"
-#include "Hooks/PollEventHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
 #include "Hooks/SetCursorRotateHook.hpp"
@@ -73,43 +73,37 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
             bool ftb_start_hook = FTBStartHook::Prepare();
             bool ftb_end_hook = FTBEndHook::Prepare();
-            if (*settings->enable_auto_toggling_movement_mode && ftb_start_hook && ftb_end_hook)
+            if (ftb_start_hook && ftb_end_hook)
             {
                 FTBStartHook::Enable();
                 FTBEndHook::Enable();
             }
             else
             {
-                if (*settings->enable_auto_toggling_movement_mode)
-                {
-                    errors.append("Auto toggling WASD at FTB start/end could not be enabled.\n");
-                }
+                errors.append("Auto toggling WASD at FTB start/end could not be enabled.\n");
             }
 
             bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
             bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
             bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
             bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
-            bool poll_event_hook = PollEventHook::Prepare();
+            bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
             bool check_context_menu_or_cancel_action_hook =
                 CheckContextMenuOrCancelActionHook::Prepare();
-            if (*settings->enable_improved_mouselook && set_virtual_cursor_pos_hook &&
-                get_window_grab_hook && set_cursor_rotate_hook && reset_cursor_rotate_hook &&
-                poll_event_hook && check_context_menu_or_cancel_action_hook)
+            if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
+                reset_cursor_rotate_hook && check_command_inputs_hook &&
+                check_context_menu_or_cancel_action_hook)
             {
                 SetVirtualCursorPosHook::Enable();
                 SDL_GetWindowGrabHook::Enable();
                 SetCursorRotateHook::Enable();
                 ResetCursorRotateHook::Enable();
-                PollEventHook::Enable();
+                CheckCommandInputsHook::Enable();
                 CheckContextMenuOrCancelActionHook::Enable();
             }
             else
             {
-                if (*settings->enable_improved_mouselook)
-                {
-                    errors.append("Improved Mouselook could not be enabled.\n");
-                }
+                errors.append("Improved Mouselook could not be enabled.\n");
             }
         }
         else

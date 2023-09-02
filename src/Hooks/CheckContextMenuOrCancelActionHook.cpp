@@ -42,6 +42,12 @@ void CheckContextMenuOrCancelActionHook::Enable()
 int64_t CheckContextMenuOrCancelActionHook::OverrideFunc(int64_t a1, int64_t a2,
     int* SomeInputStruct, int16_t a4, int64_t a5)
 {
+    if (!*Settings::GetSingleton()->enable_improved_mouselook ||
+        !*Settings::GetSingleton()->enable_rightclick_mouselook_fix)
+    {
+        return OriginalFunc(a1, a2, SomeInputStruct, a4, a5);
+    }
+
     auto* state = State::GetSingleton();
     int command_id = *SomeInputStruct;
     if (command_id != 160 && command_id != 200)

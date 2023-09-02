@@ -55,11 +55,17 @@ void SetVirtualCursorPosHook::HideCursor(QWORD* xy)
     state->rotate_start_time = 0;
 }
 
-// Called every frame that has a mouse motion event
+// Called in MainThread, every frame that has a mouse motion event
 void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
 {
     auto state = State::GetSingleton();
     auto settings = Settings::GetSingleton();
+
+    if (!*settings->enable_improved_mouselook)
+    {
+        return OriginalFunc(a1, xy);
+    }
+
     if (state->IsRotating())
     {
         if (state->is_rotating_changed)

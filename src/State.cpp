@@ -3,14 +3,12 @@
 #include "SDL.h"
 #include "Settings.hpp"
 
-void State::SetIsRotating(bool in_value, bool send_fake_key)
+void State::SetIsRotating(bool in_value)
 {
-    is_rotating = in_value;
-
-    // If this is forced, also send a fake key so the game reacts to it.
-    if (send_fake_key && rotate_keys.size() > 0)
+    if (rotate_keys.size() > 0)
     {
-        if (is_rotating)
+        set_is_rotating_was_faked = true;
+        if (!is_rotating)
         {
             InputFaker::SendKey(rotate_keys[0], SDL_PRESSED);
         }
@@ -19,6 +17,11 @@ void State::SetIsRotating(bool in_value, bool send_fake_key)
             InputFaker::SendKey(rotate_keys[0], SDL_RELEASED);
         }
     }
+}
+
+void State::SetInternalIsRotating(bool in_value)
+{
+    is_rotating = in_value;
 }
 
 bool State::IsRotating() { return is_rotating; }

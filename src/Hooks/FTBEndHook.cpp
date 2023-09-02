@@ -1,4 +1,5 @@
 #include "FTBEndHook.hpp"
+#include "../Settings.hpp"
 #include "../State.hpp"
 
 bool FTBEndHook::Prepare()
@@ -42,8 +43,11 @@ int64_t FTBEndHook::OverrideFunc(int64_t a1, int64_t a2, char* a3)
 {
     int64_t ret = OriginalFunc(a1, a2, a3);
 
-    auto* state = State::GetSingleton();
-    state->SetIsWasdCharacterMovement(true);
+    if (*Settings::GetSingleton()->enable_auto_toggling_movement_mode)
+    {
+        auto* state = State::GetSingleton();
+        state->SetIsWasdCharacterMovement(true);
+    }
 
     return ret;
 }

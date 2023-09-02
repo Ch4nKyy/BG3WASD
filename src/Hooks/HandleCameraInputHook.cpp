@@ -1,15 +1,12 @@
-#include "PollEventHook.hpp"
-#include "../InputFaker.hpp"
 #include "../Settings.hpp"
 #include "../State.hpp"
-#include "SetVirtualCursorPosHook.hpp"
+#include "HandleCameraInputHook.hpp"
 
-bool PollEventHook::Prepare()
+bool HandleCameraInputHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? ?? 85 ?? 0F ?? ?? ?? ?? ?? 0F ?? ?? ?? ?? ?? ?? ?? 48 ?? ?? ?? F3 ?? ?? ?? ?? "
-        "?? ?? ?? 0F ?? ?? ?? ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? ?? ?? 4C ?? ?? 48 ?? ?? ?? 48 ?? ?? E8 "
-        "?? ?? ?? ?? 84">()) };
+        "E8 ?? ?? ?? ?? 0F ?? ?? 66 ?? ?? 80 ?? ?? 75 ?? 4C ?? ?? 48 ?? ?? ?? ?? 4C ?? ?? 48 ?? ?? "
+        "E8 ?? ?? ?? ?? 4C">()) };
     addresses = address_array;
 
     all_found = true;
@@ -19,7 +16,7 @@ bool PollEventHook::Prepare()
         if (!address)
         {
             State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("PollEventHook #{} not found", i);
+            WARN("HandleCameraInputHook #{} not found", i);
             all_found = false;
         }
         ++i;
@@ -27,7 +24,7 @@ bool PollEventHook::Prepare()
     return all_found;
 }
 
-void PollEventHook::Enable()
+void HandleCameraInputHook::Enable()
 {
     if (not all_found)
     {
@@ -37,14 +34,14 @@ void PollEventHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked PollEventHook #{}: {:X}", i, AsAddress(address));
+        INFO("Hooked HandleCameraInputHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }
 
-// Called in MainThread, every frame
-int64_t PollEventHook::OverrideFunc(int64_t a1)
+// Called in GameThread, every frame with camera input, while it is allowed
+char* HandleCameraInputHook::OverrideFunc(int64_t a1, char* a2, int64_t a3, int* a4)
 {
     auto* state = State::GetSingleton();
-    return OriginalFunc(a1);
+    return OriginalFunc(a1, a2, a3, a4);
 }

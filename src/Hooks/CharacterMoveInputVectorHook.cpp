@@ -45,7 +45,7 @@ void CharacterMoveInputVectorHook::Enable()
     }
 }
 
-// Called most frames, but not if the player cannot move!
+// Called in GameThread, every frame, but not if the player cannot move!
 int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
 {
     yx = OriginalFunc(yx);
@@ -53,14 +53,14 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
     Vector2* yx_v = reinterpret_cast<Vector2*>(yx);
 
     auto* state = State::GetSingleton();
+    auto* settings = Settings::GetSingleton();
     if (state->autoforward_toggled || (state->is_mouseleft_pressed && state->IsRotating()))
     {
         // This causes the input vector to not be normalized anymore, but it doesn't matter.
         yx_v->y = 1.0f;
     }
-    if (state->walking_toggled^ state->walking_held)
+    if (state->walking_toggled ^ state->walking_held)
     {
-        auto* settings = Settings::GetSingleton();
         yx_v->x *= *settings->walk_speed;
         yx_v->y *= *settings->walk_speed;
     }
@@ -77,6 +77,11 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
         // There is center logic that doesn't do that, e.g. when you press F1, but I didn't find it
         // yet.
         yx_v->y = 1.0f;
+    }
+
+    if (*Settings::GetSingleton()->enable_improved_mouselook)
+    {
+        state->player_can_input_movement = true;
     }
 
     return yx;
