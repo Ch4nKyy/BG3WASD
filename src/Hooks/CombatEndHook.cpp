@@ -55,8 +55,7 @@ const char* CombatEndHook::OverrideFunc(DWORD* a1)
         character_name_contains_player)
     {
         auto* state = State::GetSingleton();
-        state->is_wasd_character_movement = true;
-        state->frames_to_hold_forward_to_center_camera = 10;
+        state->SetIsWasdCharacterMovement(true);
     }
 
     return faction_name;

@@ -7,6 +7,7 @@ set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE FILEPATH "")
+set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/SDL2/cmake)
 
 include(GNUInstallDirs)
 
@@ -81,6 +82,7 @@ endmacro()
 # dependencies
 find_package(spdlog CONFIG REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(SDL2 REQUIRED)
 find_dependency_path(DKUtil include/DKUtil/Logger.hpp)
 
 # cmake target
@@ -102,6 +104,7 @@ target_include_directories(
 		${CMAKE_CURRENT_BINARY_DIR}/include
 		${CMAKE_CURRENT_SOURCE_DIR}/include
 		${CMAKE_CURRENT_SOURCE_DIR}/src
+		${SDL2_INCLUDE_DIRS}
 )
 
 # linkage
@@ -111,6 +114,7 @@ target_link_libraries(
 		DKUtil::DKUtil
 		spdlog::spdlog
 		nlohmann_json::nlohmann_json
+		SDL2::SDL2
 )
 
 # compiler def

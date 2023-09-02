@@ -7,20 +7,32 @@ using namespace DKUtil::Alias;
 class Settings : public DKUtil::model::Singleton<Settings>
 {
 public:
-    String toggle_walk_or_sprint{ "ToggleWalkOrSprint", "ModHotkeys" };
-    String toggle_character_or_camera{ "ToggleCharacterOrCamera", "ModHotkeys" };
-    String toggle_autorun{ "ToggleAutorun", "ModHotkeys" };
-    String hold_walk_or_sprint{ "HoldWalkOrSprint", "ModHotkeys" };
+    String toggle_walkspeed{ "ToggleWalkspeed", "ModHotkeys" };
+    String toggle_movement_mode{ "ToggleMovementMode", "ModHotkeys" };
+    String toggle_autoforward{ "ToggleAutoforward", "ModHotkeys" };
+    String hold_walkspeed{ "HoldWalkspeed", "ModHotkeys" };
     String reload_config{ "ReloadConfig", "ModHotkeys" };
+    // TODO ToggleMouselook
+    // String toggle_mouselook{ "ToggleMouselook", "ModHotkeys" };
 
-    Double walk_speed{ "WalkSpeed", "Movement" };
-    Boolean walking_is_default{ "WalkingIsDefault", "Movement" };
+    Double walk_speed{ "WalkSpeed", "Core" };
+    Boolean walking_is_default{ "WalkingIsDefault", "Core" };
 
-    Boolean enable_auto_toggling_wasd_mode{ "AutoTogglingWasdMode", "EnableFeatures" };
+    Boolean enable_auto_toggling_movement_mode{ "EnableAutoTogglingMovementMode",
+        "AutoToggleMovementMode" };
+
+    Boolean enable_improved_mouselook{ "EnableMouselook", "Mouselook" };
+    // TODO ToggleMouselook
+    // Boolean toggle_movement_toggles_mouselook{ "ToggleMovementModeAlsoTogglesMouselook",
+    //     "Mouselook" };
+    Boolean enable_rightclick_mouselook_fix{ "EnableRightclickMouselookFix", "Mouselook" };
+    Integer rightclick_threshold{ "RightclickThreshold", "Mouselook" };
 
     void Load() noexcept;
 
 private:
     TomlConfig config = COMPILE_PROXY("NativeMods/BG3WASD.toml"sv);
     bool loaded_once = false;
+
+    void InitState();
 };

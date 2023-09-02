@@ -3,7 +3,6 @@
 #include "Addresses/LoadInputConfig.hpp"
 #include "InputconfigPatcher.hpp"
 #include "State.hpp"
-#include "VirtualKeyMap.hpp"
 
 using enum Command;
 
@@ -13,30 +12,57 @@ void Settings::Load() noexcept
     std::call_once(config_init,
         [&]()
         {
-            config.Bind(toggle_walk_or_sprint, "key:insert");
-            config.Bind(toggle_character_or_camera, "key:capslock");
-            config.Bind(toggle_autorun, "shift+key:w");
-            config.Bind(hold_walk_or_sprint, "");
+            config.Bind(toggle_walkspeed, "key:insert");
+            config.Bind(toggle_movement_mode, "key:capslock");
+            config.Bind(toggle_autoforward, "shift+key:w");
+            config.Bind(hold_walkspeed, "");
             config.Bind(reload_config, "key:f11");
+            // TODO ToggleMouselook
+            // config.Bind(toggle_mouselook, "");
 
             config.Bind<0.0, 1.0>(walk_speed, 0.3);
             config.Bind(walking_is_default, FALSE);
 
-            config.Bind(enable_auto_toggling_wasd_mode, TRUE);
+            config.Bind(enable_auto_toggling_movement_mode, TRUE);
+            
+            config.Bind(enable_improved_mouselook, TRUE);
+            // TODO ToggleMouselook
+            // TODO ToggleMouselook
+            // config.Bind(toggle_movement_toggles_mouselook, FALSE);
+            config.Bind(enable_rightclick_mouselook_fix, TRUE);
+            config.Bind(rightclick_threshold, 200);
         });
 
     config.Load();
 
+    if (!*enable_improved_mouselook)
+    {
+        // TODO ToggleMouselook
+        // *toggle_mouselook = "";
+        // *toggle_movement_toggles_mouselook = false;
+        *enable_rightclick_mouselook_fix = false;
+    }
+
     if (!loaded_once)
     {
-        auto* state = State::GetSingleton();
-        state->walking = walking_is_default;
+        InitState();
     }
+    // This means the user hot reloaded the toml config!
     else
     {
-        VirtualKeyMap::UpdateVkCombosOfCommandMap();  // called through inputconfig init hook anyway
+        InputconfigPatcher::Patch();
     }
 
     loaded_once = true;
     INFO("Config loaded successfully."sv)
+}
+
+void Settings::InitState()
+{
+    auto* state = State::GetSingleton();
+
+    state->walking_toggled= walking_is_default;
+
+    // Flag invalid to react later.
+    state->cursor_position_to_restore.x = -1;
 }
