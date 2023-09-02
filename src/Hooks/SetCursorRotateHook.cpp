@@ -49,11 +49,6 @@ void SetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
     }
 
     auto* state = State::GetSingleton();
-    if (!state->set_is_rotating_was_faked)
-    {
-        state->mouselook_toggled = false;
-    }
-    state->set_is_rotating_was_faked = false;
 
     state->is_rotating_changed = true;
     state->SetInternalIsRotating(true);

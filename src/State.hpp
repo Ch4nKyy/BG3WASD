@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL.h"
+#include "ToggleRequest.hpp"
 
 class State : public DKUtil::model::Singleton<State>
 {
@@ -38,6 +39,7 @@ public:
     uint32_t last_time_cancel_action_pressed = 0;
     bool player_can_input_movement = false;
     bool player_could_input_movement_last_frame = false;
+    ToggleRequest mouselook_request = ToggleRequest::NONE;
 
     void SetIsRotating(bool in_value);
     void SetInternalIsRotating(bool in_value);

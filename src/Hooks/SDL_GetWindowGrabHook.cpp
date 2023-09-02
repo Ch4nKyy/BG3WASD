@@ -40,7 +40,7 @@ void SDL_GetWindowGrabHook::Enable()
     }
 }
 
-// Called every frame that has a mouse motion event
+// Called in MainThread, every frame that has a mouse motion event
 int64_t SDL_GetWindowGrabHook::OverrideFunc(int64_t a1)
 {
     State::GetSingleton()->sdl_window = reinterpret_cast<SDL_Window*>(a1);

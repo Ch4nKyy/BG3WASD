@@ -8,7 +8,7 @@ void State::SetIsRotating(bool in_value)
     if (rotate_keys.size() > 0)
     {
         set_is_rotating_was_faked = true;
-        if (!is_rotating)
+        if (in_value)
         {
             InputFaker::SendKey(rotate_keys[0], SDL_PRESSED);
         }
@@ -30,10 +30,11 @@ bool State::IsRotating() { return is_rotating; }
 void State::SetIsWasdCharacterMovement(bool in_value)
 {
     is_wasd_character_movement = in_value;
-    if (Settings::GetSingleton()->toggle_movement_toggles_mouselook)
-    {
-        SetIsRotating(is_wasd_character_movement);
-    }
+    // TODO ToggleMouselook
+    // if (Settings::GetSingleton()->toggle_movement_toggles_mouselook)
+    // {
+    //     SetIsRotating(is_wasd_character_movement);
+    // }
     if (is_wasd_character_movement)
     {
         frames_to_hold_forward_to_center_camera = 10;

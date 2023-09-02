@@ -54,19 +54,44 @@ char CheckCommandInputsHook::OverrideFunc(int64_t a1, float* a2)
             InputFaker::SendMouseMotion(0, 0);
         }
 
+        if (state->player_can_input_movement)
+        {
+            switch (state->mouselook_request)
+            {
+            case ToggleRequest::OFF:
+                state->SetIsRotating(false);
+                state->mouselook_toggled = false;
+                state->mouselook_request = ToggleRequest::NONE;
+                break;
+            case ToggleRequest::ON:
+                state->SetIsRotating(true);
+                state->mouselook_toggled = true;
+                state->mouselook_request = ToggleRequest::NONE;
+                break;
+            case ToggleRequest::ON_AND_OFF:  // needed when tabbing in
+                state->SetIsRotating(true);
+                state->SetIsRotating(false);
+                state->mouselook_toggled = false;
+                state->mouselook_request = ToggleRequest::NONE;
+                break;
+            case ToggleRequest::NONE:
+            default:
+                break;
+            }
+        }
+
         if (state->player_could_input_movement_last_frame != state->player_can_input_movement)
         {
             if (state->player_can_input_movement && state->mouselook_toggled)
             {
                 state->SetIsRotating(true);
-                INFO("a");
             }
             if (!state->player_can_input_movement && state->IsRotating())
             {
                 state->SetIsRotating(false);
-                INFO("b");
             }
         }
+
         state->player_could_input_movement_last_frame = state->player_can_input_movement;
         state->player_can_input_movement = false;
 

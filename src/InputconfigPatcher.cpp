@@ -204,8 +204,9 @@ void InputconfigPatcher::ValidateModHotkeys(
             { "ToggleMovementMode", { *settings->toggle_movement_mode } },
             { "ToggleAutoforward", { *settings->toggle_autoforward } },
             { "HoldWalkspeed", { *settings->hold_walkspeed } },
-            { "ReloadConfig", { *settings->reload_config } },
-            { "ToggleMouselook", { *settings->toggle_mouselook } }
+            { "ReloadConfig", { *settings->reload_config } }
+            // TODO ToggleMouselook
+            // { "ToggleMouselook", { *settings->toggle_mouselook } }
         };
     // clang-format on
 

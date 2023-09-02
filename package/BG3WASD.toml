@@ -19,15 +19,6 @@ ToggleAutoforward = "shift+key:w"
 # Lets you move forward without holding Forward.
 # AZERTY users should set it to shift+key:z.
 
-ToggleMouselook = ""
-# The Camera Rotate command from the main menu must be held, but this key offers a real toggle for
-# mouselook.
-# For this key to work, Camera Rotate must still be bound to another key without modifiers in the
-# game menu!
-# Unfortunately, the toggle does not work inversely, yet. So if you toggle to mouselook, holding
-# Camera Rotate will not show the cursor when held.
-# Requires EnableMouselook = true.
-
 
 [Core]
 
@@ -49,20 +40,15 @@ EnableAutoTogglingMovementMode = true
 [Mouselook]
 
 EnableMouselook = true
-# Hides the mouse cursor and disable Interact (usually left click) during rotation.
+# Hides the mouse cursor and disables Interact (usually left click) during rotation.
 # Enable Rotate+LeftClick = Move Forward
-# [true, false]
-
-ToggleMovementModeAlsoTogglesMouselook = false
-# When true, toggling the movement mode will also toggle mouselook. 
-# This works together with AutoTogglingWasdMode!
-# Requires EnableMouselook = true.
 # [true, false]
 
 EnableRightclickMouselookFix = true
 # Improves the gameplay for players that bind Camera Rotate to Right Mouse Button.
-# Without this feature enabled, Camera Rotate will collide with Cancel Action and Context Menu.
+# With this feature disabled, Camera Rotate will collide with Cancel Action and Context Menu.
 # Also works with any other key than Rightclick, but Rightclick is most commonly used.
+# The only downside to this feature is that the mouse cursor takes few milliseconds longer to hide.
 # [true, false]
 
 RightclickThreshold = 200

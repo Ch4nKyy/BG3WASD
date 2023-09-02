@@ -122,7 +122,8 @@ void VirtualKeyMap::UpdateVkCombosOfCommandMap()
     AddKeyComboForCommand(FORWARD, state->character_forward_keys);
     AddKeyComboForCommand(BACKWARD, state->character_backward_keys);
     AddKeyComboForCommand(MOUSE_LEFT_DOWN, std::vector{ std::string("mouse:left") });
-    AddKeyComboForCommand(TOGGLE_MOUSELOOK, std::vector{ *settings->toggle_mouselook });
+    // TODO ToggleMouselook
+    // AddKeyComboForCommand(TOGGLE_MOUSELOOK, std::vector{ *settings->toggle_mouselook });
 }
 
 bool VirtualKeyMap::VkIsValid(std::string keyname)

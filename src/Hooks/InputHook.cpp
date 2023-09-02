@@ -1,4 +1,5 @@
 #include "InputHook.hpp"
+#include "../ToggleRequest.hpp"
 #include "../VirtualKeyMap.hpp"
 
 using enum Command;
@@ -11,15 +12,15 @@ void InputHook::Enable(HMODULE a_hModule)
 void InputHook::StartHookAsOwnThread(HMODULE a_hModule)
 {
     HHOOK keyboard_hook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, a_hModule, 0);
-    HHOOK mouse_hook = SetWindowsHookEx(WH_MOUSE_LL, MouseProc, a_hModule, 0);
+    // HHOOK mouse_hook = SetWindowsHookEx(WH_MOUSE_LL, MouseProc, a_hModule, 0);
     if (!keyboard_hook)
     {
         FATAL("Critical error. Keyboard hook failed!");
     }
-    if (!mouse_hook)
-    {
-        FATAL("Critical error. Mouse hook failed!");
-    }
+    // if (!mouse_hook)
+    // {
+    //     FATAL("Critical error. Mouse hook failed!");
+    // }
     MSG msg;
 
     while (GetMessage(&msg, 0, 0, 0) > 0)
@@ -29,7 +30,7 @@ void InputHook::StartHookAsOwnThread(HMODULE a_hModule)
     }
 
     UnhookWindowsHookEx(keyboard_hook);
-    UnhookWindowsHookEx(mouse_hook);
+    // UnhookWindowsHookEx(mouse_hook);
 }
 
 LRESULT CALLBACK InputHook::MouseProc(int a_nCode, WPARAM a_wParam, LPARAM a_lParam)
@@ -181,7 +182,7 @@ void InputHook::ReloadConfig()
 
 void InputHook::MouseLeftDown()
 {
-    auto state = State::GetSingleton();//*
+    auto state = State::GetSingleton();
     if (DidCommandChange(MOUSE_LEFT_DOWN, WM_KEYDOWN))
     {
         state->is_mouseleft_pressed = true;
@@ -194,12 +195,19 @@ void InputHook::MouseLeftDown()
 
 void InputHook::ToggleMouselook()
 {
-    auto state = State::GetSingleton();
-    if (DidCommandChange(TOGGLE_MOUSELOOK, WM_KEYDOWN))
-    {
-        state->mouselook_toggled = !state->mouselook_toggled;
-        state->SetIsRotating(state->mouselook_toggled);
-    }
+    // TODO ToggleMouselook
+    // auto state = State::GetSingleton();
+    // if (DidCommandChange(TOGGLE_MOUSELOOK, WM_KEYDOWN))
+    // {
+    //     if (state->mouselook_toggled)
+    //     {
+    //         state->mouselook_request = ToggleRequest::OFF;
+    //     }
+    //     else
+    //     {
+    //         state->mouselook_request = ToggleRequest::ON;
+    //     }
+    // }
 }
 
 bool InputHook::SetLastInputVkByMouseInput(WPARAM wParam, DWORD mouseData)

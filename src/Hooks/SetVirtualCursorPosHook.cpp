@@ -78,8 +78,7 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
             }
         }
         if (*settings->enable_rightclick_mouselook_fix && state->rotate_start_time != 0 &&
-            SDL_GetTicks() - state->rotate_start_time >
-                *settings->rightclick_threshold)
+            SDL_GetTicks() - state->rotate_start_time > *settings->rightclick_threshold)
         {
             HideCursor(xy);
             return OriginalFunc(a1, xy);

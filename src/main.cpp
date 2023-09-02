@@ -18,6 +18,7 @@
 #include "Hooks/SetCursorRotateHook.hpp"
 #include "Hooks/SetVirtualCursorPosHook.hpp"
 #include "Hooks/WASDUnlock.hpp"
+#include "Hooks/WindowGainFocusHook.hpp"
 #include "InputconfigPatcher.hpp"
 #include "SDL.h"
 #include "Settings.hpp"
@@ -90,6 +91,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
             bool check_context_menu_or_cancel_action_hook =
                 CheckContextMenuOrCancelActionHook::Prepare();
+            // TODO ToggleMouselook
+            // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
             if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
                 reset_cursor_rotate_hook && check_command_inputs_hook &&
                 check_context_menu_or_cancel_action_hook)
@@ -100,6 +103,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 ResetCursorRotateHook::Enable();
                 CheckCommandInputsHook::Enable();
                 CheckContextMenuOrCancelActionHook::Enable();
+                // TODO ToggleMouselook
+                // WindowGainFocusHook::Enable();
             }
             else
             {

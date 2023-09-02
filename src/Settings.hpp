@@ -12,7 +12,8 @@ public:
     String toggle_autoforward{ "ToggleAutoforward", "ModHotkeys" };
     String hold_walkspeed{ "HoldWalkspeed", "ModHotkeys" };
     String reload_config{ "ReloadConfig", "ModHotkeys" };
-    String toggle_mouselook{ "ToggleMouselook", "ModHotkeys" };
+    // TODO ToggleMouselook
+    // String toggle_mouselook{ "ToggleMouselook", "ModHotkeys" };
 
     Double walk_speed{ "WalkSpeed", "Core" };
     Boolean walking_is_default{ "WalkingIsDefault", "Core" };
@@ -21,8 +22,9 @@ public:
         "AutoToggleMovementMode" };
 
     Boolean enable_improved_mouselook{ "EnableMouselook", "Mouselook" };
-    Boolean toggle_movement_toggles_mouselook{ "ToggleMovementModeAlsoTogglesMouselook",
-        "Mouselook" };
+    // TODO ToggleMouselook
+    // Boolean toggle_movement_toggles_mouselook{ "ToggleMovementModeAlsoTogglesMouselook",
+    //     "Mouselook" };
     Boolean enable_rightclick_mouselook_fix{ "EnableRightclickMouselookFix", "Mouselook" };
     Integer rightclick_threshold{ "RightclickThreshold", "Mouselook" };
 

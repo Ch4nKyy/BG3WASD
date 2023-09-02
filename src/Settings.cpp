@@ -17,7 +17,8 @@ void Settings::Load() noexcept
             config.Bind(toggle_autoforward, "shift+key:w");
             config.Bind(hold_walkspeed, "");
             config.Bind(reload_config, "key:f11");
-            config.Bind(toggle_mouselook, "");
+            // TODO ToggleMouselook
+            // config.Bind(toggle_mouselook, "");
 
             config.Bind<0.0, 1.0>(walk_speed, 0.3);
             config.Bind(walking_is_default, FALSE);
@@ -25,7 +26,9 @@ void Settings::Load() noexcept
             config.Bind(enable_auto_toggling_movement_mode, TRUE);
             
             config.Bind(enable_improved_mouselook, TRUE);
-            config.Bind(toggle_movement_toggles_mouselook, FALSE);
+            // TODO ToggleMouselook
+            // TODO ToggleMouselook
+            // config.Bind(toggle_movement_toggles_mouselook, FALSE);
             config.Bind(enable_rightclick_mouselook_fix, TRUE);
             config.Bind(rightclick_threshold, 200);
         });
@@ -34,8 +37,9 @@ void Settings::Load() noexcept
 
     if (!*enable_improved_mouselook)
     {
-        *toggle_mouselook = "";
-        *toggle_movement_toggles_mouselook = false;
+        // TODO ToggleMouselook
+        // *toggle_mouselook = "";
+        // *toggle_movement_toggles_mouselook = false;
         *enable_rightclick_mouselook_fix = false;
     }
 
