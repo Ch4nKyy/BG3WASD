@@ -41,7 +41,10 @@ EnableAutoTogglingMovementMode = true
 
 EnableMouselook = true
 # Hides the mouse cursor and disables Interact (usually left click) during rotation.
-# Enable Rotate+LeftClick = Move Forward
+# [true, false]
+
+EnableRotatePlusLeftclickMovesForward = true
+# Holding the Camera Rotate key and Leftclick at the same time will move Forward.
 # [true, false]
 
 EnableRightclickMouselookFix = true

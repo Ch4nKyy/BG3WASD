@@ -22,6 +22,8 @@ public:
         "AutoToggleMovementMode" };
 
     Boolean enable_improved_mouselook{ "EnableMouselook", "Mouselook" };
+    Boolean enable_rotate_plus_lmb_is_forward{ "EnableRotatePlusLeftclickMovesForward",
+        "Mouselook" };
     // TODO ToggleMouselook
     // Boolean toggle_movement_toggles_mouselook{ "ToggleMovementModeAlsoTogglesMouselook",
     //     "Mouselook" };

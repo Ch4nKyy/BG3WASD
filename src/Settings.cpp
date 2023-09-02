@@ -26,6 +26,7 @@ void Settings::Load() noexcept
             config.Bind(enable_auto_toggling_movement_mode, TRUE);
             
             config.Bind(enable_improved_mouselook, TRUE);
+            config.Bind(enable_rotate_plus_lmb_is_forward, TRUE);
             // TODO ToggleMouselook
             // TODO ToggleMouselook
             // config.Bind(toggle_movement_toggles_mouselook, FALSE);
