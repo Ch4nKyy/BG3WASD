@@ -2,7 +2,6 @@
 # For the names of all available keys, see the bottom of this config file.
 # The ModHotkeys are region DEPENDANT!!! AZERTY keyboard users must adapt them!
 
-
 ToggleMovementMode = "key:capslock"
 # Key that toggles between Character and Camera movement mode.
 
