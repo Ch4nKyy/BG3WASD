@@ -284,6 +284,24 @@ void InputconfigPatcher::FindIssues(json data, const std::vector<std::string> co
                 continue;
             }
 
+            if (allow_modifiers && modifiers.size() != 0)
+            {
+                bool modifiers_all_legal = true;
+                for (auto modifier : modifiers)
+                {
+                    if (modifier != "ctrl" && modifier != "shift" && modifier != "alt")
+                    {
+                        modifiers_all_legal = false;
+                        continue;
+                    }
+                }
+                if (!modifiers_all_legal)
+                {
+                    not_found_keycombos.push_back(keycombo);
+                    continue;
+                }
+            }
+
             valid_combos++;
         }
 
