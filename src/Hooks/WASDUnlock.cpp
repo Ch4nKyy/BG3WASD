@@ -4,7 +4,7 @@
 void* WASDUnlock::Search(uintptr_t a_base = 0)
 {
     return dku::Hook::Assembly::search_pattern<
-        "38 05 ?? ?? ?? ?? 0F 84 ?? ?? ?? ?? 48 8B">(a_base);
+        "38 ?? ?? ?? ?? ?? 0F ?? ?? ?? ?? ?? 48 ?? ?? ?? 8B ?? ?? ?? ?? ?? 39">(a_base);
 }
 
 bool WASDUnlock::Prepare()
@@ -12,10 +12,8 @@ bool WASDUnlock::Prepare()
     auto match1 = Search();
     address1 = AsAddress(match1);
 
-    auto match2 = Search(address1 + 1);
-    address2 = AsAddress(match2);
 
-    if (not(address1 && address2))
+    if (not(address1))
     {
         State::GetSingleton()->mod_found_all_addresses = false;
         WARN("WASD unlock not found!");
@@ -27,7 +25,7 @@ bool WASDUnlock::Prepare()
 
 void WASDUnlock::Enable()
 {
-    if (not(address1 && address2))
+    if (not(address1))
     {
         return;
     }
@@ -36,8 +34,7 @@ void WASDUnlock::Enable()
         0x90, 0x90, 0x90 };
 
     dku::Hook::WriteImm(address1, data);
-    dku::Hook::WriteImm(address2, data);
-    INFO("WASD unlocked : {:X} and {:X}", address1, address2);
+    INFO("WASD unlocked : {:X}", address1);
 
     return;
 }

@@ -1,17 +1,19 @@
 #include "CharacterMoveInputVectorHook.hpp"
 #include "../Settings.hpp"
 #include "../State.hpp"
-#include "../Structs/Vector2.hpp"
+#include "../Structs/Vector3.hpp"
 
 bool CharacterMoveInputVectorHook::Prepare()
 {
     std::array<uintptr_t, 3> address_array = {
         AsAddress(dku::Hook::Assembly::search_pattern<
-            "E8 ?? ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? F3 0F ?? ?? 80 ?? ?? ?? F3">()),
-        AsAddress(dku::Hook::Assembly::search_pattern<
-            "E8 ?? ?? ?? ?? 0F ?? ?? 48 ?? ?? F3 ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? E8">()),
-        AsAddress(dku::Hook::Assembly::search_pattern<
-            "E8 ?? ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? F3 0F ?? ?? F3 0F ?? ?? ?? 80">())
+            "E8 ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? F3 ?? ?? ?? ?? ?? F3 ?? ?? ?? ?? "
+            "?? ?? ?? F3 ?? ?? ?? F3 ?? ?? ?? F3 ?? ?? ?? F3 ?? ?? ?? F3">()),
+        AsAddress(
+            dku::Hook::Assembly::search_pattern<"E8 ?? ?? ?? ?? 48 ?? ?? ?? ?? 48 ?? ?? ?? F2 ?? "
+                                                "?? ?? F2 ?? ?? ?? ?? 8B ?? ?? 89 ?? ?? E8">()),
+        AsAddress(
+            dku::Hook::Assembly::search_pattern<"E8 ?? ?? ?? ?? 4C ?? ?? ?? F2 ?? ?? ?? F2">())
     };
     addresses = address_array;
 
@@ -46,11 +48,11 @@ void CharacterMoveInputVectorHook::Enable()
 }
 
 // Called in GameThread, every frame, but not if the player cannot move!
-int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
+float* CharacterMoveInputVectorHook::OverrideFunc(float* xyz, int64_t a2)
 {
-    yx = OriginalFunc(yx);
+    xyz = OriginalFunc(xyz, a2);
 
-    Vector2* yx_v = reinterpret_cast<Vector2*>(yx);
+    Vector3* xyz_v = reinterpret_cast<Vector3*>(xyz);
 
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
@@ -58,17 +60,19 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
                                           state->is_mouseleft_pressed && state->IsRotating()))
     {
         // This causes the input vector to not be normalized anymore, but it doesn't matter.
-        yx_v->y = 1.0f;
+        xyz_v->x = 1.0f; // TODO this is bugged now. it is world space instead of local space.
     }
     if (state->walking_toggled ^ state->walking_held)
     {
-        yx_v->x *= *settings->walk_speed;
-        yx_v->y *= *settings->walk_speed;
+        xyz_v->x *= *settings->walk_speed;
+        xyz_v->y *= *settings->walk_speed;
+        xyz_v->z *= *settings->walk_speed;
     }
     if (not state->IsWasdCharacterMovement())
     {
-        yx_v->x = 0.0f;
-        yx_v->y = 0.0f;
+        xyz_v->x = 0.0f;
+        xyz_v->y = 0.0f;
+        xyz_v->z = 0.0f;
     }
     if (state->frames_to_hold_forward_to_center_camera > 0)
     {
@@ -77,7 +81,7 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
         // The game has a center camera command, but it sucks, because it always faces north.
         // There is center logic that doesn't do that, e.g. when you press F1, but I didn't find it
         // yet.
-        yx_v->y = 1.0f;
+        xyz_v->x = 1.0f;
     }
 
     if (*Settings::GetSingleton()->enable_improved_mouselook)
@@ -85,5 +89,5 @@ int64_t CharacterMoveInputVectorHook::OverrideFunc(int64_t yx)
         state->player_can_input_movement = true;
     }
 
-    return yx;
+    return xyz;
 }
