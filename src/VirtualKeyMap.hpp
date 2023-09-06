@@ -141,7 +141,9 @@ private:
         { "key:]", { VK_OEM_6, SDL_SCANCODE_RIGHTBRACKET, SDLK_RIGHTBRACKET } },
         { "key:'", { VK_OEM_7, SDL_SCANCODE_APOSTROPHE, SDLK_QUOTE } },
         { "key:crsel", { VK_CRSEL, SDL_SCANCODE_CRSEL, SDLK_CRSEL } },
-        { "key:exsel", { VK_EXSEL, SDL_SCANCODE_EXSEL, SDLK_EXSEL } }
+        { "key:exsel", { VK_EXSEL, SDL_SCANCODE_EXSEL, SDLK_EXSEL } },
+        { "key:pagedown", { VK_NEXT, SDL_SCANCODE_PAGEDOWN, SDLK_PAGEDOWN } },
+        { "key:pageup", { VK_PRIOR, SDL_SCANCODE_PAGEUP, SDLK_PAGEUP } }
     };
     // clang-format on
 };

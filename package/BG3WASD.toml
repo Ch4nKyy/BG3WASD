@@ -76,7 +76,7 @@ RightclickThreshold = 200
 # key:backspace         key:tab                 key:return              key:capslock
 # key:insert            key:delete              key:space               key:end
 # key:home              key:printscreen         key:scrolllock          key:escape
-# key:pause             key:numlock
+# key:pause             key:numlock             key:pageup              key:pagedown
 
 # key:lalt              key:ralt
 # key:lshift            key:rshift
