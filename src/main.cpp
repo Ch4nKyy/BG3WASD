@@ -79,7 +79,9 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             }
             else
             {
-                errors.append("Auto toggling WASD at FTB start/end could not be enabled.\n");
+                errors.append(
+                    "Auto toggling movement mode at forced turn-based mode start/end could not be "
+                    "enabled.\n");
             }
 
             bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
@@ -111,7 +113,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         }
         else
         {
-            errors.append("WASD could not be enabled at all! Mod will be inactive.\n");
+            errors.append(
+                "Character movement could not be enabled at all! Mod will be inactive.\n");
         }
 
         if (!State::GetSingleton()->mod_found_all_addresses)
