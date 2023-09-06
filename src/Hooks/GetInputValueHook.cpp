@@ -63,8 +63,7 @@ int64_t GetInputValueHook::OverrideFunc(int64_t player_input_controller_ptr,
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
     int command_id = *(int*)command_id_ptr;
-    if (state->autoforward_toggled || (*settings->enable_rotate_plus_lmb_is_forward &&
-                                          state->is_mouseleft_pressed && state->IsRotating()))
+    if (state->autoforward_toggled)
     {
         if (command_id == 142)
         {
@@ -72,6 +71,24 @@ int64_t GetInputValueHook::OverrideFunc(int64_t player_input_controller_ptr,
             xyz_v->y = 1.0f;
         }
     }
+    if (*settings->enable_rotate_plus_lmb_is_forward)
+    {
+        bool rotate_and_lmb_is_pressed = state->is_mouseleft_pressed && state->IsRotating();
+        if (state->last_frame_rotate_and_lmb_was_pressed && !rotate_and_lmb_is_pressed)
+        {
+            state->autoforward_toggled = false;
+        }
+        if (rotate_and_lmb_is_pressed)
+        {
+            if (command_id == 142)
+            {
+                xyz_v->x = 1.0f;
+                xyz_v->y = 1.0f;
+            }
+        }
+        state->last_frame_rotate_and_lmb_was_pressed = rotate_and_lmb_is_pressed;
+    }
+
     if (state->walking_toggled ^ state->walking_held)
     {
         xyz_v->x *= *settings->walk_speed;

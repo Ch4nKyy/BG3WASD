@@ -40,6 +40,7 @@ public:
     bool player_can_input_movement = false;
     bool player_could_input_movement_last_frame = false;
     ToggleRequest mouselook_request = ToggleRequest::NONE;
+    bool last_frame_rotate_and_lmb_was_pressed = false;
 
     void SetIsRotating(bool in_value);
     void SetInternalIsRotating(bool in_value);
