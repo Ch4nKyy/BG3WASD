@@ -2,7 +2,6 @@
 #include "Addresses/LoadInputConfig.hpp"
 #include "Hooks/AfterChangingKeybindInMenuHook.hpp"
 #include "Hooks/AfterInitialLoadInputConfigHook.hpp"
-#include "Hooks/CharacterMoveInputVectorHook.hpp"
 #include "Hooks/CheckCommandInputsHook.hpp"
 #include "Hooks/CheckContextMenuOrCancelActionHook.hpp"
 #include "Hooks/CombatEndHook.hpp"
@@ -10,6 +9,7 @@
 #include "Hooks/FTBEndHook.hpp"
 #include "Hooks/FTBStartHook.hpp"
 #include "Hooks/GetCameraObjectHook.hpp"
+#include "Hooks/GetInputValueHook.hpp"
 #include "Hooks/InputHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
@@ -54,7 +54,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
         bool wasd_unlock = WASDUnlock::Prepare();
         bool get_camera_object_hook = GetCameraObjectHook::Prepare();
-        bool character_movement_input_vector_hook = CharacterMoveInputVectorHook::Prepare();
+        bool character_movement_input_vector_hook = GetInputValueHook::Prepare();
         bool is_in_controller_mode = IsInControllerMode::Prepare();
         bool load_input_config = LoadInputConfig::Prepare();
         bool after_changing_keybind_in_menu_hook = AfterChangingKeybindInMenuHook::Prepare();
@@ -66,7 +66,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             InputHook::Enable(a_hModule);  // throws on error
             WASDUnlock::Enable();
             GetCameraObjectHook::Enable();
-            CharacterMoveInputVectorHook::Enable();
+            GetInputValueHook::Enable();
             AfterChangingKeybindInMenuHook::Enable();
             AfterInitialLoadInputConfigHook::Enable();
 
