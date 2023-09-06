@@ -80,17 +80,21 @@ char CheckCommandInputsHook::OverrideFunc(int64_t a1, float* a2)
             }
         }
 
-        if (state->player_could_input_movement_last_frame != state->player_can_input_movement)
-        {
-            if (state->player_can_input_movement && state->mouselook_toggled)
-            {
-                state->SetIsRotating(true);
-            }
-            if (!state->player_can_input_movement && state->IsRotating())
-            {
-                state->SetIsRotating(false);
-            }
-        }
+        // TODO ToggleMouselook
+        // if (state->player_could_input_movement_last_frame != state->player_can_input_movement)
+        // {
+        //     if (state->player_can_input_movement && state->mouselook_toggled)
+        //     {
+        //         state->SetIsRotating(true);
+        //     }
+        //     if (!state->player_can_input_movement && state->IsRotating())
+        //     {
+        // // TODO THIS IS PROBLEMATIC. It doesn't only stop rotate when you enter menus, but also
+        // // when you climb steps! Funny thing is, it is somehow overwritten, when you press the
+        // // rotate key that is bound in the second key slot in the menu!
+        //         state->SetIsRotating(false);
+        //     }
+        // }
         state->player_could_input_movement_last_frame = state->player_can_input_movement;
         state->player_can_input_movement = false;
 
