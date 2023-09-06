@@ -17,6 +17,8 @@ public:
 
     Double walk_speed{ "WalkSpeed", "Core" };
     Boolean walking_is_default{ "WalkingIsDefault", "Core" };
+    // TODO character_leftright_is_rotate
+    // Boolean character_leftright_is_rotate{ "CharacterLeftRightIsRotateInsteadOfMove", "Core" };
 
     Boolean enable_auto_toggling_movement_mode{ "EnableAutoTogglingMovementMode",
         "AutoToggleMovementMode" };

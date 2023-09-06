@@ -22,9 +22,17 @@ void Settings::Load() noexcept
 
             config.Bind<0.0, 1.0>(walk_speed, 0.3);
             config.Bind(walking_is_default, FALSE);
+            // TODO character_leftright_is_rotate
+            // config.Bind(character_leftright_is_rotate, FALSE);
+            // Future toml lines:
+            // CharacterLeftRightIsRotateInsteadOfMove = false
+            // # Set this to true if you want to MOVE the Camera with Left/Right, but ROTATE the
+            // # Character.
+            // # For this to work, you need to bind Camera Rotate Left/Right to the same keys as
+            // # Camera Left/Right.
 
             config.Bind(enable_auto_toggling_movement_mode, TRUE);
-            
+
             config.Bind(enable_improved_mouselook, TRUE);
             config.Bind(enable_rotate_plus_lmb_is_forward, TRUE);
             // TODO ToggleMouselook
@@ -62,7 +70,7 @@ void Settings::InitState()
 {
     auto* state = State::GetSingleton();
 
-    state->walking_toggled= walking_is_default;
+    state->walking_toggled = walking_is_default;
 
     // Flag invalid to react later.
     state->cursor_position_to_restore.x = -1;

@@ -125,6 +125,21 @@ json InputconfigPatcher::UpdateData(json data, std::string character_command,
             }
         }
     }
+
+    // TODO character_leftright_is_rotate
+    // If this option is set, don't copy camera keys. But preserve Controller keys.
+    // if (Settings::GetSingleton()->character_leftright_is_rotate)
+    // {
+    //     if (character_command == "CharacterMoveLeft")
+    //     {
+    //         keys_to_bind = { "c:leftstick_xneg" };
+    //     }
+    //     else if (character_command == "CharacterMoveRight")
+    //     {
+    //         keys_to_bind = { "c:leftstick_xpos" };
+    //     }
+    // }
+
     data[character_command] = keys_to_bind;
     return data;
 }

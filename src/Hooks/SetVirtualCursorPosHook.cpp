@@ -42,7 +42,7 @@ void SetVirtualCursorPosHook::Enable()
 
 void SetVirtualCursorPosHook::HideCursor(QWORD* xy)
 {
-    auto state = State::GetSingleton();
+    auto* state = State::GetSingleton();
     SDL_SetRelativeMouseMode(SDL_TRUE);
     Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
     int w = 0;
@@ -58,8 +58,8 @@ void SetVirtualCursorPosHook::HideCursor(QWORD* xy)
 // Called in MainThread, every frame that has a mouse motion event
 void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
 {
-    auto state = State::GetSingleton();
-    auto settings = Settings::GetSingleton();
+    auto* state = State::GetSingleton();
+    auto* settings = Settings::GetSingleton();
 
     if (!*settings->enable_improved_mouselook)
     {

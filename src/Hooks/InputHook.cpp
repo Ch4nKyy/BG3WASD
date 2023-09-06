@@ -182,7 +182,7 @@ void InputHook::ReloadConfig()
 
 void InputHook::MouseLeftDown()
 {
-    auto state = State::GetSingleton();
+    auto* state = State::GetSingleton();
     if (DidCommandChange(MOUSE_LEFT_DOWN, WM_KEYDOWN))
     {
         state->is_mouseleft_pressed = true;
@@ -196,7 +196,7 @@ void InputHook::MouseLeftDown()
 void InputHook::ToggleMouselook()
 {
     // TODO ToggleMouselook
-    // auto state = State::GetSingleton();
+    // auto* state = State::GetSingleton();
     // if (DidCommandChange(TOGGLE_MOUSELOOK, WM_KEYDOWN))
     // {
     //     if (state->mouselook_toggled)

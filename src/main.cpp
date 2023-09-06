@@ -46,7 +46,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
         dku::Hook::Trampoline::AllocTrampoline(1 << 9);
 
-        auto settings = Settings::GetSingleton();
+        auto* settings = Settings::GetSingleton();
 
         settings->Load();
 
