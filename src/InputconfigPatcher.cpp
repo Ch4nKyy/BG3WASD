@@ -13,7 +13,12 @@ void InputconfigPatcher::Patch()
     }
     catch (...)
     {
-        FATAL("Inputconfig could not be patched!");
+        FATAL(
+            "Inputconfig could not be patched!\n"
+            "This can often be fixed by renaming or deleting "
+            "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
+            "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
+            "Win+R and typing %localappdata%.");
     }
 }
 
@@ -56,7 +61,7 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     if (output_stream.fail())
     {
         FATAL(
-            "Inputconfig could not be patched! "
+            "Inputconfig could not be patched!\n"
             "This can often be fixed by renaming or deleting "
             "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
             "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
@@ -203,6 +208,7 @@ void InputconfigPatcher::UpdateAndValidateKeys(json data)
             error.append("\n");
         }
         error.append("This might cause the mod to malfunction!");
+        WARN(error);
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "BG3WASD", error.c_str(), NULL);
     }
 }
