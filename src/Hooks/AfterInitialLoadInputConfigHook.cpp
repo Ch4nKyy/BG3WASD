@@ -1,7 +1,6 @@
 #include "AfterInitialLoadInputConfigHook.hpp"
 #include "../InputconfigPatcher.hpp"
 #include "../State.hpp"
-#include "Addresses/LoadInputConfig.hpp"
 
 bool AfterInitialLoadInputConfigHook::Prepare()
 {
@@ -46,7 +45,6 @@ int64_t AfterInitialLoadInputConfigHook::Hook(int64_t* a1, uint16_t a2)
     auto ret = CallOriginal(a1, a2);
 
     InputconfigPatcher::Patch();
-    LoadInputConfig::Call(0, 0);
 
     return ret;
 }

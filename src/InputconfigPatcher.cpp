@@ -2,6 +2,7 @@
 #include <shlobj.h>
 #include <string>
 
+#include "Addresses/LoadInputConfig.hpp"
 #include "InputconfigPatcher.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
@@ -11,6 +12,7 @@ void InputconfigPatcher::Patch()
     try
     {
         ReadAndWriteInputconfig();
+        LoadInputConfig::Call(0, 0);
     }
     catch (...)
     {

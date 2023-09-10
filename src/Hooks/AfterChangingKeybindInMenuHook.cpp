@@ -1,6 +1,5 @@
 #include "AfterChangingKeybindInMenuHook.hpp"
 #include "../State.hpp"
-#include "Addresses/LoadInputConfig.hpp"
 #include "InputconfigPatcher.hpp"
 
 bool AfterChangingKeybindInMenuHook::Prepare()
@@ -46,7 +45,6 @@ int64_t AfterChangingKeybindInMenuHook::Hook(int64_t a1)
     auto ret = CallOriginal(a1);
 
     InputconfigPatcher::Patch();
-    LoadInputConfig::Call(0, 0);
 
     return ret;
 }
