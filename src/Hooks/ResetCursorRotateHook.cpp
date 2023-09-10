@@ -63,12 +63,12 @@ void ResetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
     }
     state->set_is_rotating_was_faked = false;
 
+    //  Skip on game launch / first load.
     if (state->cursor_position_to_restore.x != -1)
     {
-        state->is_rotating_changed = true;
         state->SetInternalIsRotating(false);
-        state->frames_to_restore_cursor_pos = 2;
+        state->HideCursor(false);
     }
-    InputFaker::SendMouseMotion(0, 0);
+
     return OriginalFunc(a1, a2);
 }

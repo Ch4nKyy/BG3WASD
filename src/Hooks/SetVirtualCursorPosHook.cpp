@@ -40,21 +40,6 @@ void SetVirtualCursorPosHook::Enable()
     }
 }
 
-void SetVirtualCursorPosHook::HideCursor(QWORD* xy)
-{
-    auto* state = State::GetSingleton();
-    SDL_SetRelativeMouseMode(SDL_TRUE);
-    Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
-    int w = 0;
-    int h = -1000000;
-    SDL_GetWindowSize(state->sdl_window, &w,
-        NULL);  // TODO can be removed if I manage to block interact
-    // Centering x is not necessary, but may be useful at some point.
-    xy_v->x = w / 2;
-    xy_v->y = h;
-    state->rotate_start_time = 0;
-}
-
 // Called in MainThread, every frame that has a mouse motion event
 void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
 {
@@ -66,38 +51,41 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
         return OriginalFunc(a1, xy);
     }
 
-    if (state->IsRotating())
+    const std::lock_guard<std::mutex> lock(state->hide_cursor_mutex);
+    if (state->ShouldHideCursor())
     {
-        if (state->is_rotating_changed)
+        if (!state->cursor_hidden_last_frame)
         {
-            state->is_rotating_changed = false;
-            if (!*settings->enable_rightclick_mouselook_fix)
-            {
-                HideCursor(xy);
-                return OriginalFunc(a1, xy);
-            }
+            SDL_SetRelativeMouseMode(SDL_TRUE);
+            Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
+            int w = 0;
+            int h = -1000000;
+            SDL_GetWindowSize(state->sdl_window, &w,
+                NULL);  // TODO can be removed if I manage to block interact
+            // Centering x is not necessary, but may be useful at some point.
+            xy_v->x = w / 2;
+            xy_v->y = h;
+            OriginalFunc(a1, xy);
         }
-        if (*settings->enable_rightclick_mouselook_fix && state->rotate_start_time != 0 &&
-            SDL_GetTicks() - state->rotate_start_time > *settings->rightclick_threshold)
-        {
-            HideCursor(xy);
-            return OriginalFunc(a1, xy);
-        }
-        return;
-    }
-    else
-    {
-        if (state->is_rotating_changed)
-        {
-            state->is_rotating_changed = false;
-            state->rotate_start_time = 0;
-            SDL_SetRelativeMouseMode(SDL_FALSE);
-        }
-        if (state->frames_to_restore_cursor_pos > 0)
+        else
         {
             return;
         }
     }
+    else
+    {
+        if (state->cursor_hidden_last_frame)
+        {
+            POINT p = state->cursor_position_to_restore;
+            SDL_WarpMouseInWindow(state->sdl_window, (int)p.x, (int)p.y);
+            SDL_SetRelativeMouseMode(SDL_FALSE);
+            Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
+            xy_v->x = (int)p.x;
+            xy_v->y = (int)p.y;
+        }
+        OriginalFunc(a1, xy);
+    }
+    state->cursor_hidden_last_frame = state->ShouldHideCursor();
 
-    return OriginalFunc(a1, xy);
+    return;
 }

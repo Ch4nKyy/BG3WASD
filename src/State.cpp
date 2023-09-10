@@ -19,12 +19,19 @@ void State::SetIsRotating(bool in_value)
     }
 }
 
-void State::SetInternalIsRotating(bool in_value)
-{
-    is_rotating = in_value;
-}
+void State::SetInternalIsRotating(bool in_value) { is_rotating = in_value; }
 
 bool State::IsRotating() { return is_rotating; }
+
+void State::HideCursor(bool in_value)
+{
+    const std::lock_guard<std::mutex> lock(hide_cursor_mutex);
+    should_hide_cursor = in_value;
+    rotate_start_time = 0;
+    InputFaker::SendMouseMotion(0, 0);
+}
+
+bool State::ShouldHideCursor() { return should_hide_cursor; }
 
 // If set to true, also center camera
 void State::SetIsWasdCharacterMovement(bool in_value)

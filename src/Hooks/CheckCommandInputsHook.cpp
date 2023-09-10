@@ -45,15 +45,10 @@ void CheckCommandInputsHook::Enable()
 char CheckCommandInputsHook::OverrideFunc(int64_t a1, float* a2)
 {
     auto* state = State::GetSingleton();
+    auto* settings = Settings::GetSingleton();
 
     if (*Settings::GetSingleton()->enable_improved_mouselook)
     {
-        if (state->IsRotating() && *Settings::GetSingleton()->enable_rightclick_mouselook_fix &&
-            state->rotate_start_time != 0)
-        {
-            InputFaker::SendMouseMotion(0, 0);
-        }
-
         if (state->player_can_input_movement)
         {
             switch (state->mouselook_request)
@@ -98,17 +93,12 @@ char CheckCommandInputsHook::OverrideFunc(int64_t a1, float* a2)
         state->player_could_input_movement_last_frame = state->player_can_input_movement;
         state->player_can_input_movement = false;
 
-        if (!state->IsRotating())
+        if (state->IsRotating())
         {
-            if (state->frames_to_restore_cursor_pos > 0)
+            if (state->rotate_start_time != 0 &&
+                SDL_GetTicks() - state->rotate_start_time > *settings->rightclick_threshold)
             {
-                POINT p = state->cursor_position_to_restore;
-                --state->frames_to_restore_cursor_pos;
-                if (state->frames_to_restore_cursor_pos == 0)
-                {
-                    state->cursor_position_to_restore.x = -1;
-                }
-                SDL_WarpMouseInWindow(state->sdl_window, (int)p.x, (int)p.y);
+                state->HideCursor(true);
             }
         }
     }

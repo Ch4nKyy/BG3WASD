@@ -7,7 +7,6 @@ class SetVirtualCursorPosHook
 public:
     static void Enable();
     static bool Prepare();
-    static void HideCursor(QWORD* xy);
 
 private:
     static void OverrideFunc(QWORD* a1, QWORD* a2);

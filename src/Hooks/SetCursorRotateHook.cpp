@@ -49,16 +49,21 @@ void SetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
 
     auto* state = State::GetSingleton();
 
-    state->is_rotating_changed = true;
     state->SetInternalIsRotating(true);
-    GetCursorPos(&state->cursor_position_to_restore);
+
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    state->cursor_position_to_restore.x = x;
+    state->cursor_position_to_restore.y = y;
     if (Settings::GetSingleton()->enable_rightclick_mouselook_fix)
     {
         state->rotate_start_time = SDL_GetTicks();
     }
     else
     {
-        InputFaker::SendMouseMotion(0, 0);
+        state->HideCursor(true);
     }
+    // Actual hiding happens in CheckCommandInputsHook
+
     return OriginalFunc(a1, a2);
 }

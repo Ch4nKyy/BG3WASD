@@ -30,10 +30,8 @@ public:
     std::vector<std::string> rotate_keys;
     bool rotate_keys_include_lmb = false;
     SDL_Window* sdl_window = 0;
-    bool is_rotating_changed = false;
     bool set_is_rotating_was_faked = false;
     POINT cursor_position_to_restore;
-    int frames_to_restore_cursor_pos = -1;
     bool is_mouseleft_pressed = false;
     uint32_t rotate_start_time = 0;
     uint32_t last_time_context_menu_pressed = 0;
@@ -42,10 +40,14 @@ public:
     bool player_could_input_movement_last_frame = false;
     ToggleRequest mouselook_request = ToggleRequest::NONE;
     bool last_frame_rotate_and_lmb_was_pressed = false;
+    bool cursor_hidden_last_frame = false;
+    std::mutex hide_cursor_mutex;
 
     void SetIsRotating(bool in_value);
     void SetInternalIsRotating(bool in_value);
     bool IsRotating();
+    void HideCursor(bool in_value);
+    bool ShouldHideCursor();
 
 private:
     //core
@@ -53,4 +55,5 @@ private:
 
     // mouselook
     bool is_rotating = false;
+    bool should_hide_cursor = false;
 };
