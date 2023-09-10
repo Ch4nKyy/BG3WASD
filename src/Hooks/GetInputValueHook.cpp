@@ -101,13 +101,13 @@ int64_t GetInputValueHook::OverrideFunc(int64_t player_input_controller_ptr,
     }
     if (state->frames_to_hold_forward_to_center_camera > 0)
     {
-        --(state->frames_to_hold_forward_to_center_camera);
         // Send a move input for a few frames, so the camera moves back to the character.
         // The game has a center camera command, but it sucks, because it always faces north.
         // There is center logic that doesn't do that, e.g. when you press F1, but I didn't find it
         // yet.
         if (command_id == 142)
         {
+            --(state->frames_to_hold_forward_to_center_camera);
             xyz_v->x = 1.0f;
             xyz_v->y = 1.0f;
         }
