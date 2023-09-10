@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <shlobj.h>
 #include <string>
 
@@ -160,6 +161,8 @@ void InputconfigPatcher::UpdateAndValidateKeys(json data)
         GetKeycombosOfCommandFromInputconfig(data, "CharacterMoveBackward", commands, { "" });
     state->rotate_keys = GetKeycombosOfCommandFromInputconfig(data, "CameraToggleMouseRotate",
         commands, { "mouse:middle" });
+    state->rotate_keys_include_lmb = std::find(state->rotate_keys.begin(), state->rotate_keys.end(),
+                                         "mouse:left") != state->rotate_keys.end();
     VirtualKeyMap::UpdateVkCombosOfCommandMap();
 
     std::vector<std::string> unbound_commands;

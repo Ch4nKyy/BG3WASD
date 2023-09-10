@@ -28,6 +28,7 @@ public:
     // mouselook
     bool mouselook_toggled = false;
     std::vector<std::string> rotate_keys;
+    bool rotate_keys_include_lmb = false;
     SDL_Window* sdl_window = 0;
     bool is_rotating_changed = false;
     bool set_is_rotating_was_faked = false;

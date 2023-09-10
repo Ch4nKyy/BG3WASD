@@ -71,7 +71,7 @@ int64_t GetInputValueHook::OverrideFunc(int64_t player_input_controller_ptr,
             xyz_v->y = 1.0f;
         }
     }
-    if (*settings->enable_rotate_plus_lmb_is_forward)
+    if (*settings->enable_rotate_plus_lmb_is_forward && !state->rotate_keys_include_lmb)
     {
         bool rotate_and_lmb_is_pressed = state->is_mouseleft_pressed && state->IsRotating();
         if (state->last_frame_rotate_and_lmb_was_pressed && !rotate_and_lmb_is_pressed)
