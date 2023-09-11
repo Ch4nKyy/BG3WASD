@@ -1,3 +1,12 @@
+
+if (!$args) { throw "Provide version number as argument!" }
+$version_number = $args[0]
+if (-Not ($version_number -match '^\d\.\d\.\d$')) { throw "Version number must be of format x.y.z" }
+$version_line = "    VERSION $version_number"
+$file = "$PSScriptRoot\CMakeLists.txt"
+$regex = '^\s*VERSION\s+\d\.\d\.\d$'
+(Get-Content $file) -replace $regex, $version_line | Set-Content $file
+
 Remove-Item $PSScriptRoot/build -Recurse -Force -ErrorAction:SilentlyContinue -Confirm:$False | Out-Null
 & cmake -B $PSScriptRoot/build -S $PSScriptRoot --preset=REL -DPLUGIN_MODE:BOOL=TRUE
 & cmake --build $PSScriptRoot/build --config Release
