@@ -193,6 +193,9 @@ void InputHook::ReloadConfig()
 void InputHook::MouseLeftDown()
 {
     auto* state = State::GetSingleton();
+    // Setting the variable is done twice here, but it helps against it getting stuck during
+    // AltTab.
+    state->is_mouseleft_pressed = (GetAsyncKeyState(VK_LBUTTON) & 0x8000);
     if (DidCommandChange(MOUSE_LEFT_DOWN, WM_KEYDOWN))
     {
         state->is_mouseleft_pressed = true;
