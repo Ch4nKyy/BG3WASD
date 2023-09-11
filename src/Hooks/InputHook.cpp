@@ -60,7 +60,8 @@ LRESULT CALLBACK InputHook::KeyboardProc(int a_nCode, WPARAM a_wParam, LPARAM a_
         GetWindowThreadProcessId(hwnd, &pid);
         if (pid == CURRENT_PROCESS_ID)
         {
-            if (a_nCode >= 0 && (a_wParam == WM_KEYDOWN || a_wParam == WM_KEYUP))
+            if (a_nCode >= 0 && (a_wParam == WM_KEYDOWN || a_wParam == WM_KEYUP ||
+                                    a_wParam == WM_SYSKEYDOWN || a_wParam == WM_SYSKEYUP))
             {
                 // lower key codes conflict with other codes, wtf, so use upper
                 last_input_vk = ((KBDLLHOOKSTRUCT*)a_lParam)->vkCode;
@@ -88,7 +89,8 @@ void InputHook::HandleInput()
 
 bool InputHook::DidCommandChange(Command command, int transition)
 {
-    if (last_transition != transition)
+    // keydown or syskeydown doesn't matter.
+    if (last_transition != transition && last_transition != transition + 4)
     {
         return false;
     }
