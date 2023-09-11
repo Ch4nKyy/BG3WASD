@@ -43,7 +43,7 @@ void ResetCursorRotateHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address + offsets_array[i], OverrideFunc);
-        INFO("Hooked ResetCursorRotateHook #{}: {:X}", i, AsAddress(address + offsets_array[i]));
+        DEBUG("Hooked ResetCursorRotateHook #{}: {:X}", i, AsAddress(address + offsets_array[i]));
         ++i;
     }
 }

@@ -15,7 +15,7 @@ bool LoadInputConfig::Prepare()
     }
 
     Func = reinterpret_cast<tLoadInputConfig>(address);
-    INFO("LoadInputConfig found: {:X}", AsAddress(Func))
+    DEBUG("LoadInputConfig found: {:X}", AsAddress(Func))
     return true;
 }
 

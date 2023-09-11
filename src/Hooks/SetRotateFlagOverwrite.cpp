@@ -16,7 +16,7 @@ bool SetRotateFlagOverwrite::Prepare()
         return false;
     }
 
-    INFO("Hooked SetRotateFlagOverwrite: {:X}", AsAddress(address));
+    DEBUG("Hooked SetRotateFlagOverwrite: {:X}", AsAddress(address));
     handle = dku::Hook::AddASMPatch(address, { 0, 6 }, &patch);
     return true;
 }

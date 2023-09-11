@@ -21,6 +21,7 @@
 #include "SDL.h"
 #include "Settings.hpp"
 #include "State.hpp"
+#include "VersionInfo.hpp"
 
 BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lpReserved)
 {
@@ -33,8 +34,9 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         }
 #endif
         dku::Logger::Init(Plugin::NAME, std::to_string(Plugin::Version));
+        dku::Hook::Trampoline::AllocTrampoline(1 << 9);
 
-        INFO("Game Process Name : {}", dku::Hook::GetProcessName())
+        VersionInfo::Print(a_hModule);
 
         SDL_version linked;
         SDL_GetVersion(&linked);
@@ -44,16 +46,12 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 "SDL2.dll version mismatch. This usually means that you must re-install the mod, "
                 "or at least the SDL2.dll!");
         }
-
         // With SDL 2.24 and spam-clicking Rotate I could bug the cursor so that it would
         // warp to the center of the screen.
         // Using SDL 2.28 and this Hint fixes this issue.
         SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_CENTER, "0");
 
-        dku::Hook::Trampoline::AllocTrampoline(1 << 9);
-
         auto* settings = Settings::GetSingleton();
-
         settings->Load();
 
         std::string errors;
@@ -132,6 +130,10 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         {
             WARN(errors);
             SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "BG3WASD", errors.c_str(), NULL);
+        }
+        else
+        {
+            INFO("WASD Mod started without errors.");
         }
     }
 

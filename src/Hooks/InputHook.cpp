@@ -240,7 +240,6 @@ bool InputHook::SetLastInputVkByMouseInput(WPARAM wParam, DWORD mouseData)
         last_transition = WM_KEYUP;
         break;
     case WM_XBUTTONDOWN:
-        INFO(GET_XBUTTON_WPARAM(mouseData));
         if (GET_XBUTTON_WPARAM(mouseData) == XBUTTON1)
         {
             last_input_vk = VK_XBUTTON1;

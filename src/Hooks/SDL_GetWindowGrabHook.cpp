@@ -33,7 +33,7 @@ void SDL_GetWindowGrabHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked SDL_GetWindowGrabHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked SDL_GetWindowGrabHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

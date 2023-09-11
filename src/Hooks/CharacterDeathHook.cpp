@@ -33,7 +33,7 @@ void CharacterDeathHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address + 57, OverrideFunc);
-        INFO("Hooked CharacterDeathHook #{}: {:X}", i, AsAddress(address + 57));
+        DEBUG("Hooked CharacterDeathHook #{}: {:X}", i, AsAddress(address + 57));
         ++i;
     }
 }

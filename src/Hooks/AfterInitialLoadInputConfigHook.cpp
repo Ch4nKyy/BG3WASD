@@ -33,7 +33,7 @@ void AfterInitialLoadInputConfigHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, Hook);
-        INFO("Hooked AfterInitialLoadInputConfigHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked AfterInitialLoadInputConfigHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

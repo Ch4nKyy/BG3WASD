@@ -34,7 +34,7 @@ void FTBStartHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address + 13, OverrideFunc);
-        INFO("Hooked FTBStartHook #{}: {:X}", i, AsAddress(address + 13));
+        DEBUG("Hooked FTBStartHook #{}: {:X}", i, AsAddress(address + 13));
         ++i;
     }
 }

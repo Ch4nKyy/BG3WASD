@@ -34,7 +34,7 @@ void CombatStartHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address + 37, OverrideFunc);
-        INFO("Hooked CombatStartHook #{}: {:X}", i, AsAddress(address + 37));
+        DEBUG("Hooked CombatStartHook #{}: {:X}", i, AsAddress(address + 37));
         ++i;
     }
 }

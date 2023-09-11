@@ -34,7 +34,7 @@ void GetCharacterName::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked GetCharacterName #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked GetCharacterName #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

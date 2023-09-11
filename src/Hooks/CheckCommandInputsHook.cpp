@@ -36,7 +36,7 @@ void CheckCommandInputsHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked CheckCommandInputsHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked CheckCommandInputsHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

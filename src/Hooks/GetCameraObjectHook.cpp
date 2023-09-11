@@ -34,7 +34,7 @@ void GetCameraObjectHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked GetCameraObjectHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked GetCameraObjectHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

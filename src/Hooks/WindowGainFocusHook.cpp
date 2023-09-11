@@ -36,7 +36,7 @@ void WindowGainFocusHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked WindowGainFocusHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked WindowGainFocusHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

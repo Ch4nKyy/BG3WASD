@@ -33,7 +33,7 @@ void CombatEndHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address + 40, OverrideFunc);
-        INFO("Hooked CombatEndHook #{}: {:X}", i, AsAddress(address + 40));
+        DEBUG("Hooked CombatEndHook #{}: {:X}", i, AsAddress(address + 40));
         ++i;
     }
 }

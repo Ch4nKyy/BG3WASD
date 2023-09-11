@@ -35,7 +35,7 @@ void SetVirtualCursorPosHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked SetVirtualCursorPosHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked SetVirtualCursorPosHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

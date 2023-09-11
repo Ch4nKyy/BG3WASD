@@ -1,3 +1,4 @@
+#pragma comment(lib, "version.lib")
 
 #include "Settings.hpp"
 #include "Addresses/LoadInputConfig.hpp"

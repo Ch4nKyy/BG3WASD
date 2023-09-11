@@ -46,7 +46,7 @@ void GetInputValueHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked GetInputValueHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked GetInputValueHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

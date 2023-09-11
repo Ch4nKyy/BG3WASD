@@ -15,7 +15,7 @@ bool IsInControllerMode::Prepare()
 
     int32_t offset = *reinterpret_cast<int32_t*>(address + 2);
     is_in_controller_mode = reinterpret_cast<bool*>(address + 7 + offset);
-    INFO("IsInControllerMode found {:X}", AsAddress(is_in_controller_mode))
+    DEBUG("IsInControllerMode found {:X}", AsAddress(is_in_controller_mode))
     return true;
 }
 

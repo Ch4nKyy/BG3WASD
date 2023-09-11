@@ -34,7 +34,7 @@ void SetCursorRotateHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked SetCursorRotateHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked SetCursorRotateHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

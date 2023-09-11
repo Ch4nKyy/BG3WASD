@@ -33,7 +33,7 @@ void HandleCameraInputHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        INFO("Hooked HandleCameraInputHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked HandleCameraInputHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

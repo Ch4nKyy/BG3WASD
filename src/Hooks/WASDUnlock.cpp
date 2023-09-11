@@ -34,7 +34,7 @@ void WASDUnlock::Enable()
         0x90, 0x90, 0x90 };
 
     dku::Hook::WriteImm(address1, data);
-    INFO("WASD unlocked : {:X}", address1);
+    DEBUG("WASD unlocked : {:X}", address1);
 
     return;
 }
