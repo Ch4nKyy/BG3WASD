@@ -14,7 +14,7 @@ include(GNUInstallDirs)
 # info
 project(
 	BG3WASD
-    VERSION 1.7.7
+	VERSION 1.7.8
 	LANGUAGES CXX
 )
 
@@ -90,66 +90,66 @@ find_dependency_path(DKUtil include/DKUtil/Logger.hpp)
 add_library(
 	${PROJECT_NAME}
 	SHARED
-		${SOURCES}
-		${CMAKE_CURRENT_BINARY_DIR}/include/Plugin.h
-		${CMAKE_CURRENT_BINARY_DIR}/version.rc
-		.clang-format
-		vcpkg.json
+	${SOURCES}
+	${CMAKE_CURRENT_BINARY_DIR}/include/Plugin.h
+	${CMAKE_CURRENT_BINARY_DIR}/version.rc
+	.clang-format
+	vcpkg.json
 )
 
 # include dir
 target_include_directories(
 	${PROJECT_NAME}
 	PRIVATE
-		${CMAKE_CURRENT_BINARY_DIR}/include
-		${CMAKE_CURRENT_SOURCE_DIR}/include
-		${CMAKE_CURRENT_SOURCE_DIR}/src
-		${SDL2_INCLUDE_DIRS}
+	${CMAKE_CURRENT_BINARY_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+	${SDL2_INCLUDE_DIRS}
 )
 
 # linkage
 target_link_libraries(
-	${PROJECT_NAME} 
+	${PROJECT_NAME}
 	PRIVATE
-		DKUtil::DKUtil
-		spdlog::spdlog
-		nlohmann_json::nlohmann_json
-		SDL2::SDL2
+	DKUtil::DKUtil
+	spdlog::spdlog
+	nlohmann_json::nlohmann_json
+	SDL2::SDL2
 )
 
 # compiler def
-if (MSVC)
+if(MSVC)
 	add_compile_definitions(_UNICODE)
 
 	target_compile_options(
 		${PROJECT_NAME}
 		PRIVATE
-			/MP
-			/await
-			/W0
-			/WX
-			/permissive-
-			/Zc:alignedNew
-			/Zc:auto
-			/Zc:__cplusplus
-			/Zc:externC
-			/Zc:externConstexpr
-			/Zc:forScope
-			/Zc:hiddenFriend
-			/Zc:implicitNoexcept
-			/Zc:lambda
-			/Zc:noexceptTypes
-			/Zc:preprocessor
-			/Zc:referenceBinding
-			/Zc:rvalueCast
-			/Zc:sizedDealloc
-			/Zc:strictStrings
-			/Zc:ternary
-			/Zc:threadSafeInit
-			/Zc:trigraphs
-			/Zc:wchar_t
-			/wd4200 # nonstandard extension used : zero-sized array in struct/union
-			/FI${CMAKE_BINARY_DIR}/CMakeFiles/${PROJECT_NAME}.dir/$<CONFIG>/cmake_pch.hxx
+		/MP
+		/await
+		/W0
+		/WX
+		/permissive-
+		/Zc:alignedNew
+		/Zc:auto
+		/Zc:__cplusplus
+		/Zc:externC
+		/Zc:externConstexpr
+		/Zc:forScope
+		/Zc:hiddenFriend
+		/Zc:implicitNoexcept
+		/Zc:lambda
+		/Zc:noexceptTypes
+		/Zc:preprocessor
+		/Zc:referenceBinding
+		/Zc:rvalueCast
+		/Zc:sizedDealloc
+		/Zc:strictStrings
+		/Zc:ternary
+		/Zc:threadSafeInit
+		/Zc:trigraphs
+		/Zc:wchar_t
+		/wd4200 # nonstandard extension used : zero-sized array in struct/union
+		/FI${CMAKE_BINARY_DIR}/CMakeFiles/${PROJECT_NAME}.dir/$<CONFIG>/cmake_pch.hxx
 	)
 endif()
 
@@ -157,24 +157,24 @@ endif()
 target_precompile_headers(
 	${PROJECT_NAME}
 	PRIVATE
-		src/PCH.hpp
+	src/PCH.hpp
 )
 
 set_property(
-	TARGET 
+	TARGET
 	${PROJECT_NAME}
-	PROPERTY VS_USER_PROPS 
+	PROPERTY VS_USER_PROPS
 	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/build_stl_modules.props")
 
 # post build event
 add_custom_command(
-	TARGET 
-	${PROJECT_NAME} 
+	TARGET
+	${PROJECT_NAME}
 	POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy
-		${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/${PROJECT_NAME}.dll
-		"$ENV{BG3PATH}/bin/NativeMods/${PROJECT_NAME}.dll"
+	${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/${PROJECT_NAME}.dll
+	"$ENV{BG3PATH}/bin/NativeMods/${PROJECT_NAME}.dll"
 	COMMAND ${CMAKE_COMMAND} -E copy
-		${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/${PROJECT_NAME}.dll
-		"$ENV{BG3PATH2}/bin/NativeMods/${PROJECT_NAME}.dll"
+	${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/${PROJECT_NAME}.dll
+	"$ENV{BG3PATH2}/bin/NativeMods/${PROJECT_NAME}.dll"
 )
