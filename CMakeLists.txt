@@ -174,4 +174,7 @@ add_custom_command(
 	COMMAND ${CMAKE_COMMAND} -E copy
 		${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/${PROJECT_NAME}.dll
 		"$ENV{BG3PATH}/bin/NativeMods/${PROJECT_NAME}.dll"
+	COMMAND ${CMAKE_COMMAND} -E copy
+		${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/${PROJECT_NAME}.dll
+		"$ENV{BG3PATH2}/bin/NativeMods/${PROJECT_NAME}.dll"
 )
