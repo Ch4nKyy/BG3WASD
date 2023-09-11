@@ -111,9 +111,17 @@ bool InputHook::DidCommandChange(Command command, int transition)
             {
                 changed &= ((GetAsyncKeyState(vk) & 0x8000) || (last_input_vk == vk));
             }
+            // L and R versions are important. Otherwise the KEYUP events are filtered by the
+            // if (!combo_includes_shift && is_shift_down) logic below!
             combo_includes_shift |= (vk == VK_SHIFT);
+            combo_includes_shift |= (vk == VK_LSHIFT);
+            combo_includes_shift |= (vk == VK_RSHIFT);
             combo_includes_ctrl |= (vk == VK_CONTROL);
+            combo_includes_ctrl |= (vk == VK_LCONTROL);
+            combo_includes_ctrl |= (vk == VK_RCONTROL);
             combo_includes_alt |= (vk == VK_MENU);
+            combo_includes_alt |= (vk == VK_LMENU);
+            combo_includes_alt |= (vk == VK_RMENU);
         }
         if (!combo_includes_shift && is_shift_down || !combo_includes_ctrl && is_ctrl_down ||
             !combo_includes_alt && is_alt_down)
