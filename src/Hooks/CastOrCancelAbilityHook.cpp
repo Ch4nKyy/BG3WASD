@@ -42,8 +42,7 @@ WORD* CastOrCancelAbilityHook::OverrideFunc(WORD* a1, int* CommandStruct, uint64
     int64_t a5, int64_t a6, int64_t a7, int64_t a8, int64_t a9, int64_t a10, int64_t a11,
     int64_t a12, int64_t a13, int64_t a14, int64_t a15, int64_t a16)
 {
-    if (!*Settings::GetSingleton()->enable_improved_mouselook ||
-        !*Settings::GetSingleton()->enable_rightclick_mouselook_fix)
+    if (!*Settings::GetSingleton()->enable_improved_mouselook)
     {
         return OriginalFunc(a1, CommandStruct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
             a15, a16);
@@ -69,7 +68,7 @@ WORD* CastOrCancelAbilityHook::OverrideFunc(WORD* a1, int* CommandStruct, uint64
         {
             uint32_t time_now = SDL_GetTicks();
             uint32_t time_diff_millis = time_now - state->last_time_cancel_action_pressed;
-            if (time_diff_millis > *Settings::GetSingleton()->rightclick_threshold)
+            if (time_diff_millis > *Settings::GetSingleton()->rotate_threshold)
             {
                 *(WORD*)a1 = 0;
                 return a1;

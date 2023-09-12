@@ -55,15 +55,7 @@ void SetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
     SDL_GetMouseState(&x, &y);
     state->cursor_position_to_restore.x = x;
     state->cursor_position_to_restore.y = y;
-    if (Settings::GetSingleton()->enable_rightclick_mouselook_fix)
-    {
-        state->rotate_start_time = SDL_GetTicks();
-    }
-    else
-    {
-        state->HideCursor(true);
-    }
-    // Actual hiding happens in CheckCommandInputsHook
+    state->HideCursor(true);
 
     return OriginalFunc(a1, a2);
 }

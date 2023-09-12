@@ -12,6 +12,7 @@
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetInputValueHook.hpp"
 #include "Hooks/InputHook.hpp"
+#include "Hooks/PollEventHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
 #include "Hooks/SetCursorRotateHook.hpp"
@@ -97,11 +98,13 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             bool check_context_menu_or_cancel_action_hook =
                 CheckContextMenuOrCancelActionHook::Prepare();
             bool cast_or_cancel_ability_hook = CastOrCancelAbilityHook::Prepare();
+            bool poll_event_hook = PollEventHook::Prepare();
             // TODO ToggleMouselook
             // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
             if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
                 reset_cursor_rotate_hook && check_command_inputs_hook &&
-                check_context_menu_or_cancel_action_hook && cast_or_cancel_ability_hook)
+                check_context_menu_or_cancel_action_hook && cast_or_cancel_ability_hook &&
+                poll_event_hook)
             {
                 SetVirtualCursorPosHook::Enable();
                 SDL_GetWindowGrabHook::Enable();
@@ -110,6 +113,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 CheckCommandInputsHook::Enable();
                 CheckContextMenuOrCancelActionHook::Enable();
                 CastOrCancelAbilityHook::Enable();
+                PollEventHook::Enable();
                 // TODO ToggleMouselook
                 // WindowGainFocusHook::Enable();
             }

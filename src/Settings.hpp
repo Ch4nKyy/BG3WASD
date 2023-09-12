@@ -29,8 +29,7 @@ public:
     // TODO ToggleMouselook
     // Boolean toggle_movement_toggles_mouselook{ "ToggleMovementModeAlsoTogglesMouselook",
     //     "Mouselook" };
-    Boolean enable_rightclick_mouselook_fix{ "EnableRightclickMouselookFix", "Mouselook" };
-    Integer rightclick_threshold{ "RightclickThreshold", "Mouselook" };
+    Integer rotate_threshold{ "RotateThreshold", "Mouselook" };
 
     void Load() noexcept;
 

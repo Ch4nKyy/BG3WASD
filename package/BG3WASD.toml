@@ -45,19 +45,14 @@ EnableMouselook = true
 
 EnableRotatePlusLeftclickMovesForward = true
 # Holding the Camera Rotate key and Leftclick at the same time will move Forward.
+# This feature is automatically suppressed if you bind Rotate to Leftclick.
 # [true, false]
 
-EnableRightclickMouselookFix = true
-# Improves the gameplay for players that bind Camera Rotate to Right Mouse Button.
-# With this feature disabled, Camera Rotate will collide with Cancel Action and Context Menu.
-# Also works with any other key than Rightclick, but Rightclick is most commonly used.
-# The only downside to this feature is that the mouse cursor takes few milliseconds longer to hide.
-# [true, false]
-
-RightclickThreshold = 200
-# Threshold in milliseconds where the mod distinguishes between Camera Rotate and Context Menu.
-# Requires EnableRightclickMouselookFix = true;
-# [25, 2000]
+RotateThreshold = 200
+# This threshold is only of interest, when you bind Camera Rotate to the same key as Context Menu and Cancel Action.
+# E.g. when you want to bind Rotate to Rightclick.
+# In that case, it is the threshold in milliseconds where the mod distinguishes between Rotate and other commands.
+# [0, 2000]
 
 
 # List of all available keys:

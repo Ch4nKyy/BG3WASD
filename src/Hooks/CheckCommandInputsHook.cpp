@@ -92,15 +92,6 @@ char CheckCommandInputsHook::OverrideFunc(int64_t a1, float* a2)
         // }
         state->player_could_input_movement_last_frame = state->player_can_input_movement;
         state->player_can_input_movement = false;
-
-        if (state->IsRotating())
-        {
-            if (state->rotate_start_time != 0 &&
-                SDL_GetTicks() - state->rotate_start_time > *settings->rightclick_threshold)
-            {
-                state->HideCursor(true);
-            }
-        }
     }
 
     return OriginalFunc(a1, a2);

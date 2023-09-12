@@ -39,8 +39,7 @@ void Settings::Load() noexcept
             // TODO ToggleMouselook
             // TODO ToggleMouselook
             // config.Bind(toggle_movement_toggles_mouselook, FALSE);
-            config.Bind(enable_rightclick_mouselook_fix, TRUE);
-            config.Bind(rightclick_threshold, 200);
+            config.Bind(rotate_threshold, 200);
         });
 
     config.Load();
@@ -50,7 +49,6 @@ void Settings::Load() noexcept
         // TODO ToggleMouselook
         // *toggle_mouselook = "";
         // *toggle_movement_toggles_mouselook = false;
-        *enable_rightclick_mouselook_fix = false;
     }
 
     if (!loaded_once)

@@ -51,12 +51,10 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
         return OriginalFunc(a1, xy);
     }
 
-    const std::lock_guard<std::mutex> lock(state->hide_cursor_mutex);
-    if (state->ShouldHideCursor())
+    if (state->should_hide_virtual_cursor)
     {
-        if (!state->cursor_hidden_last_frame)
+        if (!state->virtual_cursor_hidden_last_frame)
         {
-            SDL_SetRelativeMouseMode(SDL_TRUE);
             Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
             int w = 0;
             int h = -1000000;
@@ -74,18 +72,16 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
     }
     else
     {
-        if (state->cursor_hidden_last_frame)
+        if (state->virtual_cursor_hidden_last_frame)
         {
             POINT p = state->cursor_position_to_restore;
-            SDL_WarpMouseInWindow(state->sdl_window, (int)p.x, (int)p.y);
-            SDL_SetRelativeMouseMode(SDL_FALSE);
             Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
             xy_v->x = (int)p.x;
             xy_v->y = (int)p.y;
         }
         OriginalFunc(a1, xy);
     }
-    state->cursor_hidden_last_frame = state->ShouldHideCursor();
+    state->virtual_cursor_hidden_last_frame = state->should_hide_virtual_cursor;
 
     return;
 }

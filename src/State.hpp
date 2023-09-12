@@ -42,6 +42,8 @@ public:
     bool last_frame_rotate_and_lmb_was_pressed = false;
     bool cursor_hidden_last_frame = false;
     std::mutex hide_cursor_mutex;
+    bool virtual_cursor_hidden_last_frame = false;
+    bool should_hide_virtual_cursor = false;
 
     void SetIsRotating(bool in_value);
     void SetInternalIsRotating(bool in_value);

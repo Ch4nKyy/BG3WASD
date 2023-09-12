@@ -41,8 +41,7 @@ void CheckContextMenuOrCancelActionHook::Enable()
 int64_t CheckContextMenuOrCancelActionHook::OverrideFunc(int64_t a1, int64_t a2,
     int* SomeInputStruct, int16_t a4, int64_t a5)
 {
-    if (!*Settings::GetSingleton()->enable_improved_mouselook ||
-        !*Settings::GetSingleton()->enable_rightclick_mouselook_fix)
+    if (!*Settings::GetSingleton()->enable_improved_mouselook)
     {
         return OriginalFunc(a1, a2, SomeInputStruct, a4, a5);
     }
@@ -66,7 +65,7 @@ int64_t CheckContextMenuOrCancelActionHook::OverrideFunc(int64_t a1, int64_t a2,
         {
             uint32_t time_now = SDL_GetTicks();
             uint32_t time_diff_millis = time_now - state->last_time_cancel_action_pressed;
-            if (time_diff_millis > *Settings::GetSingleton()->rightclick_threshold)
+            if (time_diff_millis > *Settings::GetSingleton()->rotate_threshold)
             {
                 *(int*)(SomeInputStruct) = 0;
             }
@@ -84,7 +83,7 @@ int64_t CheckContextMenuOrCancelActionHook::OverrideFunc(int64_t a1, int64_t a2,
         {
             uint32_t time_now = SDL_GetTicks();
             uint32_t time_diff_millis = time_now - state->last_time_context_menu_pressed;
-            if (time_diff_millis > *Settings::GetSingleton()->rightclick_threshold)
+            if (time_diff_millis > *Settings::GetSingleton()->rotate_threshold)
             {
                 *(int*)(SomeInputStruct) = 0;
             }
