@@ -11,18 +11,27 @@ void InputHook::Enable(HMODULE a_hModule)
 
 void InputHook::StartHookAsOwnThread(HMODULE a_hModule)
 {
+    // For debugging, set this to false, otherwise the mouse cursor will lag insanely.
+    // (Except when you debug features that require the mouse_hook, then you have to deal with it.)
+    bool should_hook_mouse = true;
+
     HHOOK keyboard_hook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, a_hModule, 0);
-    HHOOK mouse_hook = SetWindowsHookEx(WH_MOUSE_LL, MouseProc, a_hModule, 0);
     if (!keyboard_hook)
     {
         FATAL("Critical error. Keyboard hook failed!");
     }
-    if (!mouse_hook)
-    {
-        FATAL("Critical error. Mouse hook failed!");
-    }
-    MSG msg;
 
+    HHOOK mouse_hook;
+    if (should_hook_mouse)
+    {
+        mouse_hook = SetWindowsHookEx(WH_MOUSE_LL, MouseProc, a_hModule, 0);
+        if (!mouse_hook)
+        {
+            FATAL("Critical error. Mouse hook failed!");
+        }
+    }
+
+    MSG msg;
     while (GetMessage(&msg, 0, 0, 0) > 0)
     {
         TranslateMessage(&msg);
@@ -30,7 +39,10 @@ void InputHook::StartHookAsOwnThread(HMODULE a_hModule)
     }
 
     UnhookWindowsHookEx(keyboard_hook);
-    UnhookWindowsHookEx(mouse_hook);
+    if (should_hook_mouse)
+    {
+        UnhookWindowsHookEx(mouse_hook);
+    }
 }
 
 LRESULT CALLBACK InputHook::MouseProc(int a_nCode, WPARAM a_wParam, LPARAM a_lParam)
