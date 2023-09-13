@@ -56,9 +56,9 @@ RotateThreshold = 200
 
 
 # List of all available keys:
-# (We try to match Larian's style, but for regional keys, they might not always match.)
 
 # Modifiers: ctrl, shift, alt. E.g. "ctrl+shift+key:w"
+# Multiple keycombos possible, separated by comma: "key:x,ctrl+key:y"
 
 # mouse:left            mouse:right             mouse:middle
 # mouse:x1              mouse:x2

@@ -89,12 +89,12 @@ int VirtualKeyMap::GetKeycodeByName(const std::string name)
     return 0;
 }
 
-void VirtualKeyMap::AddKeyComboForCommand(Command command, std::vector<std::string> setting)
+void VirtualKeyMap::AddVkCombosForCommand(Command command, std::vector<std::string> keycombos)
 {
     std::vector<std::vector<std::uint32_t>> vkcombos;
-    for (auto key : setting)
+    for (auto keycombo : keycombos)
     {
-        auto vkcombo = dku::string::split(key, "+"sv) |
+        auto vkcombo = dku::string::split(keycombo, "+"sv) |
                        std::views::transform(
                            [](auto key_part) { return VirtualKeyMap::GetVkByName(key_part); }) |
                        std::ranges::to<std::vector<std::uint32_t>>();
@@ -113,20 +113,19 @@ void VirtualKeyMap::UpdateVkCombosOfCommandMap()
     auto* settings = Settings::GetSingleton();
     auto* state = State::GetSingleton();
     vkcombos_of_command = {};
-    AddKeyComboForCommand(TOGGLE_WALKSPEED, std::vector{ *settings->toggle_walkspeed });
-    AddKeyComboForCommand(HOLD_WALKSPEED, std::vector{ *settings->hold_walkspeed });
-    AddKeyComboForCommand(TOGGLE_AUTOFORWARD, std::vector{ *settings->toggle_autoforward });
-    AddKeyComboForCommand(TOGGLE_MOVEMENT_MODE,
-        std::vector{ *settings->toggle_movement_mode });
-    AddKeyComboForCommand(RELOAD_CONFIG, std::vector{ *settings->reload_config });
-    AddKeyComboForCommand(FORWARD, state->character_forward_keys);
-    AddKeyComboForCommand(BACKWARD, state->character_backward_keys);
-    AddKeyComboForCommand(MOUSE_LEFT_DOWN, std::vector{ std::string("mouse:left") });
+    AddVkCombosForCommand(TOGGLE_WALKSPEED,
+        settings->GetBoundKeycombos(*settings->toggle_walkspeed));
+    AddVkCombosForCommand(HOLD_WALKSPEED, settings->GetBoundKeycombos(*settings->hold_walkspeed));
+    AddVkCombosForCommand(TOGGLE_AUTOFORWARD,
+        settings->GetBoundKeycombos(*settings->toggle_autoforward));
+    AddVkCombosForCommand(TOGGLE_MOVEMENT_MODE,
+        settings->GetBoundKeycombos(*settings->toggle_movement_mode));
+    AddVkCombosForCommand(RELOAD_CONFIG, settings->GetBoundKeycombos(*settings->reload_config));
+    AddVkCombosForCommand(FORWARD, state->character_forward_keys);
+    AddVkCombosForCommand(BACKWARD, state->character_backward_keys);
+    AddVkCombosForCommand(MOUSE_LEFT_DOWN, settings->GetBoundKeycombos(std::string("mouse:left")));
     // TODO ToggleMouselook
-    // AddKeyComboForCommand(TOGGLE_MOUSELOOK, std::vector{ *settings->toggle_mouselook });
+    // AddVkCombosForCommand(TOGGLE_MOUSELOOK, settings->GetBoundKeycombos( *settings->toggle_mouselook ));
 }
 
-bool VirtualKeyMap::VkIsValid(std::string keyname)
-{
-    return GetVkByName(keyname) != 0;
-}
+bool VirtualKeyMap::VkIsValid(std::string keyname) { return GetVkByName(keyname) != 0; }

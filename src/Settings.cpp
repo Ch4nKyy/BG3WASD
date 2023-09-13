@@ -74,3 +74,9 @@ void Settings::InitState()
     // Flag invalid to react later.
     state->cursor_position_to_restore.x = -1;
 }
+
+std::vector<std::string> Settings::GetBoundKeycombos(std::string setting)
+{
+    std::vector<std::string> result = dku::string::split(setting, ","sv);
+    return result;
+}

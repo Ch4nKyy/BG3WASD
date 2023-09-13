@@ -23,4 +23,5 @@ private:
         std::vector<std::string>& unbound_commands, std::vector<std::string>& not_found_keycombos,
         bool allow_modifiers);
     static void ValidateModHotkeys(std::vector<std::string>& mod_hotkeys_not_found_keycombos);
+    static json GetKeycombosAsJsonObject(std::string keycombos_as_string);
 };

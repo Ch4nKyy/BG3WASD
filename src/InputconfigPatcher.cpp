@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <format>
 #include <shlobj.h>
 #include <string>
 
@@ -226,11 +227,11 @@ void InputconfigPatcher::ValidateModHotkeys(
     // clang-format off
     json data =
         {
-            { "ToggleWalkspeed", { *settings->toggle_walkspeed } },
-            { "ToggleMovementMode", { *settings->toggle_movement_mode } },
-            { "ToggleAutoforward", { *settings->toggle_autoforward } },
-            { "HoldWalkspeed", { *settings->hold_walkspeed } },
-            { "ReloadConfig", { *settings->reload_config } }
+            { "ToggleWalkspeed", GetKeycombosAsJsonObject(*settings->toggle_walkspeed) },
+            { "ToggleMovementMode", GetKeycombosAsJsonObject(*settings->toggle_movement_mode)},
+            { "ToggleAutoforward", GetKeycombosAsJsonObject(*settings->toggle_autoforward)},
+            { "HoldWalkspeed", GetKeycombosAsJsonObject(*settings->hold_walkspeed) },
+            { "ReloadConfig", GetKeycombosAsJsonObject(*settings->reload_config) }
             // TODO ToggleMouselook
             // { "ToggleMouselook", { *settings->toggle_mouselook } }
         };
@@ -244,6 +245,21 @@ void InputconfigPatcher::ValidateModHotkeys(
     }
     std::vector<std::string> mod_hotkeys_unbound;
     FindIssues(data, mod_hotkeys, mod_hotkeys_unbound, mod_hotkeys_not_found_keycombos, true);
+}
+
+json InputconfigPatcher::GetKeycombosAsJsonObject(std::string keycombos_as_string)
+{
+    std::string str = "[";
+    for (auto keycombo : dku::string::split(keycombos_as_string, ","sv))
+    {
+        str.append(std::format("\"{}\",", keycombo));
+    }
+    if (str.back() == ',')
+    {
+        str.pop_back();
+    }
+    str.append("]");
+    return json::parse(str);
 }
 
 void InputconfigPatcher::FindIssues(json data, const std::vector<std::string> commands,

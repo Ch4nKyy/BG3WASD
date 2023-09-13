@@ -32,6 +32,7 @@ public:
     Integer rotate_threshold{ "RotateThreshold", "Mouselook" };
 
     void Load() noexcept;
+    std::vector<std::string> GetBoundKeycombos(std::string setting);
 
 private:
     TomlConfig config = COMPILE_PROXY("NativeMods/BG3WASD.toml"sv);

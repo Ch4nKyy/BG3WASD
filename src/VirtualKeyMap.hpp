@@ -33,7 +33,7 @@ public:
     static bool VkIsValid(std::string keyname);
 
 private:
-    static void AddKeyComboForCommand(Command command, std::vector<std::string> setting);
+    static void AddVkCombosForCommand(Command command, std::vector<std::string> keycombos);
     static inline std::map<Command, std::vector<std::vector<std::uint32_t>>> vkcombos_of_command;
     // clang-format off
 
