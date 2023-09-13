@@ -28,6 +28,9 @@ WalkSpeed = 0.3
 WalkingIsDefault = false
 # Whether the character walks, when the game starts up. [true, false]
 
+SwitchToWalkingAfterCombat = false
+# Whether to switch to walking, when combat ends. [true, false]
+
 
 [AutoToggleMovementMode]
 

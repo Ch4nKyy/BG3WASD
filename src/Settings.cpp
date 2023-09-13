@@ -23,6 +23,7 @@ void Settings::Load() noexcept
 
             config.Bind<0.0, 1.0>(walk_speed, 0.3);
             config.Bind(walking_is_default, FALSE);
+            config.Bind(walk_after_combat, FALSE);
             // TODO character_leftright_is_rotate
             // config.Bind(character_leftright_is_rotate, FALSE);
             // Future toml lines:

@@ -72,6 +72,10 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
         state->SetIsWasdCharacterMovement(!new_combat_state);
         state->old_combat_state = new_combat_state;
         state->combat_state_initiliazed = true;
+        if (new_combat_state == false && *settings->walk_after_combat)
+        {
+            state->walking_toggled = true;
+        }
     }
 
     return camera_object_ptr;
