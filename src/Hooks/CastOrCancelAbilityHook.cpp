@@ -38,27 +38,27 @@ void CastOrCancelAbilityHook::Enable()
     }
 }
 
-WORD* CastOrCancelAbilityHook::OverrideFunc(WORD* a1, int* CommandStruct, uint64_t* a3, int64_t a4,
+WORD* CastOrCancelAbilityHook::OverrideFunc(WORD* a1, int* command_struct, uint64_t* a3, int64_t a4,
     int64_t a5, int64_t a6, int64_t a7, int64_t a8, int64_t a9, int64_t a10, int64_t a11,
     int64_t a12, int64_t a13, int64_t a14, int64_t a15, int64_t a16)
 {
     if (!*Settings::GetSingleton()->enable_improved_mouselook)
     {
-        return OriginalFunc(a1, CommandStruct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
+        return OriginalFunc(a1, command_struct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
             a15, a16);
     }
 
     auto* state = State::GetSingleton();
-    int command_id = *CommandStruct;
+    int command_id = *command_struct;
     if (command_id != 160)
     {
-        return OriginalFunc(a1, CommandStruct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
+        return OriginalFunc(a1, command_struct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
             a15, a16);
     }
 
     if (command_id == 160)  // cancel action
     {
-        bool is_key_down = *(reinterpret_cast<bool*>(CommandStruct) + 28);
+        bool is_key_down = *(reinterpret_cast<bool*>(command_struct) + 28);
         if (is_key_down)
         {
             *(WORD*)a1 = 0;
@@ -76,6 +76,6 @@ WORD* CastOrCancelAbilityHook::OverrideFunc(WORD* a1, int* CommandStruct, uint64
         }
     }
 
-    return OriginalFunc(a1, CommandStruct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15,
+    return OriginalFunc(a1, command_struct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15,
         a16);
 }
