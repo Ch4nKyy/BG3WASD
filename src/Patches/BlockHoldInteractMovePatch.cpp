@@ -24,18 +24,6 @@ bool BlockHoldInteractMovePatch::Prepare()
     return all_found;
 }
 
-void BlockHoldInteractMovePatch::SetDesiredState()
-{
-    if (*Settings::GetSingleton()->block_interact_move)
-    {
-        Enable();
-    }
-    else
-    {
-        Disable();
-    }
-}
-
 void BlockHoldInteractMovePatch::Enable()
 {
     if (not all_found)

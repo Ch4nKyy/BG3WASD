@@ -18,12 +18,11 @@ struct BlockHoldInteractMovePatchAsm : Xbyak::CodeGenerator
 class BlockHoldInteractMovePatch
 {
 public:
-    static void SetDesiredState();
+    static void Enable();
+    static void Disable();
     static bool Prepare();
 
 private:
-    static void Enable();
-    static void Disable();
     static inline std::array<uintptr_t, 1> addresses;
     static inline bool all_found = false;
     static inline std::unique_ptr<DKUtil::Hook::ASMPatchHandle,

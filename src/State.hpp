@@ -45,14 +45,16 @@ public:
     bool virtual_cursor_hidden_last_frame = false;
     bool should_hide_virtual_cursor = false;
 
-    // interactmove disabler
-    std::vector<std::string> cancel_keys;
-
     void SetIsRotating(bool in_value);
     void SetInternalIsRotating(bool in_value);
     bool IsRotating();
     void HideCursor(bool in_value);
     bool ShouldHideCursor();
+
+    // interactmove disabler
+    std::vector<std::string> cancel_keys;
+
+    void EnableInteractMoveBlocker(bool enabled);
     void SetCurrentlyInteractMoving(bool in_value);
     bool IsCurrentlyInteractMoving();
 

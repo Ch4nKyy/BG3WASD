@@ -48,7 +48,8 @@ WORD* InsideHandleMoveInputHook::OverrideFunc(int64_t a1, WORD* a2, uint16_t* a3
     auto* settings = Settings::GetSingleton();
 
     int command_id = *(int*)command_struct;
-    if (state->IsCurrentlyInteractMoving() && command_id >= 142 && command_id <= 145)
+    if (state->IsCurrentlyInteractMoving() && state->IsWasdCharacterMovement() &&
+        command_id >= 142 && command_id <= 145)
     {
         InputFaker::SendKeyDownAndUp(state->cancel_keys[0]);
     }

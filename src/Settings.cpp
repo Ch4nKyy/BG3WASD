@@ -46,6 +46,8 @@ void Settings::Load() noexcept
             config.Bind(rotate_threshold, 200);
 
             config.Bind(block_interact_move, TRUE);
+
+            InitState();
         });
 
     config.Load();
@@ -57,16 +59,20 @@ void Settings::Load() noexcept
         // *toggle_movement_toggles_mouselook = false;
     }
 
-    if (!loaded_once)
-    {
-        InitState();
-    }
     // This means the user hot reloaded the toml config!
-    else
+    if (loaded_once)
     {
+        auto* state = State::GetSingleton();
         InputconfigPatcher::Patch();
-        BlockHoldInteractMovePatch::SetDesiredState();
-        BlockInteractMovePatch::SetDesiredState();
+
+        if (*block_interact_move)
+        {
+            state->EnableInteractMoveBlocker(state->IsWasdCharacterMovement());
+        }
+        else
+        {
+            state->EnableInteractMoveBlocker(false);
+        }
     }
 
     loaded_once = true;
