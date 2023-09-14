@@ -1,5 +1,6 @@
 #include "State.hpp"
 #include "InputFaker.hpp"
+#include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
 #include "SDL.h"
 #include "Settings.hpp"
 
@@ -30,6 +31,31 @@ void State::HideCursor(bool in_value)
 }
 
 bool State::ShouldHideCursor() { return should_hide_cursor; }
+
+/* During Interact move, don't block CancelAction from cancelling movement, or you cannot block it
+at all!
+But during wasd move, block it, so movement is smoother and Context Menu opens faster after moving.
+*/
+void State::SetCurrentlyInteractMoving(bool in_value)
+{
+    if (in_value)
+    {
+        if (!currently_interact_moving)
+        {
+            BlockCancelActionStoppingMovementPatch::Disable();
+        }
+    }
+    else
+    {
+        if (currently_interact_moving)
+        {
+            BlockCancelActionStoppingMovementPatch::Enable();
+        }
+    }
+    currently_interact_moving = in_value;
+}
+
+bool State::IsCurrentlyInteractMoving() { return currently_interact_moving; }
 
 // If set to true, also center camera
 void State::SetIsWasdCharacterMovement(bool in_value)

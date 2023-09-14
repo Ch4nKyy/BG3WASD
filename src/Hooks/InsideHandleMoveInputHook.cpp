@@ -1,5 +1,6 @@
 #include "InsideHandleMoveInputHook.hpp"
 #include "../InputFaker.hpp"
+#include "../Patches/BlockCancelActionStoppingMovementPatch.hpp"
 #include "../Settings.hpp"
 #include "../State.hpp"
 
@@ -39,6 +40,7 @@ void InsideHandleMoveInputHook::Enable()
     }
 }
 
+// GameThread
 WORD* InsideHandleMoveInputHook::OverrideFunc(int64_t a1, WORD* a2, uint16_t* a3,
     int64_t command_struct)
 {
@@ -46,7 +48,7 @@ WORD* InsideHandleMoveInputHook::OverrideFunc(int64_t a1, WORD* a2, uint16_t* a3
     auto* settings = Settings::GetSingleton();
 
     int command_id = *(int*)command_struct;
-    if (state->currently_interact_moving && command_id >= 142 && command_id <= 145)
+    if (state->IsCurrentlyInteractMoving() && command_id >= 142 && command_id <= 145)
     {
         InputFaker::SendKeyDownAndUp(state->cancel_keys[0]);
     }

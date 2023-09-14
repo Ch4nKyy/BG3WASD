@@ -46,7 +46,6 @@ public:
     bool should_hide_virtual_cursor = false;
 
     // interactmove disabler
-    bool currently_interact_moving = false;
     std::vector<std::string> cancel_keys;
 
     void SetIsRotating(bool in_value);
@@ -54,6 +53,8 @@ public:
     bool IsRotating();
     void HideCursor(bool in_value);
     bool ShouldHideCursor();
+    void SetCurrentlyInteractMoving(bool in_value);
+    bool IsCurrentlyInteractMoving();
 
 private:
     //core
@@ -62,4 +63,7 @@ private:
     // mouselook
     bool is_rotating = false;
     bool should_hide_cursor = false;
+
+    // InteractMoveBlocker
+    bool currently_interact_moving = false;
 };

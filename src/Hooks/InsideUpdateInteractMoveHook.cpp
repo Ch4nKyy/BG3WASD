@@ -43,7 +43,7 @@ int64_t InsideUpdateInteractMoveHook::OverrideFunc(int64_t a1)
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
 
-    state->currently_interact_moving = true;
+    state->SetCurrentlyInteractMoving(true);
 
     return OriginalFunc(a1);
 }

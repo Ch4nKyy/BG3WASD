@@ -45,8 +45,8 @@ int64_t DecideMoveUpdaterHook::OverrideFunc(int64_t a1, int64_t a2)
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
 
-    // If we are, then this is overwritten in InsideUpdateInteractMove
-    state->currently_interact_moving = false;
+    // If we are, then this is immediately overwritten in InsideUpdateInteractMove
+    state->SetCurrentlyInteractMoving(false);
 
     return OriginalFunc(a1, a2);
 }

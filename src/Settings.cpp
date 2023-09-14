@@ -3,6 +3,7 @@
 #include "Settings.hpp"
 #include "Addresses/LoadInputConfig.hpp"
 #include "InputconfigPatcher.hpp"
+#include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
 #include "Patches/BlockHoldInteractMovePatch.hpp"
 #include "Patches/BlockInteractMovePatch.hpp"
 #include "State.hpp"
