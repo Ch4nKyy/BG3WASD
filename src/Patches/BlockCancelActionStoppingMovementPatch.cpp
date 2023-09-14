@@ -20,7 +20,7 @@ bool BlockCancelActionStoppingMovementPatch::Prepare()
         }
         ++i;
     }
-    INFO("BlockCancelActionStoppingMovementPatch found: {:X}", AsAddress(addresses[0]));
+    DEBUG("BlockCancelActionStoppingMovementPatch found: {:X}", AsAddress(addresses[0]));
     return all_found;
 }
 

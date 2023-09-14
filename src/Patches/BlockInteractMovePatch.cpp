@@ -20,7 +20,7 @@ bool BlockInteractMovePatch::Prepare()
         }
         ++i;
     }
-    INFO("BlockInteractMovePatch found: {:X}", AsAddress(addresses[0]));
+    DEBUG("BlockInteractMovePatch found: {:X}", AsAddress(addresses[0]));
     return all_found;
 }
 
