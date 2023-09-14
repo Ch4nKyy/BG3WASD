@@ -24,7 +24,6 @@
 #include "Hooks/WindowGainFocusHook.hpp"
 #include "InputconfigPatcher.hpp"
 #include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
-#include "Patches/BlockHoldInteractMovePatch.hpp"
 #include "Patches/BlockInteractMovePatch.hpp"
 #include "SDL.h"
 #include "Settings.hpp"
@@ -131,13 +130,12 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             bool decide_move_updater_hook = DecideMoveUpdaterHook::Prepare();
             bool inside_update_interact_move_hook = InsideUpdateInteractMoveHook::Prepare();
             bool inside_handle_move_input_hook = InsideHandleMoveInputHook::Prepare();
-            bool block_hold_interact_move_patch = BlockHoldInteractMovePatch::Prepare();
             bool block_interact_move_patch = BlockInteractMovePatch::Prepare();
             bool block_cancel_stopping_movement_patch =
                 BlockCancelActionStoppingMovementPatch::Prepare();
             if (decide_move_updater_hook && inside_update_interact_move_hook &&
-                inside_handle_move_input_hook && block_hold_interact_move_patch &&
-                block_interact_move_patch && block_cancel_stopping_movement_patch)
+                inside_handle_move_input_hook && block_interact_move_patch &&
+                block_cancel_stopping_movement_patch)
             {
                 DecideMoveUpdaterHook::Enable();
                 InsideUpdateInteractMoveHook::Enable();
