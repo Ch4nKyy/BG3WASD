@@ -7,11 +7,14 @@
 #include "Hooks/CheckContextMenuOrCancelActionHook.hpp"
 #include "Hooks/CombatEndHook.hpp"
 #include "Hooks/CombatStartHook.hpp"
+#include "Hooks/DecideMoveUpdaterHook.hpp"
 #include "Hooks/FTBEndHook.hpp"
 #include "Hooks/FTBStartHook.hpp"
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetInputValueHook.hpp"
+#include "Hooks/InsideHandleMoveInputHook.hpp"
 #include "Hooks/InputHook.hpp"
+#include "Hooks/InsideUpdateInteractMoveHook.hpp"
 #include "Hooks/PollEventHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
@@ -120,6 +123,21 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             else
             {
                 errors.append("Improved Mouselook could not be enabled.\n");
+            }
+
+            bool decide_move_updater_hook = DecideMoveUpdaterHook::Prepare();
+            bool inside_update_interact_move_hook = InsideUpdateInteractMoveHook::Prepare();
+            bool inside_handle_move_input_hook = InsideHandleMoveInputHook::Prepare();
+            if (decide_move_updater_hook && inside_update_interact_move_hook &&
+                inside_handle_move_input_hook)
+            {
+                DecideMoveUpdaterHook::Enable();
+                InsideUpdateInteractMoveHook::Enable();
+                InsideHandleMoveInputHook::Enable();
+            }
+            else
+            {
+                errors.append("CharacterMove cancels InteractMove could not be enabled.\n");
             }
         }
         else
