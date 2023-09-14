@@ -32,6 +32,8 @@ public:
     //     "Mouselook" };
     Integer rotate_threshold{ "RotateThreshold", "Mouselook" };
 
+    Boolean block_interact_move{ "BlockInteractMove", "InteractMoveBlocker" };
+
     void Load() noexcept;
     std::vector<std::string> GetBoundKeycombos(std::string setting);
 

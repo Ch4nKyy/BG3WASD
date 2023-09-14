@@ -3,6 +3,8 @@
 #include "Settings.hpp"
 #include "Addresses/LoadInputConfig.hpp"
 #include "InputconfigPatcher.hpp"
+#include "Patches/BlockHoldInteractMovePatch.hpp"
+#include "Patches/BlockInteractMovePatch.hpp"
 #include "State.hpp"
 
 using enum Command;
@@ -41,6 +43,8 @@ void Settings::Load() noexcept
             // TODO ToggleMouselook
             // config.Bind(toggle_movement_toggles_mouselook, FALSE);
             config.Bind(rotate_threshold, 200);
+
+            config.Bind(block_interact_move, TRUE);
         });
 
     config.Load();
@@ -60,6 +64,8 @@ void Settings::Load() noexcept
     else
     {
         InputconfigPatcher::Patch();
+        BlockHoldInteractMovePatch::SetDesiredState();
+        BlockInteractMovePatch::SetDesiredState();
     }
 
     loaded_once = true;
