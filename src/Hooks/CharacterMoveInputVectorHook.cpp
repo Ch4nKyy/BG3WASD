@@ -70,7 +70,7 @@ float* CharacterMoveInputVectorHook::OverrideFunc(float* xyz, int64_t a2)
         xyz_v->y *= *settings->walk_speed;
         xyz_v->z *= *settings->walk_speed;
     }
-    if (not state->IsWasdCharacterMovement())
+    if (not state->IsCharacterMovementMode())
     {
         xyz_v->x = 0.0f;
         xyz_v->y = 0.0f;

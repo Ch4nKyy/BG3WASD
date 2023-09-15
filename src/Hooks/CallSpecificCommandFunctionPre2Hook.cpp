@@ -63,7 +63,7 @@ WORD* CallSpecificCommandFunctionPre2Hook::OverrideFunc(int64_t* a1, WORD* a2, i
 
     int command_id = *(int*)command_struct;
     bool is_key_down = *(reinterpret_cast<bool*>(command_struct) + 28);
-    if (state->IsCurrentlyInteractMoving() && state->IsWasdCharacterMovement() &&
+    if (state->IsCurrentlyInteractMoving() && state->IsCharacterMovementMode() &&
         command_id >= 142 && command_id <= 145 && is_key_down)
     {
         state->force_stop = true;

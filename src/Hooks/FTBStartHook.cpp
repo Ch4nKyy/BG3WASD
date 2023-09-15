@@ -46,7 +46,7 @@ int64_t FTBStartHook::OverrideFunc(int64_t a1, int64_t a2, char* a3)
     if (*Settings::GetSingleton()->enable_auto_toggling_movement_mode)
     {
         auto* state = State::GetSingleton();
-        state->SetIsWasdCharacterMovement(false);
+        state->SetCharacterMovementMode(false);
     }
 
     return ret;

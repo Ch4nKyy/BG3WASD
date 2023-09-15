@@ -74,7 +74,7 @@ void State::SetCurrentlyInteractMoving(bool in_value)
 bool State::IsCurrentlyInteractMoving() { return currently_interact_moving; }
 
 // If set to true, also center camera
-void State::SetIsWasdCharacterMovement(bool in_value)
+void State::SetCharacterMovementMode(bool in_value)
 {
     auto* settings = Settings::GetSingleton();
 
@@ -96,7 +96,7 @@ void State::SetIsWasdCharacterMovement(bool in_value)
     //     SetIsRotating(in_value);
     // }
 
-    is_wasd_character_movement = in_value;
+    is_character_movement_mode = in_value;
 }
 
-bool State::IsWasdCharacterMovement() { return is_wasd_character_movement; }
+bool State::IsCharacterMovementMode() { return is_character_movement_mode; }

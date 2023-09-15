@@ -94,7 +94,7 @@ int64_t GetInputValueHook::OverrideFunc(int64_t player_input_controller_ptr,
         xyz_v->x *= *settings->walk_speed;
         xyz_v->y *= *settings->walk_speed;
     }
-    if (not state->IsWasdCharacterMovement())
+    if (not state->IsCharacterMovementMode())
     {
         xyz_v->x = 0.0f;
         xyz_v->y = 0.0f;

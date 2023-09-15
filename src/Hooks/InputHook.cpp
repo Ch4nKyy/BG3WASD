@@ -150,7 +150,7 @@ bool InputHook::DidCommandChange(Command command, int transition)
 
 void InputHook::AutoRun(State* state)
 {
-    if (DidCommandChange(TOGGLE_AUTOFORWARD, WM_KEYDOWN) && state->IsWasdCharacterMovement())
+    if (DidCommandChange(TOGGLE_AUTOFORWARD, WM_KEYDOWN) && state->IsCharacterMovementMode())
     {
         state->autoforward_toggled = !state->autoforward_toggled;
         return;
@@ -168,26 +168,26 @@ void InputHook::ToggleMovementMode(State* state)
 {
     if (DidCommandChange(TOGGLE_MOVEMENT_MODE, WM_KEYDOWN))
     {
-        state->SetIsWasdCharacterMovement(!state->IsWasdCharacterMovement());
+        state->SetCharacterMovementMode(!state->IsCharacterMovementMode());
         return;
     }
 }
 
 void InputHook::WalkOrSprint(State* state)
 {
-    if (DidCommandChange(TOGGLE_WALKSPEED, WM_KEYDOWN) && state->IsWasdCharacterMovement())
+    if (DidCommandChange(TOGGLE_WALKSPEED, WM_KEYDOWN) && state->IsCharacterMovementMode())
     {
         state->walking_toggled = !state->walking_toggled;
         return;
     }
 
-    if (DidCommandChange(HOLD_WALKSPEED, WM_KEYDOWN) && state->IsWasdCharacterMovement())
+    if (DidCommandChange(HOLD_WALKSPEED, WM_KEYDOWN) && state->IsCharacterMovementMode())
     {
         state->walking_held = true;
         return;
     }
 
-    if (DidCommandChange(HOLD_WALKSPEED, WM_KEYUP) && state->IsWasdCharacterMovement())
+    if (DidCommandChange(HOLD_WALKSPEED, WM_KEYUP) && state->IsCharacterMovementMode())
     {
         state->walking_held = false;
         return;

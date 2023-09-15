@@ -64,7 +64,7 @@ void Settings::Load() noexcept
 
         if (*block_interact_move)
         {
-            state->EnableInteractMoveBlocker(state->IsWasdCharacterMovement());
+            state->EnableInteractMoveBlocker(state->IsCharacterMovementMode());
         }
         else
         {

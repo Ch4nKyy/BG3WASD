@@ -16,8 +16,8 @@ public:
     std::vector<std::string> character_forward_keys;
     std::vector<std::string> character_backward_keys;
 
-    void SetIsWasdCharacterMovement(bool in_value);
-    bool IsWasdCharacterMovement();
+    void SetCharacterMovementMode(bool in_value);
+    bool IsCharacterMovementMode();
 
     // auto toggle movement
     bool last_dying_character_is_player = false;
@@ -61,7 +61,7 @@ public:
 
 private:
     //core
-    bool is_wasd_character_movement = true;
+    bool is_character_movement_mode = true;
 
     // mouselook
     bool is_rotating = false;

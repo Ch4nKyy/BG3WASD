@@ -51,7 +51,7 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
         return camera_object_ptr;
     }
 
-    if (state->IsWasdCharacterMovement())
+    if (state->IsCharacterMovementMode())
     {
         *(float*)(camera_object_ptr + 152) = 0.0f;  // x input
         *(float*)(camera_object_ptr + 156) = 0.0f;  // y input
@@ -70,7 +70,7 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
     {
         if (*settings->enable_auto_toggling_movement_mode)
         {
-            state->SetIsWasdCharacterMovement(!new_combat_state);
+            state->SetCharacterMovementMode(!new_combat_state);
         }
         if (new_combat_state == false && *settings->walk_after_combat)
         {
