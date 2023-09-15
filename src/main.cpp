@@ -2,6 +2,7 @@
 #include "Addresses/LoadInputConfig.hpp"
 #include "Hooks/AfterChangingKeybindInMenuHook.hpp"
 #include "Hooks/AfterInitialLoadInputConfigHook.hpp"
+#include "Hooks/CallSpecificCommandFunctionPre2Hook.hpp"
 #include "Hooks/CastOrCancelAbilityHook.hpp"
 #include "Hooks/CheckCommandInputsHook.hpp"
 #include "Hooks/CheckContextMenuOrCancelActionHook.hpp"
@@ -13,7 +14,6 @@
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetInputValueHook.hpp"
 #include "Hooks/InputHook.hpp"
-#include "Hooks/InsideHandleMoveInputHook.hpp"
 #include "Hooks/InsideUpdateInteractMoveHook.hpp"
 #include "Hooks/PollEventHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
@@ -129,17 +129,18 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
             bool decide_move_updater_hook = DecideMoveUpdaterHook::Prepare();
             bool inside_update_interact_move_hook = InsideUpdateInteractMoveHook::Prepare();
-            bool inside_handle_move_input_hook = InsideHandleMoveInputHook::Prepare();
+            bool call_specific_command_function_pre2_hook =
+                CallSpecificCommandFunctionPre2Hook::Prepare();
             bool block_interact_move_patch = BlockInteractMovePatch::Prepare();
             bool block_cancel_stopping_movement_patch =
                 BlockCancelActionStoppingMovementPatch::Prepare();
             if (decide_move_updater_hook && inside_update_interact_move_hook &&
-                inside_handle_move_input_hook && block_interact_move_patch &&
+                call_specific_command_function_pre2_hook && block_interact_move_patch &&
                 block_cancel_stopping_movement_patch)
             {
                 DecideMoveUpdaterHook::Enable();
                 InsideUpdateInteractMoveHook::Enable();
-                InsideHandleMoveInputHook::Enable();
+                CallSpecificCommandFunctionPre2Hook::Enable();
                 // The blocker patches are initialized in GetCameraObjectHook.
             }
             else

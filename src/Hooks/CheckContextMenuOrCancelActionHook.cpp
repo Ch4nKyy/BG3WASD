@@ -1,6 +1,9 @@
 #include "CheckContextMenuOrCancelActionHook.hpp"
+#include "../GameCommand.hpp"
 #include "../Settings.hpp"
 #include "../State.hpp"
+
+using enum GameCommand;
 
 bool CheckContextMenuOrCancelActionHook::Prepare()
 {
@@ -38,6 +41,11 @@ void CheckContextMenuOrCancelActionHook::Enable()
     }
 }
 
+// If this function returns 0 for the CancelAction command, the command is forwarded to
+// the MoveInputHandler.
+// If it is 1, then it is not forwarded, but then it blocks the Rotate command as well.
+// Interesting is, if I manipulate the command input struct here, it is modified in the
+// MoveInputHandler as well!
 int64_t CheckContextMenuOrCancelActionHook::OverrideFunc(int64_t a1, int64_t a2,
     int* SomeInputStruct, int16_t a4, int64_t a5)
 {
@@ -48,13 +56,19 @@ int64_t CheckContextMenuOrCancelActionHook::OverrideFunc(int64_t a1, int64_t a2,
 
     auto* state = State::GetSingleton();
     int command_id = *SomeInputStruct;
-    if (command_id != 160 && command_id != 200)
+    if (command_id != ActionCancel && command_id != ContextMenu)
     {
         return OriginalFunc(a1, a2, SomeInputStruct, a4, a5);
     }
 
-    if (command_id == 160)  // cancel action
+    if (command_id == ActionCancel)
     {
+        if (state->force_stop)
+        {
+            state->force_stop = false;
+            return OriginalFunc(a1, a2, SomeInputStruct, a4, a5);
+        }
+
         bool is_key_down = *(reinterpret_cast<bool*>(SomeInputStruct) + 28);
         if (is_key_down)
         {
@@ -71,7 +85,7 @@ int64_t CheckContextMenuOrCancelActionHook::OverrideFunc(int64_t a1, int64_t a2,
             }
         }
     }
-    if (command_id == 200)  // context menu
+    if (command_id == ContextMenu)
     {
         bool is_key_down = *(reinterpret_cast<bool*>(SomeInputStruct) + 28);
         if (is_key_down)

@@ -1,9 +1,12 @@
 #include "State.hpp"
+#include "GameCommand.hpp"
 #include "InputFaker.hpp"
 #include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
 #include "Patches/BlockInteractMovePatch.hpp"
 #include "SDL.h"
 #include "Settings.hpp"
+
+using enum GameCommand;
 
 void State::SetIsRotating(bool in_value)
 {
@@ -77,7 +80,8 @@ void State::SetIsWasdCharacterMovement(bool in_value)
 
     if (in_value)
     {
-        InputFaker::SendKeyDownAndUp(cancel_keys[0]);
+        force_stop = true;
+        InputFaker::SendCommand(ActionCancel, SDL_RELEASED);
         frames_to_hold_forward_to_center_camera = 10;
     }
 

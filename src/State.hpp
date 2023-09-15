@@ -53,6 +53,7 @@ public:
 
     // interactmove disabler
     std::vector<std::string> cancel_keys;
+    bool force_stop = false;
 
     void EnableInteractMoveBlocker(bool enabled);
     void SetCurrentlyInteractMoving(bool in_value);

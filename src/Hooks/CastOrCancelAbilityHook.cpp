@@ -1,6 +1,9 @@
 #include "CastOrCancelAbilityHook.hpp"
+#include "../GameCommand.hpp"
 #include "../Settings.hpp"
 #include "../State.hpp"
+
+using enum GameCommand;
 
 bool CastOrCancelAbilityHook::Prepare()
 {
@@ -50,13 +53,13 @@ WORD* CastOrCancelAbilityHook::OverrideFunc(WORD* a1, int* command_struct, uint6
 
     auto* state = State::GetSingleton();
     int command_id = *command_struct;
-    if (command_id != 160)
+    if (command_id != ActionCancel)
     {
         return OriginalFunc(a1, command_struct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
             a15, a16);
     }
 
-    if (command_id == 160)  // cancel action
+    if (command_id == ActionCancel)
     {
         bool is_key_down = *(reinterpret_cast<bool*>(command_struct) + 28);
         if (is_key_down)
@@ -76,6 +79,6 @@ WORD* CastOrCancelAbilityHook::OverrideFunc(WORD* a1, int* command_struct, uint6
         }
     }
 
-    return OriginalFunc(a1, command_struct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15,
-        a16);
+    return OriginalFunc(a1, command_struct, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
+        a15, a16);
 }
