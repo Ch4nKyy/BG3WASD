@@ -15,8 +15,9 @@ class BlockInteractMovePatch
 {
 public:
     static bool Prepare();
+    static void Activate();
+    static void Deactivate();
     static void Enable();
-    static void Disable();
 
 private:
     static inline std::array<uintptr_t, 1> addresses;

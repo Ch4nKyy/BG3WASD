@@ -24,7 +24,7 @@ bool BlockCancelActionStoppingMovementPatch::Prepare()
     return all_found;
 }
 
-void BlockCancelActionStoppingMovementPatch::Enable()
+void BlockCancelActionStoppingMovementPatch::Activate()
 {
     if (not all_found)
     {
@@ -33,14 +33,19 @@ void BlockCancelActionStoppingMovementPatch::Enable()
 
     if (!handle)
     {
-        BlockCancelActionStoppingMovementPatchAsm patch;
-        patch.ready();
-        handle = dku::Hook::AddASMPatch(addresses[0], { 0, 3 }, &patch);
+        return;
     }
     handle->Enable();
 }
 
-void BlockCancelActionStoppingMovementPatch::Disable()
+void BlockCancelActionStoppingMovementPatch::Enable()
+{
+    BlockCancelActionStoppingMovementPatchAsm patch;
+    patch.ready();
+    handle = dku::Hook::AddASMPatch(addresses[0], { 0, 3 }, &patch);
+}
+
+void BlockCancelActionStoppingMovementPatch::Deactivate()
 {
     if (not all_found)
     {

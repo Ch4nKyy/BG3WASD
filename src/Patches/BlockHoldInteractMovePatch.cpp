@@ -26,6 +26,13 @@ bool BlockHoldInteractMovePatch::Prepare()
 
 void BlockHoldInteractMovePatch::Enable()
 {
+    BlockHoldInteractMovePatchAsm patch;
+    patch.ready();
+    handle = dku::Hook::AddASMPatch(addresses[0], { 0, 7 }, &patch);
+}
+
+void BlockHoldInteractMovePatch::Activate()
+{
     if (not all_found)
     {
         return;
@@ -33,14 +40,12 @@ void BlockHoldInteractMovePatch::Enable()
 
     if (!handle)
     {
-        BlockHoldInteractMovePatchAsm patch;
-        patch.ready();
-        handle = dku::Hook::AddASMPatch(addresses[0], { 0, 7 }, &patch);
+        return;
     }
     handle->Enable();
 }
 
-void BlockHoldInteractMovePatch::Disable()
+void BlockHoldInteractMovePatch::Deactivate()
 {
     if (not all_found)
     {

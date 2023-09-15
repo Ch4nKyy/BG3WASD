@@ -42,20 +42,18 @@ void SetCursorRotateHook::Enable()
 // Called in GameThread, when Camera Rotate down
 void SetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
 {
-    if (!*Settings::GetSingleton()->enable_improved_mouselook)
+    if (*Settings::GetSingleton()->enable_improved_mouselook)
     {
-        return OriginalFunc(a1, a2);
+        auto* state = State::GetSingleton();
+
+        state->SetInternalIsRotating(true);
+
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        state->cursor_position_to_restore.x = x;
+        state->cursor_position_to_restore.y = y;
+        state->HideCursor(true);
     }
-
-    auto* state = State::GetSingleton();
-
-    state->SetInternalIsRotating(true);
-
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    state->cursor_position_to_restore.x = x;
-    state->cursor_position_to_restore.y = y;
-    state->HideCursor(true);
 
     return OriginalFunc(a1, a2);
 }

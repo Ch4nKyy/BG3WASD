@@ -56,36 +56,34 @@ int64_t PollEventHook::OverrideFunc(int64_t a1)
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
 
-    if (!*settings->enable_improved_mouselook)
+    if (*settings->enable_improved_mouselook)
     {
-        return OriginalFunc(a1);
-    }
-
-    const std::lock_guard<std::mutex> lock(state->hide_cursor_mutex);
-    if (state->ShouldHideCursor())
-    {
-        if (!state->cursor_hidden_last_frame)
+        const std::lock_guard<std::mutex> lock(state->hide_cursor_mutex);
+        if (state->ShouldHideCursor())
         {
-            SDL_SetRelativeMouseMode(SDL_TRUE);
-            state->rotate_start_time = SDL_GetTicks();
+            if (!state->cursor_hidden_last_frame)
+            {
+                SDL_SetRelativeMouseMode(SDL_TRUE);
+                state->rotate_start_time = SDL_GetTicks();
+            }
+            if (state->rotate_start_time != 0 && SDL_GetTicks() - state->rotate_start_time >
+                                                     *Settings::GetSingleton()->rotate_threshold)
+            {
+                HideVirtualCursor(true);
+            }
         }
-        if (state->rotate_start_time != 0 &&
-            SDL_GetTicks() - state->rotate_start_time > *Settings::GetSingleton()->rotate_threshold)
+        else
         {
-            HideVirtualCursor(true);
+            if (state->cursor_hidden_last_frame)
+            {
+                POINT p = state->cursor_position_to_restore;
+                SDL_WarpMouseInWindow(state->sdl_window, (int)p.x, (int)p.y);
+                SDL_SetRelativeMouseMode(SDL_FALSE);
+                HideVirtualCursor(false);
+            }
         }
+        state->cursor_hidden_last_frame = state->ShouldHideCursor();
     }
-    else
-    {
-        if (state->cursor_hidden_last_frame)
-        {
-            POINT p = state->cursor_position_to_restore;
-            SDL_WarpMouseInWindow(state->sdl_window, (int)p.x, (int)p.y);
-            SDL_SetRelativeMouseMode(SDL_FALSE);
-            HideVirtualCursor(false);
-        }
-    }
-    state->cursor_hidden_last_frame = state->ShouldHideCursor();
 
     return OriginalFunc(a1);
 }

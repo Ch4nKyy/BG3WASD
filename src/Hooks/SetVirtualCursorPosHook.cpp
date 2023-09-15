@@ -46,42 +46,41 @@ void SetVirtualCursorPosHook::OverrideFunc(QWORD* a1, QWORD* xy)
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
 
-    if (!*settings->enable_improved_mouselook)
+    if (*settings->enable_improved_mouselook)
     {
-        return OriginalFunc(a1, xy);
-    }
-
-    if (state->should_hide_virtual_cursor)
-    {
-        if (!state->virtual_cursor_hidden_last_frame)
+        if (state->should_hide_virtual_cursor)
         {
-            Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
-            int w = 0;
-            int h = -1000000;
-            SDL_GetWindowSize(state->sdl_window, &w,
-                NULL);  // TODO can be removed if I manage to block interact
-            // Centering x is not necessary, but may be useful at some point.
-            xy_v->x = w / 2;
-            xy_v->y = h;
-            OriginalFunc(a1, xy);
+            if (!state->virtual_cursor_hidden_last_frame)
+            {
+                Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
+                int w = 0;
+                int h = -1000000;
+                SDL_GetWindowSize(state->sdl_window, &w,
+                    NULL);  // TODO can be removed if I manage to block interact
+                // Centering x is not necessary, but may be useful at some point.
+                xy_v->x = w / 2;
+                xy_v->y = h;
+                OriginalFunc(a1, xy);
+            }
+            else
+            {
+                return;
+            }
         }
         else
         {
-            return;
+            if (state->virtual_cursor_hidden_last_frame)
+            {
+                POINT p = state->cursor_position_to_restore;
+                Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
+                xy_v->x = (int)p.x;
+                xy_v->y = (int)p.y;
+            }
+            OriginalFunc(a1, xy);
         }
+        state->virtual_cursor_hidden_last_frame = state->should_hide_virtual_cursor;
+        return;
     }
-    else
-    {
-        if (state->virtual_cursor_hidden_last_frame)
-        {
-            POINT p = state->cursor_position_to_restore;
-            Vector2* xy_v = reinterpret_cast<Vector2*>(xy);
-            xy_v->x = (int)p.x;
-            xy_v->y = (int)p.y;
-        }
-        OriginalFunc(a1, xy);
-    }
-    state->virtual_cursor_hidden_last_frame = state->should_hide_virtual_cursor;
 
-    return;
+    return OriginalFunc(a1, xy);
 }

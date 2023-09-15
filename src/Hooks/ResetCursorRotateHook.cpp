@@ -51,23 +51,21 @@ void ResetCursorRotateHook::Enable()
 // Called in GameThread, when Camera Rotate key is up or forced by game, e.g. dialog or UI.
 void ResetCursorRotateHook::OverrideFunc(int64_t a1, int a2)
 {
-    if (!*Settings::GetSingleton()->enable_improved_mouselook)
+    if (*Settings::GetSingleton()->enable_improved_mouselook)
     {
-        return OriginalFunc(a1, a2);
-    }
+        auto* state = State::GetSingleton();
+        if (!state->set_is_rotating_was_faked)
+        {
+            state->mouselook_toggled = false;
+        }
+        state->set_is_rotating_was_faked = false;
 
-    auto* state = State::GetSingleton();
-    if (!state->set_is_rotating_was_faked)
-    {
-        state->mouselook_toggled = false;
-    }
-    state->set_is_rotating_was_faked = false;
-
-    //  Skip on game launch / first load.
-    if (state->cursor_position_to_restore.x != -1)
-    {
-        state->SetInternalIsRotating(false);
-        state->HideCursor(false);
+        //  Skip on game launch / first load.
+        if (state->cursor_position_to_restore.x != -1)
+        {
+            state->SetInternalIsRotating(false);
+            state->HideCursor(false);
+        }
     }
 
     return OriginalFunc(a1, a2);

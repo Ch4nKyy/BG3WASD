@@ -19,9 +19,10 @@ struct BlockHoldInteractMovePatchAsm : Xbyak::CodeGenerator
 class BlockHoldInteractMovePatch
 {
 public:
-    static void Enable();
-    static void Disable();
+    static void Activate();
+    static void Deactivate();
     static bool Prepare();
+    static void Enable();
 
 private:
     static inline std::array<uintptr_t, 1> addresses;

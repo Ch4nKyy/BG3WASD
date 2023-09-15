@@ -41,13 +41,13 @@ void State::EnableInteractMoveBlocker(bool enabled)
 {
     if (enabled)
     {
-        BlockInteractMovePatch::Enable();
-        BlockHoldInteractMovePatch::Enable();
+        BlockInteractMovePatch::Activate();
+        BlockHoldInteractMovePatch::Activate();
     }
     else
     {
-        BlockInteractMovePatch::Disable();
-        BlockHoldInteractMovePatch::Disable();
+        BlockInteractMovePatch::Deactivate();
+        BlockHoldInteractMovePatch::Deactivate();
     }
 }
 
@@ -61,14 +61,14 @@ void State::SetCurrentlyInteractMoving(bool in_value)
     {
         if (!currently_interact_moving)
         {
-            BlockCancelActionStoppingMovementPatch::Disable();
+            BlockCancelActionStoppingMovementPatch::Deactivate();
         }
     }
     else
     {
         if (currently_interact_moving)
         {
-            BlockCancelActionStoppingMovementPatch::Enable();
+            BlockCancelActionStoppingMovementPatch::Activate();
         }
     }
     currently_interact_moving = in_value;

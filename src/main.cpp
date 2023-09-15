@@ -143,6 +143,9 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 DecideMoveUpdaterHook::Enable();
                 InsideUpdateInteractMoveHook::Enable();
                 CallSpecificCommandFunctionPre2Hook::Enable();
+                BlockInteractMovePatch::Enable();
+                BlockHoldInteractMovePatch::Enable();
+                BlockCancelActionStoppingMovementPatch::Enable();
                 // The blocker patches are initialized in GetCameraObjectHook.
             }
             else

@@ -11,7 +11,8 @@ class BlockCancelActionStoppingMovementPatch
 {
 public:
     static bool Prepare();
-    static void Disable();
+    static void Deactivate();
+    static void Activate();
     static void Enable();
 
 private:
