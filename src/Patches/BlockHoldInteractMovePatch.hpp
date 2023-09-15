@@ -12,6 +12,7 @@ struct BlockHoldInteractMovePatchAsm : Xbyak::CodeGenerator
         nop();
         nop();
         nop();
+        nop();
     }
 };
 

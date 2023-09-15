@@ -2,6 +2,7 @@
 #include "GameCommand.hpp"
 #include "InputFaker.hpp"
 #include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
+#include "Patches/BlockHoldInteractMovePatch.hpp"
 #include "Patches/BlockInteractMovePatch.hpp"
 #include "SDL.h"
 #include "Settings.hpp"
@@ -41,10 +42,12 @@ void State::EnableInteractMoveBlocker(bool enabled)
     if (enabled)
     {
         BlockInteractMovePatch::Enable();
+        BlockHoldInteractMovePatch::Enable();
     }
     else
     {
         BlockInteractMovePatch::Disable();
+        BlockHoldInteractMovePatch::Disable();
     }
 }
 
