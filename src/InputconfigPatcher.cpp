@@ -254,7 +254,15 @@ json InputconfigPatcher::GetKeycombosAsJsonObject(std::string keycombos_as_strin
     std::string str = "[";
     for (auto keycombo : dku::string::split(keycombos_as_string, ","sv))
     {
-        str.append(std::format("\"{}\",", keycombo));
+        // Extra escape magic is needed for backslash.
+        if (dku::string::icontains(keycombo, "key:\\"))
+        {
+            str.append(std::format("\"{}\\\",", keycombo));
+        }
+        else
+        {
+            str.append(std::format("\"{}\",", keycombo));
+        }
     }
     if (str.back() == ',')
     {
