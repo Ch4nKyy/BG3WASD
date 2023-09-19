@@ -78,6 +78,7 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
         }
         state->old_combat_state = new_combat_state;
         state->combat_state_initiliazed = true;
+        state->last_time_combat_state_changed = SDL_GetTicks();
     }
 
     return camera_object_ptr;

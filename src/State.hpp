@@ -25,6 +25,7 @@ public:
     std::string combat_end_character_name;
     bool old_combat_state = false;
     bool combat_state_initiliazed = false;
+    uint32_t last_time_combat_state_changed = 0;
 
     // mouselook
     bool mouselook_toggled = false;
