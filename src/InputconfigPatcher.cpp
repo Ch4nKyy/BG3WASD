@@ -33,17 +33,10 @@ bool InputconfigPatcher::IsStringEmptyOrWhitespace(const std::string string)
 
 void InputconfigPatcher::ReadAndWriteInputconfig()
 {
-    wchar_t* localAppDataFolder_wchar;
-    if (SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, NULL,
-            &localAppDataFolder_wchar) != S_OK)
-    {
-        FATAL("Critical error. Could not find LocalAppData.");
-    }
+    auto* state = State::GetSingleton();
 
-    std::wstring localAppDataFolder = localAppDataFolder_wchar;
-    std::wstring config_path_relative =
-        L"/Larian Studios/Baldur's Gate 3/PlayerProfiles/Public/inputconfig_p1.json";
-    std::wstring config_path_absolute = localAppDataFolder + config_path_relative;
+    std::wstring inputconfig_name = L"/inputconfig_p1.json";
+    std::wstring config_path_absolute = state->profile_path + inputconfig_name;
 
     std::ifstream input_stream(config_path_absolute);
     json data = json::object();

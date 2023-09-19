@@ -15,6 +15,7 @@
 #include "Hooks/GetInputValueHook.hpp"
 #include "Hooks/InputHook.hpp"
 #include "Hooks/InsideUpdateInteractMoveHook.hpp"
+#include "Hooks/LoadStringHook.hpp"
 #include "Hooks/PollEventHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
@@ -71,9 +72,10 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         bool load_input_config = LoadInputConfig::Prepare();
         bool after_changing_keybind_in_menu_hook = AfterChangingKeybindInMenuHook::Prepare();
         bool after_initial_load_inputconfig_hook = AfterInitialLoadInputConfigHook::Prepare();
+        bool load_string_hook = LoadStringHook::Prepare();
         if (wasd_unlock && get_camera_object_hook && character_movement_input_vector_hook &&
             is_in_controller_mode && after_changing_keybind_in_menu_hook && load_input_config &&
-            after_initial_load_inputconfig_hook)
+            after_initial_load_inputconfig_hook && load_string_hook)
         {
             InputHook::Enable(a_hModule);  // throws on error
             WASDUnlock::Enable();
@@ -81,6 +83,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             GetInputValueHook::Enable();
             AfterChangingKeybindInMenuHook::Enable();
             AfterInitialLoadInputConfigHook::Enable();
+            LoadStringHook::Enable();
 
             bool ftb_start_hook = FTBStartHook::Prepare();
             bool ftb_end_hook = FTBEndHook::Prepare();
