@@ -24,6 +24,8 @@
 #include "Hooks/WASDUnlock.hpp"
 #include "Hooks/WindowGainFocusHook.hpp"
 #include "InputconfigPatcher.hpp"
+#include "Patches/BlockAnalogStickSelection2Patch.hpp"
+#include "Patches/BlockAnalogStickSelectionPatch.hpp"
 #include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
 #include "Patches/BlockHoldInteractMovePatch.hpp"
 #include "Patches/BlockInteractMovePatch.hpp"
@@ -73,9 +75,12 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         bool after_changing_keybind_in_menu_hook = AfterChangingKeybindInMenuHook::Prepare();
         bool after_initial_load_inputconfig_hook = AfterInitialLoadInputConfigHook::Prepare();
         bool load_string_hook = LoadStringHook::Prepare();
+        bool block_analog_stick_selection_patch = BlockAnalogStickSelectionPatch::Prepare();
+        bool block_analog_stick_selection_patch2 = BlockAnalogStickSelection2Patch::Prepare();
         if (wasd_unlock && get_camera_object_hook && character_movement_input_vector_hook &&
             is_in_controller_mode && after_changing_keybind_in_menu_hook && load_input_config &&
-            after_initial_load_inputconfig_hook && load_string_hook)
+            after_initial_load_inputconfig_hook && load_string_hook &&
+            block_analog_stick_selection_patch && block_analog_stick_selection_patch2)
         {
             InputHook::Enable(a_hModule);  // throws on error
             WASDUnlock::Enable();
@@ -84,6 +89,10 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             AfterChangingKeybindInMenuHook::Enable();
             AfterInitialLoadInputConfigHook::Enable();
             LoadStringHook::Enable();
+            BlockAnalogStickSelectionPatch::Enable();
+            BlockAnalogStickSelectionPatch::Activate();
+            BlockAnalogStickSelection2Patch::Enable();
+            BlockAnalogStickSelection2Patch::Activate();
 
             bool ftb_start_hook = FTBStartHook::Prepare();
             bool ftb_end_hook = FTBEndHook::Prepare();
