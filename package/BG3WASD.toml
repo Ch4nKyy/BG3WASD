@@ -60,7 +60,7 @@ RotateThreshold = 200
 
 [InteractMoveBlocker]
 
-BlockInteractMove = true
+BlockInteractMove = false
 # During Character movement mode, block Interact (usually Leftclick) from moving your character.
 # Interacting with objects and people still works.
 # Even if set to false, you can still cancel interact moves by pressing your CharacterMove keys.

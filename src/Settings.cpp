@@ -42,7 +42,7 @@ void Settings::Load() noexcept
             // config.Bind(toggle_movement_toggles_mouselook, FALSE);
             config.Bind(rotate_threshold, 200);
 
-            config.Bind(block_interact_move, TRUE);
+            config.Bind(block_interact_move, FALSE);
 
             InitState();
         });
