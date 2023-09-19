@@ -54,7 +54,6 @@ public:
     bool ShouldHideCursor();
 
     // interactmove disabler
-    std::vector<std::string> cancel_keys;
     bool force_stop = false;
 
     void EnableInteractMoveBlocker(bool enabled);
