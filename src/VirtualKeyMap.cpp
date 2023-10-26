@@ -105,7 +105,14 @@ void VirtualKeyMap::AddVkCombosForCommand(Command command, std::vector<std::stri
 
 std::vector<std::vector<std::uint32_t>> VirtualKeyMap::GetVkCombosOfCommand(Command command)
 {
-    return vkcombos_of_command.at(command);
+    if (vkcombos_of_command.contains(command))
+    {
+        return vkcombos_of_command.at(command);
+    }
+    else
+    {
+        return {};
+    }
 }
 
 void VirtualKeyMap::UpdateVkCombosOfCommandMap()
