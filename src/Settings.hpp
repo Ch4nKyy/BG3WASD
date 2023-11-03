@@ -39,7 +39,7 @@ public:
 
 private:
     TomlConfig config = COMPILE_PROXY("NativeMods/BG3WASD.toml"sv);
-    bool loaded_once = false;
+    bool first_time_loaded = true;
 
     void InitState();
 };

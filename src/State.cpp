@@ -39,7 +39,9 @@ bool State::ShouldHideCursor() { return should_hide_cursor; }
 
 void State::EnableInteractMoveBlocker(bool enabled)
 {
-    if (enabled)
+    auto* settings = Settings::GetSingleton();
+
+    if (enabled && *settings->block_interact_move)
     {
         BlockInteractMovePatch::Activate();
         BlockHoldInteractMovePatch::Activate();
@@ -88,10 +90,7 @@ void State::SetCharacterMovementMode(bool in_value)
         frames_to_hold_forward_to_center_camera = 10;
     }
 
-    if (*settings->block_interact_move)
-    {
-        EnableInteractMoveBlocker(in_value);
-    }
+    EnableInteractMoveBlocker(in_value);
 
     // TODO ToggleMouselook
     // if (*settings->toggle_movement_toggles_mouselook)

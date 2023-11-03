@@ -9,43 +9,39 @@ using enum Command;
 
 void Settings::Load() noexcept
 {
-    static std::once_flag config_init;
-    std::call_once(config_init,
-        [&]()
-        {
-            config.Bind(toggle_walkspeed, "key:insert");
-            config.Bind(toggle_movement_mode, "key:capslock");
-            config.Bind(toggle_autoforward, "shift+key:w");
-            config.Bind(hold_walkspeed, "");
-            config.Bind(reload_config, "key:f11");
-            // TODO ToggleMouselook
-            // config.Bind(toggle_mouselook, "");
+    if (first_time_loaded)
+    {
+        config.Bind(toggle_walkspeed, "key:insert");
+        config.Bind(toggle_movement_mode, "key:capslock");
+        config.Bind(toggle_autoforward, "shift+key:w");
+        config.Bind(hold_walkspeed, "");
+        config.Bind(reload_config, "key:f11");
+        // TODO ToggleMouselook
+        // config.Bind(toggle_mouselook, "");
 
-            config.Bind<0.0, 1.0>(walk_speed, 0.3);
-            config.Bind(walking_is_default, FALSE);
-            config.Bind(walk_after_combat, FALSE);
-            // TODO character_leftright_is_rotate
-            // config.Bind(character_leftright_is_rotate, FALSE);
-            // Future toml lines:
-            // CharacterLeftRightIsRotateInsteadOfMove = false
-            // # Set this to true if you want to MOVE the Camera with Left/Right, but ROTATE the
-            // # Character.
-            // # For this to work, you need to bind Camera Rotate Left/Right to the same keys as
-            // # Camera Left/Right.
+        config.Bind<0.0, 1.0>(walk_speed, 0.3);
+        config.Bind(walking_is_default, FALSE);
+        config.Bind(walk_after_combat, FALSE);
+        // TODO character_leftright_is_rotate
+        // config.Bind(character_leftright_is_rotate, FALSE);
+        // Future toml lines:
+        // CharacterLeftRightIsRotateInsteadOfMove = false
+        // # Set this to true if you want to MOVE the Camera with Left/Right, but ROTATE the
+        // # Character.
+        // # For this to work, you need to bind Camera Rotate Left/Right to the same keys as
+        // # Camera Left/Right.
 
-            config.Bind(enable_auto_toggling_movement_mode, TRUE);
+        config.Bind(enable_auto_toggling_movement_mode, TRUE);
 
-            config.Bind(enable_improved_mouselook, TRUE);
-            config.Bind(enable_rotate_plus_lmb_is_forward, TRUE);
-            // TODO ToggleMouselook
-            // TODO ToggleMouselook
-            // config.Bind(toggle_movement_toggles_mouselook, FALSE);
-            config.Bind(rotate_threshold, 200);
+        config.Bind(enable_improved_mouselook, TRUE);
+        config.Bind(enable_rotate_plus_lmb_is_forward, TRUE);
+        // TODO ToggleMouselook
+        // TODO ToggleMouselook
+        // config.Bind(toggle_movement_toggles_mouselook, FALSE);
+        config.Bind(rotate_threshold, 200);
 
-            config.Bind(block_interact_move, FALSE);
-
-            InitState();
-        });
+        config.Bind(block_interact_move, FALSE);
+    }
 
     config.Load();
 
@@ -56,23 +52,20 @@ void Settings::Load() noexcept
         // *toggle_movement_toggles_mouselook = false;
     }
 
-    // This means the user hot reloaded the toml config!
-    if (loaded_once)
+    auto* state = State::GetSingleton();
+
+    if (first_time_loaded)
     {
-        auto* state = State::GetSingleton();
-        InputconfigPatcher::Patch();
-
-        if (*block_interact_move)
-        {
-            state->EnableInteractMoveBlocker(state->IsCharacterMovementMode());
-        }
-        else
-        {
-            state->EnableInteractMoveBlocker(false);
-        }
+        InitState();
     }
+    else  // reloaded
+    {
+        // during first load, this is called in AfterInitialLoadInputConfigHook
+        InputconfigPatcher::Patch();
+    }
+    state->EnableInteractMoveBlocker(state->IsCharacterMovementMode());
 
-    loaded_once = true;
+    first_time_loaded = false;
     INFO("Config loaded successfully."sv)
 }
 
