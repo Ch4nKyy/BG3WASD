@@ -95,10 +95,10 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             BlockAnalogStickSelection2Patch::Activate();
 
             errors.append(
-                "You are using WASD 1.9.0, which is the Patch 4 preview version. "
-                "Please note that the feature set of this version is reduced, "
-                "because Patch 4 broke a lot of the mods functionality and I'm still working to "
-                "restore it. "
+                "You are using WASD 1.9.0, which is the Patch 4 preview version.\n"
+                "Please note that the feature set of this version is reduced,\n"
+                "because Patch 4 broke a lot of the mods functionality and I'm still working to\n"
+                "restore it.\n"
                 "For more information, visit the Comment section on Nexusmods.\n");
 
             bool ftb_start_hook = FTBStartHook::Prepare();
