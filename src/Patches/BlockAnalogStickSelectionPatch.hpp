@@ -12,9 +12,11 @@ struct BlockAnalogStickSelectionPatchAsm : Xbyak::CodeGenerator
         nop();
         nop();
         nop();
+        nop();
     }
 };
 
+// When changing Analog Stick Selection in the menu, ignore it.
 class BlockAnalogStickSelectionPatch
 {
 public:

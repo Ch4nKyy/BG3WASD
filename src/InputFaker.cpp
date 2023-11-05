@@ -1,6 +1,6 @@
 #include "InputFaker.hpp"
 #include "GameCommand.hpp"
-#include "Hooks/CallSpecificCommandFunctionPre2Hook.hpp"
+#include "Hooks/CallSpecificCommandFunctionPre2Cavehook.hpp"
 #include "SDL.h"
 #include "VirtualKeyMap.hpp"
 
@@ -105,7 +105,7 @@ int InputFaker::SendCommand(GameCommand command_id, bool down)
     {
         return 0;
     }
-    if (!CallSpecificCommandFunctionPre2Hook::OriginalFunc)
+    if (!CallSpecificCommandFunctionPre2Cavehook::Func)
     {
         return 0;
     }
@@ -121,7 +121,7 @@ int InputFaker::SendCommand(GameCommand command_id, bool down)
     *(int32_t*)(command_struct + 44) = 1;
     *(int64_t*)(command_struct + 52) = 161145105638892;
     WORD return_status = 0;
-    CallSpecificCommandFunctionPre2Hook::OriginalFunc(game_input_manager, &return_status,
+    CallSpecificCommandFunctionPre2Cavehook::Func(game_input_manager, &return_status,
         (int*)command_struct);
 
     return return_status;

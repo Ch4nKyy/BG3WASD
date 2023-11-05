@@ -1,12 +1,12 @@
 #include "FTBStartHook.hpp"
-#include "../State.hpp"
 #include "../Settings.hpp"
+#include "../State.hpp"
 
 bool FTBStartHook::Prepare()
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "8D ?? ?? ?? ?? ?? 48 ?? ?? ?? 49 ?? ?? E8 ?? ?? ?? ?? 4D ?? ?? 4C ?? ?? ?? 48 ?? ?? 49 ?? "
-        "?? E8 ?? ?? ?? ?? 48">()) };
+    std::array<uintptr_t, 1> address_array = { AsAddress(
+        dku::Hook::Assembly::search_pattern<"E8 ?? ?? ?? ?? 4C ?? ?? 4C ?? ?? ?? 48 ?? ?? 48 ?? ?? "
+                                            "E8 ?? ?? ?? ?? 49 ?? ?? ?? 83 ?? ?? ?? 72 ?? 48">()) };
     addresses = address_array;
 
     all_found = true;
@@ -33,8 +33,8 @@ void FTBStartHook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        OriginalFunc = dku::Hook::write_call<5>(address + 13, OverrideFunc);
-        DEBUG("Hooked FTBStartHook #{}: {:X}", i, AsAddress(address + 13));
+        OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
+        DEBUG("Hooked FTBStartHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }

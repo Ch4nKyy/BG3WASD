@@ -15,7 +15,7 @@ public:
     int frames_to_hold_forward_to_center_camera = 0;
     std::vector<std::string> character_forward_keys;
     std::vector<std::string> character_backward_keys;
-    std::wstring profile_path = L"";
+    std::wstring inputconfig_path = L"";
 
     void SetCharacterMovementMode(bool in_value);
     bool IsCharacterMovementMode();

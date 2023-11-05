@@ -2,20 +2,20 @@
 #include "Addresses/LoadInputConfig.hpp"
 #include "Hooks/AfterChangingKeybindInMenuHook.hpp"
 #include "Hooks/AfterInitialLoadInputConfigHook.hpp"
-#include "Hooks/CallSpecificCommandFunctionPre2Hook.hpp"
+#include "Hooks/CallSpecificCommandFunctionPre2Cavehook.hpp"
 #include "Hooks/CastOrCancelAbilityHook.hpp"
 #include "Hooks/CheckCommandInputsHook.hpp"
 #include "Hooks/CheckContextMenuOrCancelActionHook.hpp"
 #include "Hooks/CombatEndHook.hpp"
 #include "Hooks/CombatStartHook.hpp"
+#include "Hooks/ConcatInputconfigPathHook.hpp"
 #include "Hooks/DecideMoveUpdaterHook.hpp"
 #include "Hooks/FTBEndHook.hpp"
 #include "Hooks/FTBStartHook.hpp"
 #include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetInputValueHook.hpp"
 #include "Hooks/InputHook.hpp"
-#include "Hooks/InsideUpdateInteractMoveHook.hpp"
-#include "Hooks/LoadStringHook.hpp"
+#include "Hooks/InsideUpdateInteractMoveCavehook.hpp"
 #include "Hooks/PollEventHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
@@ -74,7 +74,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         bool load_input_config = LoadInputConfig::Prepare();
         bool after_changing_keybind_in_menu_hook = AfterChangingKeybindInMenuHook::Prepare();
         bool after_initial_load_inputconfig_hook = AfterInitialLoadInputConfigHook::Prepare();
-        bool load_string_hook = LoadStringHook::Prepare();
+        bool load_string_hook = ConcatInputconfigPathHook::Prepare();
         bool block_analog_stick_selection_patch = BlockAnalogStickSelectionPatch::Prepare();
         bool block_analog_stick_selection_patch2 = BlockAnalogStickSelection2Patch::Prepare();
         if (wasd_unlock && get_camera_object_hook && character_movement_input_vector_hook &&
@@ -88,11 +88,18 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             GetInputValueHook::Enable();
             AfterChangingKeybindInMenuHook::Enable();
             AfterInitialLoadInputConfigHook::Enable();
-            LoadStringHook::Enable();
+            ConcatInputconfigPathHook::Enable();
             BlockAnalogStickSelectionPatch::Enable();
             BlockAnalogStickSelectionPatch::Activate();
             BlockAnalogStickSelection2Patch::Enable();
             BlockAnalogStickSelection2Patch::Activate();
+
+            errors.append(
+                "You are using WASD 1.9.0, which is the Patch 4 preview version. "
+                "Please note that the feature set of this version is reduced, "
+                "because Patch 4 broke a lot of the mods functionality and I'm still working to "
+                "restore it. "
+                "For more information, visit the Comment section on Nexusmods.\n");
 
             bool ftb_start_hook = FTBStartHook::Prepare();
             bool ftb_end_hook = FTBEndHook::Prepare();
@@ -108,59 +115,61 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                     "enabled.\n");
             }
 
-            bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
-            bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
-            bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
-            bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
-            bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
-            bool check_context_menu_or_cancel_action_hook =
-                CheckContextMenuOrCancelActionHook::Prepare();
-            bool cast_or_cancel_ability_hook = CastOrCancelAbilityHook::Prepare();
-            bool poll_event_hook = PollEventHook::Prepare();
-            // TODO ToggleMouselook
-            // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
-            if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
-                reset_cursor_rotate_hook && check_command_inputs_hook &&
-                check_context_menu_or_cancel_action_hook && cast_or_cancel_ability_hook &&
-                poll_event_hook)
-            {
-                SetVirtualCursorPosHook::Enable();
-                SDL_GetWindowGrabHook::Enable();
-                SetCursorRotateHook::Enable();
-                ResetCursorRotateHook::Enable();
-                CheckCommandInputsHook::Enable();
-                CheckContextMenuOrCancelActionHook::Enable();
-                CastOrCancelAbilityHook::Enable();
-                PollEventHook::Enable();
-                // TODO ToggleMouselook
-                // WindowGainFocusHook::Enable();
-            }
-            else
+            // bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
+            // bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
+            // bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
+            // bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
+            // bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
+            // bool check_context_menu_or_cancel_action_hook =
+            //     CheckContextMenuOrCancelActionHook::Prepare();
+            // bool cast_or_cancel_ability_hook = CastOrCancelAbilityHook::Prepare();
+            // bool poll_event_hook = PollEventHook::Prepare();
+            // // TODO ToggleMouselook
+            // // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
+            // if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
+            //     reset_cursor_rotate_hook && check_command_inputs_hook &&
+            //     check_context_menu_or_cancel_action_hook && cast_or_cancel_ability_hook &&
+            //     poll_event_hook)
+            // {
+            //     SetVirtualCursorPosHook::Enable();
+            //     SDL_GetWindowGrabHook::Enable();
+            //     SetCursorRotateHook::Enable();
+            //     ResetCursorRotateHook::Enable();
+            //     CheckCommandInputsHook::Enable();
+            //     CheckContextMenuOrCancelActionHook::Enable();
+            //     CastOrCancelAbilityHook::Enable();
+            //     PollEventHook::Enable();
+
+            //     // TODO ToggleMouselook
+            //     // WindowGainFocusHook::Enable();
+            // }
+            // else
             {
                 errors.append("Improved Mouselook could not be enabled.\n");
             }
 
-            bool decide_move_updater_hook = DecideMoveUpdaterHook::Prepare();
-            bool inside_update_interact_move_hook = InsideUpdateInteractMoveHook::Prepare();
-            bool call_specific_command_function_pre2_hook =
-                CallSpecificCommandFunctionPre2Hook::Prepare();
-            bool block_interact_move_patch = BlockInteractMovePatch::Prepare();
-            bool block_hold_interact_move_patch = BlockHoldInteractMovePatch::Prepare();
-            bool block_cancel_stopping_movement_patch =
-                BlockCancelActionStoppingMovementPatch::Prepare();
-            if (decide_move_updater_hook && inside_update_interact_move_hook &&
-                call_specific_command_function_pre2_hook && block_interact_move_patch &&
-                block_hold_interact_move_patch && block_cancel_stopping_movement_patch)
-            {
-                DecideMoveUpdaterHook::Enable();
-                InsideUpdateInteractMoveHook::Enable();
-                CallSpecificCommandFunctionPre2Hook::Enable();
-                BlockInteractMovePatch::Enable();
-                BlockHoldInteractMovePatch::Enable();
-                BlockCancelActionStoppingMovementPatch::Enable();
-                // The blocker patches are initialized in GetCameraObjectHook.
-            }
-            else
+            // bool decide_move_updater_hook = DecideMoveUpdaterHook::Prepare();
+            // bool inside_update_interact_move_hook = InsideUpdateInteractMoveCavehook::Prepare();
+            // bool call_specific_command_function_pre2_hook =
+            //     CallSpecificCommandFunctionPre2Cavehook::Prepare();
+            // bool block_interact_move_patch = BlockInteractMovePatch::Prepare();
+            // bool block_hold_interact_move_patch = BlockHoldInteractMovePatch::Prepare();
+            // bool block_cancel_stopping_movement_patch =
+            //     BlockCancelActionStoppingMovementPatch::Prepare();
+            // if (decide_move_updater_hook && inside_update_interact_move_hook &&
+            //     call_specific_command_function_pre2_hook && block_interact_move_patch &&
+            //     block_hold_interact_move_patch && block_cancel_stopping_movement_patch)
+            // {
+            //     DecideMoveUpdaterHook::Enable();
+            //     InsideUpdateInteractMoveCavehook::Enable();
+            //     CallSpecificCommandFunctionPre2Cavehook::Enable();
+            //     BlockInteractMovePatch::Enable();
+            //     BlockHoldInteractMovePatch::Enable();
+            //     BlockCancelActionStoppingMovementPatch::Enable();
+
+            //     // The blocker patches are initialized in GetCameraObjectHook.
+            // }
+            // else
             {
                 errors.append("InteractMoveBlocker could not be enabled.\n");
             }

@@ -35,8 +35,7 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
 {
     auto* state = State::GetSingleton();
 
-    std::wstring inputconfig_name = L"/inputconfig_p1.json";
-    std::wstring config_path_absolute = state->profile_path + inputconfig_name;
+    std::wstring config_path_absolute = state->inputconfig_path;
 
     std::ifstream input_stream(config_path_absolute);
     json data = json::object();

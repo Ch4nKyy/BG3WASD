@@ -4,14 +4,14 @@
 void* WASDUnlock::Search(uintptr_t a_base = 0)
 {
     return dku::Hook::Assembly::search_pattern<
-        "38 ?? ?? ?? ?? ?? 0F ?? ?? ?? ?? ?? 48 ?? ?? ?? 8B ?? ?? ?? ?? ?? 39">(a_base);
+        "44 ?? ?? ?? ?? ?? ?? 0F ?? ?? ?? ?? ?? 49 ?? ?? ?? 8B ?? ?? ?? ?? ?? 39 ?? ?? ?? ?? ?? "
+        "0F">(a_base);
 }
 
 bool WASDUnlock::Prepare()
 {
     auto match1 = Search();
     address1 = AsAddress(match1);
-
 
     if (not(address1))
     {
@@ -30,8 +30,8 @@ void WASDUnlock::Enable()
         return;
     }
 
-    static constexpr uint8_t data[0xC] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
-        0x90, 0x90, 0x90 };
+    static constexpr uint8_t data[13] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90 };
 
     dku::Hook::WriteImm(address1, data);
     DEBUG("WASD unlocked : {:X}", address1);

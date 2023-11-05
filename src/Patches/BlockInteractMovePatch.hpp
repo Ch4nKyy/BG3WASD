@@ -6,8 +6,7 @@ struct BlockInteractMovePatchAsm : Xbyak::CodeGenerator
 {
     BlockInteractMovePatchAsm()
     {
-        nop();
-        nop();
+        cmp(eax,eax);
     }
 };
 

@@ -5,7 +5,7 @@
 bool SDL_GetWindowGrabHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? ?? 3B ?? 74 ?? 48 ?? ?? ?? 8B ?? E8 ?? ?? ?? ?? 48 ?? ?? ?? ?? 74">()) };
+        "FF ?? ?? ?? ?? ?? 3B ?? 74 ?? 48 ?? ?? ?? 8B ?? FF">()) };
     addresses = address_array;
 
     all_found = true;
@@ -32,7 +32,7 @@ void SDL_GetWindowGrabHook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
+        OriginalFunc = dku::Hook::write_call<6>(address, OverrideFunc);
         DEBUG("Hooked SDL_GetWindowGrabHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
@@ -41,7 +41,7 @@ void SDL_GetWindowGrabHook::Enable()
 // Called in MainThread, every frame that has a mouse motion event
 int64_t SDL_GetWindowGrabHook::OverrideFunc(int64_t a1)
 {
-    State::GetSingleton()->sdl_window = reinterpret_cast<SDL_Window*>(a1);
+    // State::GetSingleton()->sdl_window = reinterpret_cast<SDL_Window*>(a1);
 
     return OriginalFunc(a1);
 }

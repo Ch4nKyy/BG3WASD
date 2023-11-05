@@ -1,4 +1,4 @@
-#include "CallSpecificCommandFunctionPre2Hook.hpp"
+#include "CallSpecificCommandFunctionPre2Cavehook.hpp"
 #include "../GameCommand.hpp"
 #include "../InputFaker.hpp"
 #include "../Patches/BlockCancelActionStoppingMovementPatch.hpp"
@@ -7,11 +7,12 @@
 
 using enum GameCommand;
 
-bool CallSpecificCommandFunctionPre2Hook::Prepare()
+bool CallSpecificCommandFunctionPre2Cavehook::Prepare()
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "48 ?? ?? ?? ?? ?? ?? 4C ?? ?? 48 ?? ?? E8 ?? ?? ?? ?? 48 ?? ?? ?? ?? 48 ?? ?? 48 ?? ?? ?? "
-        "?? 48 ?? ?? ?? ?? 48">()) };
+    return false;
+    
+    std::array<uintptr_t, 1> address_array = { AsAddress(
+        dku::Hook::Assembly::search_pattern<"FF 50 68 48 8B C3">()) };
     addresses = address_array;
 
     all_found = true;
@@ -21,7 +22,7 @@ bool CallSpecificCommandFunctionPre2Hook::Prepare()
         if (!address)
         {
             State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("CallSpecificCommandFunctionPre2Hook #{} not found", i);
+            WARN("CallSpecificCommandFunctionPre2Cavehook #{} not found", i);
             all_found = false;
         }
         ++i;
@@ -29,7 +30,31 @@ bool CallSpecificCommandFunctionPre2Hook::Prepare()
     return all_found;
 }
 
-void CallSpecificCommandFunctionPre2Hook::Enable()
+struct Prolog : Xbyak::CodeGenerator
+{
+    Prolog()
+    {
+        push(rax);
+        push(rbx);
+        push(rcx);
+        push(rdx);
+        push(r8);
+    }
+};
+
+struct Epilog : Xbyak::CodeGenerator
+{
+    Epilog()
+    {
+        pop(rax);
+        pop(rbx);
+        pop(rcx);
+        pop(rdx);
+        pop(r8);
+    }
+};
+
+void CallSpecificCommandFunctionPre2Cavehook::Enable()
 {
     if (not all_found)
     {
@@ -38,10 +63,12 @@ void CallSpecificCommandFunctionPre2Hook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        auto offset = 13;
-        OriginalFunc = dku::Hook::write_call<5>(address + offset, OverrideFunc);
-        DEBUG("Hooked CallSpecificCommandFunctionPre2Hook #{}: {:X}", i,
-            AsAddress(address + offset));
+        Prolog prolog;
+        Epilog epilog;
+        handle = DKUtil::Hook::AddCaveHook(address, { 0, 6 }, FUNC_INFO(Func), &prolog, &epilog,
+            DKUtil::Hook::HookFlag::kRestoreAfterEpilog);
+        handle->Enable();
+        DEBUG("Hooked CallSpecificCommandFunctionPre2Cavehook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }
@@ -51,7 +78,7 @@ void CallSpecificCommandFunctionPre2Hook::Enable()
 // We can use it to detect input commands and react to them.
 // But we can also use the original function to send input commands directly instead of sending
 // keys.
-WORD* CallSpecificCommandFunctionPre2Hook::OverrideFunc(int64_t* a1, WORD* a2, int* command_struct)
+void CallSpecificCommandFunctionPre2Cavehook::Func(int64_t* a1, WORD* a2, int* command_struct)
 {
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
@@ -69,6 +96,4 @@ WORD* CallSpecificCommandFunctionPre2Hook::OverrideFunc(int64_t* a1, WORD* a2, i
         state->force_stop = true;
         InputFaker::SendCommand(ActionCancel, SDL_RELEASED);
     }
-
-    return OriginalFunc(a1, a2, command_struct);
 }

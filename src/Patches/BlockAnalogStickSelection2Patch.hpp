@@ -17,6 +17,7 @@ struct BlockAnalogStickSelection2PatchAsm : Xbyak::CodeGenerator
     }
 };
 
+// On game start, set Analog Stick Selection to disabled (2).
 class BlockAnalogStickSelection2Patch
 {
 public:
