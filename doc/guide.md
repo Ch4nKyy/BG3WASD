@@ -51,12 +51,12 @@ PlayerController as its first parameter.
 Do a full text search for ```", 8Eh"``` or whatever hex value CharacterMoveForward is
 and look for an occurrence where value, value+1, value+2 and value+3 are very close to each other
 assigned to variables or moved into registers!
-There are 2 functions where this is the case. I call them GetMovementInputVec and
+There are 2 functions where this is the case. I name them GetMovementInputVec and
 GetMovementInputWorldVec. The latter one has some matrix transformation math at the end.
 This is the one we are looking for. Rename and mark this function, so we can easily find it.
 
 In this function, 142/143/144/145 are assigned to variables. These variables are then passed to
-a function I call GetInputValue. All 4 calls of this function calls are hooked by the mod!
+a function I name GetInputValue. All 4 calls of this function calls are hooked by the mod!
 So if one of those hooks breaks, you know how to repair it.
 
 ### Short way
@@ -115,7 +115,7 @@ To find this function call/hook, you can check the xrefs of GetInputValue.
 There should be a code section where GetInputValue is called 4 times next to each other with the
 command ids 102, 103,
 104, 105 (third parameter). These are the CameraForward/Backward/Left/Right command IDs.
-I call this function HandleCameraInput.
+I name this function HandleCameraInput.
 The very first line of this function is ```camera_object = GetCameraObject(a3);```, but this is not
 the call that we want to hook.  
 Somewhere at the very bottom of HandleCameraInput, there is:  
@@ -130,7 +130,7 @@ Inside this sub_xxx, there is another call to GetCameraObject and it is the one 
 ## LoadInputConfig
 
 Search for the string ```inputremap_p1.json```. It should only have one xref and that is inside the
-function I call LoadInputConfig.  
+function I name LoadInputConfig.  
 The AOB signature aims at the function start, not at any call of the function.
 
 ## AfterInitialLoadInputConfigHook
@@ -150,7 +150,7 @@ very first time during game start, trace the stack trace.
 ## BlockAnalogStickSelectionPatch
 
 Search for the string ```hec9cb611gdbebg4618ga7c8g069215436e27```. It should only have 1 xref and
-lead you to the function I call ChangeSetting.
+lead you to the function I name ChangeSetting.
 At the very bottom, there is something like  
 ```
 case aaa:
@@ -174,7 +174,7 @@ Hook the function call that is passed this string.
 
 ## SDL_GetWindowGrabHook
 
-Search for the import "SDL_PollEvent". This function is called twice in the function I call
+Search for the import "SDL_PollEvent". This function is called twice in the function I name
 PollInput.  
 In the PollInput function, also SDL_GetWindowGrabHook is called twice. We hook the first call.
 
@@ -313,3 +313,12 @@ Nop this to block hold interact moves.
 
 Use input_program_flow.drawio.svg as reference.  
 Debug, hold Interact and then trace all the way from CheckCommandInputs.
+
+## CastOrCancelAbilityHook
+
+Search for the string ```h61f300a7g2cfcg4536gad62gde94e92935ca```.  
+It should only have 1 xref in the function I name CallSpecificCommandFunction.
+
+In the middle of this function, there is a call to a subfunction with many parameters, the last
+being the Settings ptr qword, as discovered in BlockAnalogStickSelectionPatch.  
+This subfunction I name CastOrCancelAbility and this call must be hooked.

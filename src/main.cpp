@@ -95,13 +95,6 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
             BlockAnalogStickSelection2Patch::Enable();
             BlockAnalogStickSelection2Patch::Activate();
 
-            errors.append(
-                "You are using WASD 1.9.0, which is the Patch 4 preview version.\n"
-                "Please note that the feature set of this version is reduced,\n"
-                "because Patch 4 broke a lot of the mods functionality and I'm still working to\n"
-                "restore it.\n"
-                "For more information, visit the Comment section on Nexusmods.\n");
-
             bool ftb_start_hook = FTBStartHook::Prepare();
             bool ftb_end_hook = FTBEndHook::Prepare();
             if (ftb_start_hook && ftb_end_hook)
@@ -116,35 +109,33 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                     "enabled.\n");
             }
 
-            // bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
-            // bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
-            // bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
-            // bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
+            bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
+            bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
+            bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
+            bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
+            bool check_context_menu_or_cancel_action_hook =
+                CheckContextMenuOrCancelActionHook::Prepare();
+            bool cast_or_cancel_ability_hook = CastOrCancelAbilityHook::Prepare();
+            bool poll_event_hook = PollEventHook::Prepare();
+            // TODO ToggleMouselook
+            // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
             // bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
-            // bool check_context_menu_or_cancel_action_hook =
-            //     CheckContextMenuOrCancelActionHook::Prepare();
-            // bool cast_or_cancel_ability_hook = CastOrCancelAbilityHook::Prepare();
-            // bool poll_event_hook = PollEventHook::Prepare();
-            // // TODO ToggleMouselook
-            // // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
-            // if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
-            //     reset_cursor_rotate_hook && check_command_inputs_hook &&
-            //     check_context_menu_or_cancel_action_hook && cast_or_cancel_ability_hook &&
-            //     poll_event_hook)
-            // {
-            //     SetVirtualCursorPosHook::Enable();
-            //     SDL_GetWindowGrabHook::Enable();
-            //     SetCursorRotateHook::Enable();
-            //     ResetCursorRotateHook::Enable();
-            //     CheckCommandInputsHook::Enable();
-            //     CheckContextMenuOrCancelActionHook::Enable();
-            //     CastOrCancelAbilityHook::Enable();
-            //     PollEventHook::Enable();
-
-            //     // TODO ToggleMouselook
-            //     // WindowGainFocusHook::Enable();
-            // }
-            // else
+            if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
+                reset_cursor_rotate_hook && check_context_menu_or_cancel_action_hook &&
+                cast_or_cancel_ability_hook && poll_event_hook)
+            {
+                SetVirtualCursorPosHook::Enable();
+                SDL_GetWindowGrabHook::Enable();
+                SetCursorRotateHook::Enable();
+                ResetCursorRotateHook::Enable();
+                CheckContextMenuOrCancelActionHook::Enable();
+                CastOrCancelAbilityHook::Enable();
+                PollEventHook::Enable();
+                // TODO ToggleMouselook
+                // WindowGainFocusHook::Enable();
+                // CheckCommandInputsHook::Enable();
+            }
+            else
             {
                 errors.append("Improved Mouselook could not be enabled.\n");
             }

@@ -9,8 +9,7 @@ public:
     static bool Prepare();
 
 private:
-    static void OverrideFunc(QWORD* a1, QWORD* a2);
-    static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;
+    static QWORD* OverrideFunc(int64_t* self, char* a2, int* a3);
     static inline std::array<uintptr_t, 1> addresses;
     static inline bool all_found = false;
 };
