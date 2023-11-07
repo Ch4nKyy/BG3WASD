@@ -1,6 +1,26 @@
 #include "WASDUnlock.hpp"
 #include "../State.hpp"
 
+struct WASDUnlockPatch : Xbyak::CodeGenerator
+{
+    WASDUnlockPatch()
+    {
+        nop(); // 1
+        nop();
+        nop();
+        nop();
+        nop(); // 5
+        nop();
+        nop();
+        nop();
+        nop();
+        nop(); // 10
+        nop();
+        nop();
+        nop(); // 13
+    }
+};
+
 void* WASDUnlock::Search(uintptr_t a_base = 0)
 {
     return dku::Hook::Assembly::search_pattern<
@@ -30,10 +50,9 @@ void WASDUnlock::Enable()
         return;
     }
 
-    static constexpr uint8_t data[13] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
-        0x90, 0x90, 0x90, 0x90 };
+    WASDUnlockPatch patch;
 
-    dku::Hook::WriteImm(address1, data);
+    dku::Hook::WritePatch(address1, &patch);
     DEBUG("WASD unlocked : {:X}", address1);
 
     return;
