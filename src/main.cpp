@@ -24,6 +24,7 @@
 #include "Hooks/WASDUnlock.hpp"
 #include "Hooks/WindowGainFocusHook.hpp"
 #include "InputconfigPatcher.hpp"
+#include "MessageBox.hpp"
 #include "Patches/BlockAnalogStickSelection2Patch.hpp"
 #include "Patches/BlockAnalogStickSelectionPatch.hpp"
 #include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
@@ -188,7 +189,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         if (!errors.empty())
         {
             WARN(errors);
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "BG3WASD", errors.c_str(), NULL);
+            MessageBox::Show(errors);
         }
         else
         {

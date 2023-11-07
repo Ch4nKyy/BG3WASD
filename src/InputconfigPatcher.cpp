@@ -5,6 +5,7 @@
 
 #include "Addresses/LoadInputConfig.hpp"
 #include "InputconfigPatcher.hpp"
+#include "MessageBox.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
 
@@ -207,7 +208,7 @@ void InputconfigPatcher::UpdateAndValidateKeys(json data)
         }
         error.append("This might cause the mod to malfunction!");
         WARN(error);
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_WARNING, "BG3WASD", error.c_str(), NULL);
+        MessageBox::Show(error);
     }
 }
 
