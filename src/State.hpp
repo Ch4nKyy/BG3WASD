@@ -17,8 +17,11 @@ public:
     std::vector<std::string> character_backward_keys;
     std::wstring inputconfig_path = L"";
 
-    void SetCharacterMovementMode(bool in_value);
+    void SetMovementModeToggled(bool in_value);
+    void SetMovementModeHeld(bool in_value);
+    void UpdateMovementMode();
     bool IsCharacterMovementMode();
+    bool IsMovementModeToggled();
 
     // auto toggle movement
     bool last_dying_character_is_player = false;
@@ -63,7 +66,8 @@ public:
 
 private:
     //core
-    bool is_character_movement_mode = true;
+    bool movement_mode_toggled = true;
+    bool movement_mode_held = false;
 
     // mouselook
     bool is_rotating = false;

@@ -157,7 +157,9 @@ void InputHook::AutoRun(State* state)
     }
 
     if (DidCommandChange(FORWARD, WM_KEYDOWN) || DidCommandChange(BACKWARD, WM_KEYDOWN) ||
-        DidCommandChange(TOGGLE_MOVEMENT_MODE, WM_KEYDOWN))
+        DidCommandChange(TOGGLE_MOVEMENT_MODE, WM_KEYDOWN) ||
+        DidCommandChange(HOLD_MOVEMENT_MODE, WM_KEYDOWN) ||
+        DidCommandChange(HOLD_MOVEMENT_MODE, WM_KEYUP))
     {
         state->autoforward_toggled = false;
         return;
@@ -168,7 +170,19 @@ void InputHook::ToggleMovementMode(State* state)
 {
     if (DidCommandChange(TOGGLE_MOVEMENT_MODE, WM_KEYDOWN))
     {
-        state->SetCharacterMovementMode(!state->IsCharacterMovementMode());
+        state->SetMovementModeToggled(!state->IsMovementModeToggled());
+        return;
+    }
+
+    if (DidCommandChange(HOLD_MOVEMENT_MODE, WM_KEYDOWN))
+    {
+        state->SetMovementModeHeld(true);
+        return;
+    }
+
+    if (DidCommandChange(HOLD_MOVEMENT_MODE, WM_KEYUP))
+    {
+        state->SetMovementModeHeld(false);
         return;
     }
 }

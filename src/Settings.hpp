@@ -9,6 +9,7 @@ class Settings : public DKUtil::model::Singleton<Settings>
 public:
     String toggle_walkspeed{ "ToggleWalkspeed", "ModHotkeys" };
     String toggle_movement_mode{ "ToggleMovementMode", "ModHotkeys" };
+    String hold_movement_mode{ "HoldMovementMode", "ModHotkeys" };
     String toggle_autoforward{ "ToggleAutoforward", "ModHotkeys" };
     String hold_walkspeed{ "HoldWalkspeed", "ModHotkeys" };
     String reload_config{ "ReloadConfig", "ModHotkeys" };

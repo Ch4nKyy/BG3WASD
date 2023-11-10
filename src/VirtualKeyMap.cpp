@@ -127,6 +127,8 @@ void VirtualKeyMap::UpdateVkCombosOfCommandMap()
         settings->GetBoundKeycombos(*settings->toggle_autoforward));
     AddVkCombosForCommand(TOGGLE_MOVEMENT_MODE,
         settings->GetBoundKeycombos(*settings->toggle_movement_mode));
+    AddVkCombosForCommand(HOLD_MOVEMENT_MODE,
+        settings->GetBoundKeycombos(*settings->hold_movement_mode));
     AddVkCombosForCommand(RELOAD_CONFIG, settings->GetBoundKeycombos(*settings->reload_config));
     AddVkCombosForCommand(FORWARD, state->character_forward_keys);
     AddVkCombosForCommand(BACKWARD, state->character_backward_keys);

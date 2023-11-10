@@ -41,16 +41,16 @@ void CombatStartHook::Enable()
 
 const char* CombatStartHook::OverrideFunc(DWORD* a1)
 {
-    const char* faction_name = OriginalFunc(a1);
+    // const char* faction_name = OriginalFunc(a1);
 
-    char substring[10];
-    memcpy(substring, &faction_name[0], 9);
-    substring[9] = '\0';
-    if (strcmp(substring, "Companion") == 0 || strcmp(substring, "Hero Play") == 0)
-    {
-        auto* state = State::GetSingleton();
-        state->SetCharacterMovementMode(false);
-    }
+    // char substring[10];
+    // memcpy(substring, &faction_name[0], 9);
+    // substring[9] = '\0';
+    // if (strcmp(substring, "Companion") == 0 || strcmp(substring, "Hero Play") == 0)
+    // {
+    //     auto* state = State::GetSingleton();
+    //     state->SetMovementModeToggled(false);
+    // }
 
-    return faction_name;
+    // return faction_name;
 }

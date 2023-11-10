@@ -5,12 +5,15 @@
 ToggleMovementMode = "key:capslock"
 # Key that toggles between Character and Camera movement mode.
 
-HoldWalkspeed = ""
-# When you are jogging, holding this key will make you walk.
-# If you are walking, holding this key will make you jog.
+HoldMovementMode = ""
+# Switch between Character and Camera movement mode while you hold this key.
 
 ToggleWalkspeed = "key:insert"
 # Toggles between walking and jogging movespeed.
+
+HoldWalkspeed = ""
+# When you are jogging, holding this key will make you walk.
+# If you are walking, holding this key will make you jog.
 
 ReloadConfig = "key:f11"
 # This will hot reload all config values and the inputconfig.

@@ -222,6 +222,7 @@ void InputconfigPatcher::ValidateModHotkeys(
         {
             { "ToggleWalkspeed", GetKeycombosAsJsonObject(*settings->toggle_walkspeed) },
             { "ToggleMovementMode", GetKeycombosAsJsonObject(*settings->toggle_movement_mode)},
+            { "HoldMovementMode", GetKeycombosAsJsonObject(*settings->hold_movement_mode)},
             { "ToggleAutoforward", GetKeycombosAsJsonObject(*settings->toggle_autoforward)},
             { "HoldWalkspeed", GetKeycombosAsJsonObject(*settings->hold_walkspeed) },
             { "ReloadConfig", GetKeycombosAsJsonObject(*settings->reload_config) }

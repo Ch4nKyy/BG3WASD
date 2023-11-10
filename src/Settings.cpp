@@ -13,6 +13,7 @@ void Settings::Load() noexcept
     {
         config.Bind(toggle_walkspeed, "key:insert");
         config.Bind(toggle_movement_mode, "key:capslock");
+        config.Bind(hold_movement_mode, "");
         config.Bind(toggle_autoforward, "shift+key:w");
         config.Bind(hold_walkspeed, "");
         config.Bind(reload_config, "key:f11");

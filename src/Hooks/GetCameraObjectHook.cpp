@@ -70,7 +70,7 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
     {
         if (*settings->enable_auto_toggling_movement_mode)
         {
-            state->SetCharacterMovementMode(!new_combat_state);
+            state->SetMovementModeToggled(!new_combat_state);
         }
         if (new_combat_state == false && *settings->walk_after_combat)
         {

@@ -19,7 +19,8 @@ enum Command
     FORWARD,
     BACKWARD,
     MOUSE_LEFT_DOWN,
-    TOGGLE_MOUSELOOK
+    TOGGLE_MOUSELOOK,
+    HOLD_MOVEMENT_MODE,
 };
 
 class VirtualKeyMap

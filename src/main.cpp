@@ -6,8 +6,6 @@
 #include "Hooks/CastOrCancelAbilityHook.hpp"
 #include "Hooks/CheckCommandInputsHook.hpp"
 #include "Hooks/CheckContextMenuOrCancelActionHook.hpp"
-#include "Hooks/CombatEndHook.hpp"
-#include "Hooks/CombatStartHook.hpp"
 #include "Hooks/ConcatInputconfigPathHook.hpp"
 #include "Hooks/DecideMoveUpdaterHook.hpp"
 #include "Hooks/FTBEndHook.hpp"
@@ -163,7 +161,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 CallSpecificCommandFunctionPre2Cavehook::Enable();
 
                 // The blocker patches are initialized, when, in GetCameraObjectHook, the init
-                // condition is met and SetCharacterMovementMode is called.
+                // condition is met and SetMovementModeToggled is called.
             }
             else
             {

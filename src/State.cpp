@@ -78,26 +78,42 @@ void State::SetCurrentlyInteractMoving(bool in_value)
 
 bool State::IsCurrentlyInteractMoving() { return currently_interact_moving; }
 
-// If set to true, also center camera
-void State::SetCharacterMovementMode(bool in_value)
+void State::SetMovementModeToggled(bool in_value)
+{
+    movement_mode_toggled = in_value;
+
+    UpdateMovementMode();
+}
+
+void State::SetMovementModeHeld(bool in_value)
+{
+    movement_mode_held = in_value;
+
+    UpdateMovementMode();
+}
+
+// If true, also center camera
+void State::UpdateMovementMode()
 {
     auto* settings = Settings::GetSingleton();
 
-    if (in_value)
+    bool is_character_movement = IsCharacterMovementMode();
+
+    if (is_character_movement)
     {
         order_force_stop = true;
         frames_to_hold_forward_to_center_camera = 10;
     }
 
-    EnableInteractMoveBlocker(in_value);
+    EnableInteractMoveBlocker(is_character_movement);
 
     // TODO ToggleMouselook
     // if (*settings->toggle_movement_toggles_mouselook)
     // {
-    //     SetIsRotating(in_value);
+    //     SetIsRotating(is_character_movement);
     // }
-
-    is_character_movement_mode = in_value;
 }
 
-bool State::IsCharacterMovementMode() { return is_character_movement_mode; }
+bool State::IsCharacterMovementMode() { return movement_mode_toggled ^ movement_mode_held; }
+
+bool State::IsMovementModeToggled() { return movement_mode_toggled; }
