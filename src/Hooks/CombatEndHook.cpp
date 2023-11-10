@@ -59,4 +59,5 @@ const char* CombatEndHook::OverrideFunc(DWORD* a1)
     // }
 
     // return faction_name;
+    return nullptr;
 }

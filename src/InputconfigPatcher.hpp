@@ -18,7 +18,11 @@ private:
     static void ReadAndWriteInputconfig();
     static json UpdateData(json data, std::string move_command, std::string camera_command,
         json camera_default_keys);
-    static void UpdateAndValidateKeys(json data);
+    // If the user binds Camera Rotation to Rightclick, it will collide with the default bind
+    // Alt+Rightclick of Ping. That is why we automatically remove this bind.
+    static json FixPingCommand(json data);
+    static void UpdateVkCombosOfCommandMap(json data, std::vector<std::string>& commands);
+    static void ValidateKeys(json data);
     static void FindIssues(json data, const std::vector<std::string> commands,
         std::vector<std::string>& unbound_commands, std::vector<std::string>& not_found_keycombos,
         bool allow_modifiers);

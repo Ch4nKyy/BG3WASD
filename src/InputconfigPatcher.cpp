@@ -54,6 +54,8 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     data = UpdateData(data, "CharacterMoveRight", "CameraRight",
         { "c:leftstick_xpos", "key:d", "key:right" });
 
+    data = FixPingCommand(data);
+
     std::ofstream output_stream(config_path_absolute);
     if (output_stream.fail())
     {
@@ -66,7 +68,7 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     }
     output_stream << std::setw(4) << data << std::endl;
 
-    UpdateAndValidateKeys(data);
+    ValidateKeys(data);
 }
 
 std::vector<std::string> InputconfigPatcher::GetKeycombosOfCommandFromInputconfig(json data,
@@ -146,10 +148,47 @@ json InputconfigPatcher::UpdateData(json data, std::string character_command,
     return data;
 }
 
-void InputconfigPatcher::UpdateAndValidateKeys(json data)
+json InputconfigPatcher::FixPingCommand(json data)
 {
-    std::vector<std::string> commands;
+    if (!data.contains("CameraToggleMouseRotate"))
+    {
+        return data;
+    }
 
+    bool rightclick_is_bound_to_rotate = false;
+    for (json::iterator it = data["CameraToggleMouseRotate"].begin();
+         it != data["CameraToggleMouseRotate"].end(); ++it)
+    {
+        if (*it == "mouse:right")
+        {
+            rightclick_is_bound_to_rotate = true;
+        }
+    }
+    if (!rightclick_is_bound_to_rotate)
+    {
+        return data;
+    }
+
+    json ping_hotkeys = { "alt+mouse:right" };  // Games default if not changed in the json file.
+    if (data.contains("Ping"))
+    {
+        ping_hotkeys = data["Ping"];
+    }
+
+    for (json::iterator it = ping_hotkeys.begin(); it != ping_hotkeys.end(); ++it)
+    {
+        if (dku::string::icontains(*it, "mouse:right"))
+        {
+            *it = "key:unknown";
+        }
+    }
+
+    data["Ping"] = ping_hotkeys;
+    return data;
+}
+
+void InputconfigPatcher::UpdateVkCombosOfCommandMap(json data, std::vector<std::string>& commands)
+{
     auto* state = State::GetSingleton();
     state->character_forward_keys =
         GetKeycombosOfCommandFromInputconfig(data, "CharacterMoveForward", commands, { "" });
@@ -160,6 +199,12 @@ void InputconfigPatcher::UpdateAndValidateKeys(json data)
     state->rotate_keys_include_lmb = std::find(state->rotate_keys.begin(), state->rotate_keys.end(),
                                          "mouse:left") != state->rotate_keys.end();
     VirtualKeyMap::UpdateVkCombosOfCommandMap();
+}
+
+void InputconfigPatcher::ValidateKeys(json data)
+{
+    std::vector<std::string> commands;
+    UpdateVkCombosOfCommandMap(data, commands);
 
     std::vector<std::string> unbound_commands;
     std::vector<std::string> not_found_keycombos;

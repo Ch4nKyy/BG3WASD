@@ -53,4 +53,5 @@ const char* CombatStartHook::OverrideFunc(DWORD* a1)
     // }
 
     // return faction_name;
+    return nullptr;
 }
