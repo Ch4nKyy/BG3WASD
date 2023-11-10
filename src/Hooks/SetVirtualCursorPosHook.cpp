@@ -61,7 +61,7 @@ QWORD* SetVirtualCursorPosHook::OverrideFunc(int64_t* self, char* a2, int* a3)
             int w = 0;
             int h = -1000000;
             SDL_GetWindowSize(state->sdl_window, &w,
-                NULL);  // TODO can be removed if I manage to block interact
+                NULL);
             // Centering x is not necessary, but may be useful at some point.
             xy_v->x = w / 2;
             xy_v->y = h;

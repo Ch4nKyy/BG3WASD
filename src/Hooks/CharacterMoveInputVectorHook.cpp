@@ -62,7 +62,7 @@ float* CharacterMoveInputVectorHook::OverrideFunc(float* xyz, int64_t a2)
             state->is_mouseleft_pressed && state->IsRotating()))
     {
         // This causes the input vector to not be normalized anymore, but it doesn't matter.
-        xyz_v->x = 1.0f;  // TODO this is bugged now. it is world space instead of local space.
+        xyz_v->x = 1.0f;
     }
     if (state->walking_toggled ^ state->walking_held)
     {
