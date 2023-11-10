@@ -2,13 +2,40 @@
 #include "../Settings.hpp"
 #include "../State.hpp"
 
+struct InsideUpdateInteractMoveProlog : Xbyak::CodeGenerator
+{
+    InsideUpdateInteractMoveProlog()
+    {
+        push(rax);
+        push(rbx);
+        push(rcx);
+        push(rdx);
+        push(r8);
+        push(r9);
+        push(r10);
+        push(r11);
+    }
+};
+
+struct InsideUpdateInteractMoveEpilog : Xbyak::CodeGenerator
+{
+    InsideUpdateInteractMoveEpilog()
+    {
+        pop(r11);
+        pop(r10);
+        pop(r9);
+        pop(r8);
+        pop(rdx);
+        pop(rcx);
+        pop(rbx);
+        pop(rax);
+    }
+};
+
 bool InsideUpdateInteractMoveCavehook::Prepare()
 {
-    return false;
-    
     std::array<uintptr_t, 1> address_array = { AsAddress(
-        dku::Hook::Assembly::search_pattern<"48 ?? ?? ?? ?? ?? ?? 4C ?? ?? ?? ?? ?? ?? 4C ?? ?? ?? "
-                                            "?? ?? ?? 41 ?? ?? ?? ?? ?? ?? 74 ?? 41">()) };
+        dku::Hook::Assembly::search_pattern<"4C 8B 89 80 00 00 00 4C ?? ?? 30 01 00 00">()) };
     addresses = address_array;
 
     all_found = true;
@@ -35,10 +62,12 @@ void InsideUpdateInteractMoveCavehook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        DKUtil::Hook::Patch epilog = { "", 0x0 };
-
-        handle = DKUtil::Hook::AddCaveHook(address, { 0, 6 }, FUNC_INFO(Func), nullptr, &epilog,
-            DKUtil::Hook::HookFlag::kRestoreAfterEpilog);
+        InsideUpdateInteractMoveProlog prolog;
+        prolog.ready();
+        InsideUpdateInteractMoveEpilog epilog;
+        epilog.ready();
+        handle = DKUtil::Hook::AddCaveHook(address, { 0, 7 }, FUNC_INFO(Func), &prolog, &epilog,
+            DKUtil::Hook::HookFlag::kRestoreBeforeProlog);
         handle->Enable();
         DEBUG("Hooked InsideUpdateInteractMoveCavehook #{}: {:X}", i, AsAddress(address));
         ++i;

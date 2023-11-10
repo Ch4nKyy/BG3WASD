@@ -117,12 +117,14 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 CheckContextMenuOrCancelActionHook::Prepare();
             bool cast_or_cancel_ability_hook = CastOrCancelAbilityHook::Prepare();
             bool poll_event_hook = PollEventHook::Prepare();
+            bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
+
             // TODO ToggleMouselook
             // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
-            // bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
+            
             if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
                 reset_cursor_rotate_hook && check_context_menu_or_cancel_action_hook &&
-                cast_or_cancel_ability_hook && poll_event_hook)
+                cast_or_cancel_ability_hook && poll_event_hook && check_command_inputs_hook)
             {
                 SetVirtualCursorPosHook::Enable();
                 SDL_GetWindowGrabHook::Enable();
@@ -131,37 +133,39 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 CheckContextMenuOrCancelActionHook::Enable();
                 CastOrCancelAbilityHook::Enable();
                 PollEventHook::Enable();
+                CheckCommandInputsHook::Enable();
+
                 // TODO ToggleMouselook
                 // WindowGainFocusHook::Enable();
-                // CheckCommandInputsHook::Enable();
             }
             else
             {
                 errors.append("Improved Mouselook could not be enabled.\n");
             }
 
-            // bool decide_move_updater_hook = DecideMoveUpdaterHook::Prepare();
-            // bool inside_update_interact_move_hook = InsideUpdateInteractMoveCavehook::Prepare();
-            // bool call_specific_command_function_pre2_hook =
-            //     CallSpecificCommandFunctionPre2Cavehook::Prepare();
-            // bool block_interact_move_patch = BlockInteractMovePatch::Prepare();
-            // bool block_hold_interact_move_patch = BlockHoldInteractMovePatch::Prepare();
-            // bool block_cancel_stopping_movement_patch =
-            //     BlockCancelActionStoppingMovementPatch::Prepare();
-            // if (decide_move_updater_hook && inside_update_interact_move_hook &&
-            //     call_specific_command_function_pre2_hook && block_interact_move_patch &&
-            //     block_hold_interact_move_patch && block_cancel_stopping_movement_patch)
-            // {
-            //     DecideMoveUpdaterHook::Enable();
-            //     InsideUpdateInteractMoveCavehook::Enable();
-            //     CallSpecificCommandFunctionPre2Cavehook::Enable();
-            //     BlockInteractMovePatch::Enable();
-            //     BlockHoldInteractMovePatch::Enable();
-            //     BlockCancelActionStoppingMovementPatch::Enable();
+            bool decide_move_updater_hook = DecideMoveUpdaterHook::Prepare();
+            bool inside_update_interact_move_hook = InsideUpdateInteractMoveCavehook::Prepare();
+            bool call_specific_command_function_pre2_hook =
+                CallSpecificCommandFunctionPre2Cavehook::Prepare();
+            bool block_interact_move_patch = BlockInteractMovePatch::Prepare();
+            bool block_hold_interact_move_patch = BlockHoldInteractMovePatch::Prepare();
+            bool block_cancel_stopping_movement_patch =
+                BlockCancelActionStoppingMovementPatch::Prepare();
+            if (decide_move_updater_hook && inside_update_interact_move_hook &&
+                call_specific_command_function_pre2_hook && block_interact_move_patch &&
+                block_hold_interact_move_patch && block_cancel_stopping_movement_patch)
+            {
+                DecideMoveUpdaterHook::Enable();
+                InsideUpdateInteractMoveCavehook::Enable();
+                BlockCancelActionStoppingMovementPatch::Enable();
+                BlockInteractMovePatch::Enable();
+                BlockHoldInteractMovePatch::Enable();
+                CallSpecificCommandFunctionPre2Cavehook::Enable();
 
-            //     // The blocker patches are initialized in GetCameraObjectHook.
-            // }
-            // else
+                // The blocker patches are initialized, when, in GetCameraObjectHook, the init
+                // condition is met and SetCharacterMovementMode is called.
+            }
+            else
             {
                 errors.append("InteractMoveBlocker could not be enabled.\n");
             }

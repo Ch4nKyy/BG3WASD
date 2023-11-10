@@ -6,10 +6,12 @@ struct BlockInteractMovePatchAsm : Xbyak::CodeGenerator
 {
     BlockInteractMovePatchAsm()
     {
-        cmp(eax,eax);
+        test(rsp, rsp);
     }
 };
 
+// Completely blocks interact moves.
+// Activated, when the config is (re)loaded and BlockInteractMove is true.
 class BlockInteractMovePatch
 {
 public:

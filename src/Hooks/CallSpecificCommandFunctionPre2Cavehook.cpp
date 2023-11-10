@@ -7,10 +7,32 @@
 
 using enum GameCommand;
 
+struct CallSpecificCommandFunctionPre2Prolog : Xbyak::CodeGenerator
+{
+    CallSpecificCommandFunctionPre2Prolog()
+    {
+        push(rax);
+        push(rbx);
+        push(rcx);
+        push(rdx);
+        push(r8);
+    }
+};
+
+struct CallSpecificCommandFunctionPre2Epilog : Xbyak::CodeGenerator
+{
+    CallSpecificCommandFunctionPre2Epilog()
+    {
+        pop(r8);
+        pop(rdx);
+        pop(rcx);
+        pop(rbx);
+        pop(rax);
+    }
+};
+
 bool CallSpecificCommandFunctionPre2Cavehook::Prepare()
 {
-    return false;
-    
     std::array<uintptr_t, 1> address_array = { AsAddress(
         dku::Hook::Assembly::search_pattern<"FF 50 68 48 8B C3">()) };
     addresses = address_array;
@@ -30,30 +52,6 @@ bool CallSpecificCommandFunctionPre2Cavehook::Prepare()
     return all_found;
 }
 
-struct Prolog : Xbyak::CodeGenerator
-{
-    Prolog()
-    {
-        push(rax);
-        push(rbx);
-        push(rcx);
-        push(rdx);
-        push(r8);
-    }
-};
-
-struct Epilog : Xbyak::CodeGenerator
-{
-    Epilog()
-    {
-        pop(rax);
-        pop(rbx);
-        pop(rcx);
-        pop(rdx);
-        pop(r8);
-    }
-};
-
 void CallSpecificCommandFunctionPre2Cavehook::Enable()
 {
     if (not all_found)
@@ -63,8 +61,10 @@ void CallSpecificCommandFunctionPre2Cavehook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        Prolog prolog;
-        Epilog epilog;
+        CallSpecificCommandFunctionPre2Prolog prolog;
+        prolog.ready();
+        CallSpecificCommandFunctionPre2Epilog epilog;
+        epilog.ready();
         handle = DKUtil::Hook::AddCaveHook(address, { 0, 6 }, FUNC_INFO(Func), &prolog, &epilog,
             DKUtil::Hook::HookFlag::kRestoreAfterEpilog);
         handle->Enable();
@@ -73,27 +73,23 @@ void CallSpecificCommandFunctionPre2Cavehook::Enable()
     }
 }
 
-// GameThread
-// This hook is awesome.
-// We can use it to detect input commands and react to them.
-// But we can also use the original function to send input commands directly instead of sending
-// keys.
-void CallSpecificCommandFunctionPre2Cavehook::Func(int64_t* a1, WORD* a2, int* command_struct)
+void CallSpecificCommandFunctionPre2Cavehook::Func(int64_t* self, WORD* a2, int* command_struct)
 {
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
 
-    if (a1 && !InputFaker::game_input_manager)
-    {
-        InputFaker::game_input_manager = a1;
-    }
+    InputFaker::game_input_manager = *(int64_t**)self;
 
     int command_id = *(int*)command_struct;
     bool is_key_down = *(reinterpret_cast<bool*>(command_struct) + 28);
     if (state->IsCurrentlyInteractMoving() && state->IsCharacterMovementMode() &&
         command_id >= 142 && command_id <= 145 && is_key_down)
     {
-        state->force_stop = true;
-        InputFaker::SendCommand(ActionCancel, SDL_RELEASED);
+        // Calling InputFaker::SendCommand here crashes since CallSpecificCommandFunctionPre2 is a
+        // virtual call and I don't fully understand why.
+        // The easy workaround is to set the order_force_stop flag here and call it somewhere else.
+        // Inside CheckCommandInputsHook, which is called EVERY frame, this flag is checked
+        // and then reacted accordingly.
+        state->order_force_stop = true;
     }
 }

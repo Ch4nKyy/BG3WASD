@@ -15,7 +15,7 @@ references some function you don't know, just search for the name in the whole g
 first occurrence should probably describe how to discover this function.  
 You can also search it in input_program_flow.drawio.svg to get an overview.
 
-Sometimes the most robust technique to find a function is to
+Sometimes, the most robust technique to find a function is to
 1. Set a breakpoint in a general function like CheckCommandsInput or HandleInput
 1. Start the game with the debugger and stimulate it, e.g. by pressing the Interact button
 1. Analyze the stack trace or even create a function trace until you end up in the desired function
@@ -25,12 +25,13 @@ The input_program_flow.drawio.svg can help navigating.
 Often, I provide a short and a long way.  
 The short way is easier and quicker to do, but might break due to significant code changes in the
 future.  
-The long way is more complicated and requires debugging and tracing, but is probably more robust
+The long way is more complicated and requires debugging and tracing, but is more robust
 and might be needed if the short way breaks.
 
 Useful links:  
 https://defuse.ca/online-x86-assembler.htm#disassembly
 https://stackoverflow.com/questions/54499327/setting-and-clearing-the-zero-flag-in-x86
+https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170
 
 ## WASDUnlock
 
@@ -58,6 +59,8 @@ This is the one we are looking for. Rename and mark this function, so we can eas
 In this function, 142/143/144/145 are assigned to variables. These variables are then passed to
 a function I name GetInputValue. All 4 calls of this function calls are hooked by the mod!
 So if one of those hooks breaks, you know how to repair it.
+
+Now, there are 2 ways.
 
 ### Short way
 

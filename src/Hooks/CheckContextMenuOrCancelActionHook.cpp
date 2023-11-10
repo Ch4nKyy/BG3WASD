@@ -60,9 +60,9 @@ int64_t CheckContextMenuOrCancelActionHook::OverrideFunc(int64_t a1, int64_t a2,
 
     if (command_id == ActionCancel)
     {
-        if (state->force_stop)
+        if (state->is_force_stop)
         {
-            state->force_stop = false;
+            state->is_force_stop = false;
             return OriginalFunc(a1, a2, SomeInputStruct, a4, a5);
         }
     }

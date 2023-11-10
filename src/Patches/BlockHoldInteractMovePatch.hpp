@@ -16,6 +16,8 @@ struct BlockHoldInteractMovePatchAsm : Xbyak::CodeGenerator
     }
 };
 
+// Completely blocks interact hold moves.
+// Activated, when the config is (re)loaded and BlockInteractMove is true.
 class BlockHoldInteractMovePatch
 {
 public:

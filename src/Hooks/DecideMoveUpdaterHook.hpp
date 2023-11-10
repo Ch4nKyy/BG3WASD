@@ -2,6 +2,7 @@
 
 typedef int64_t QWORD;
 
+// Deactivates BlockCancelActionStoppingMovementPatch
 class DecideMoveUpdaterHook
 {
 public:

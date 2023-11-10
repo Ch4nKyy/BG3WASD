@@ -54,7 +54,8 @@ public:
     bool ShouldHideCursor();
 
     // interactmove disabler
-    bool force_stop = false;
+    bool order_force_stop = false;
+    bool is_force_stop = false;
 
     void EnableInteractMoveBlocker(bool enabled);
     void SetCurrentlyInteractMoving(bool in_value);

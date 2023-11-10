@@ -85,8 +85,7 @@ void State::SetCharacterMovementMode(bool in_value)
 
     if (in_value)
     {
-        force_stop = true;
-        InputFaker::SendCommand(ActionCancel, SDL_RELEASED);
+        order_force_stop = true;
         frames_to_hold_forward_to_center_camera = 10;
     }
 

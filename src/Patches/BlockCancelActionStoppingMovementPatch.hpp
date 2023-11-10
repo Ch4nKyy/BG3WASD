@@ -7,6 +7,9 @@ struct BlockCancelActionStoppingMovementPatchAsm : Xbyak::CodeGenerator
     BlockCancelActionStoppingMovementPatchAsm() { test(rsp, rsp); }
 };
 
+// Blocks Cancel Action from stopping direct character movement.
+// This is done so movement does not stutter, when rotating with rightclick AND
+// Cancel does not block Context Menu, making using Context Menu out of movement easier.
 class BlockCancelActionStoppingMovementPatch
 {
 public:
