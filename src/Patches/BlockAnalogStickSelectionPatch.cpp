@@ -5,7 +5,7 @@
 bool BlockAnalogStickSelectionPatch::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "44 ?? ?? 20 0E 00 00 48 81 C4 ?? ?? ?? ?? 41 ?? 5F 5E 5B 5D C3">()) };
+        "44 ?? ?? 60 0E 00 00 48 81 C4 ?? ?? ?? ?? 41 ?? 5F 5E 5B 5D C3">()) };
     addresses = address_array;
 
     all_found = true;

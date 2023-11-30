@@ -184,7 +184,7 @@ In the PollInput function, also SDL_GetWindowGrabHook is called twice. We hook t
 ## SetCursorRotateHook
 
 In the middle of the HandleCameraInput function, there is a case handler for case 101. In this
-handler, there is a function that is called twice, depending on a condition
+handler, there is a function that is called, depending on a condition
 ```if ( (v44 & 1) != 0 )```. We hook the call in the true case.
 
 ## ResetCursorRotateHook
