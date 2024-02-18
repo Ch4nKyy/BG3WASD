@@ -83,7 +83,7 @@ void CallSpecificCommandFunctionPre2Cavehook::Func(int64_t* self, WORD* a2, int*
     int command_id = *(int*)command_struct;
     bool is_key_down = *(reinterpret_cast<bool*>(command_struct) + 28);
     if (state->IsCurrentlyInteractMoving() && state->IsCharacterMovementMode() &&
-        command_id >= 142 && command_id <= 145 && is_key_down)
+        command_id >= CharacterMoveForward && command_id <= CharacterMoveRight && is_key_down)
     {
         // Calling InputFaker::SendCommand here crashes since CallSpecificCommandFunctionPre2 is a
         // virtual call and I don't fully understand why.

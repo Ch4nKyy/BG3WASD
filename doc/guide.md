@@ -44,19 +44,19 @@ Go to the only xref of aCharactermovef.
 Go to Pseudocode view.
 
 CharacterMoveForward is given to a function as parameter. This function also takes an int that is
-declared in the line above. Should be 142, if it doesn't change. This is 0x8E or 8Eh in hex.
+declared in the line above. Should be 141, if it doesn't change. This is 0x8D or 8Dh in hex.
 
 Hint: The subfunction that takes "CharacterMoveForward" and the command ID, also takes the
 PlayerController as its first parameter.
 
-Do a full text search for ```", 8Eh"``` or whatever hex value CharacterMoveForward is
+Do a full text search for ```, 8Dh``` or whatever hex value CharacterMoveForward is
 and look for an occurrence where value, value+1, value+2 and value+3 are very close to each other
 assigned to variables or moved into registers!
 There are 2 functions where this is the case. I name them GetMovementInputVec and
 GetMovementInputWorldVec. The latter one has some matrix transformation math at the end.
 This is the one we are looking for. Rename and mark this function, so we can easily find it.
 
-In this function, 142/143/144/145 are assigned to variables. These variables are then passed to
+In this function, 141/142/143/144 are assigned to variables. These variables are then passed to
 a function I name GetInputValue. All 4 calls of this function calls are hooked by the mod!
 So if one of those hooks breaks, you know how to repair it.
 
@@ -116,8 +116,8 @@ We want to override the cmp and the jz (same as je) instruction with nops.
 
 To find this function call/hook, you can check the xrefs of GetInputValue.
 There should be a code section where GetInputValue is called 4 times next to each other with the
-command ids 102, 103,
-104, 105 (third parameter). These are the CameraForward/Backward/Left/Right command IDs.
+command ids 101, 102,
+103, 104 (third parameter). These are the CameraForward/Backward/Left/Right command IDs.
 I name this function HandleCameraInput.
 The very first line of this function is ```camera_object = GetCameraObject(a3);```, but this is not
 the call that we want to hook.  
@@ -321,7 +321,20 @@ Debug, hold Interact and then trace all the way from CheckCommandInputs.
 
 Search for the string ```h61f300a7g2cfcg4536gad62gde94e92935ca```.  
 It should only have 1 xref in the function I name CallSpecificCommandFunction.
+TODO This doesn't work anymore as of Patch 6!
+I now found it through the Settings ptr. The order of xrefs is almost identical, even for
+different binaries. The Settings ptr is referenced 3 times in this function and put into rcx.
 
 In the middle of this function, there is a call to a subfunction with many parameters, the last
 being the Settings ptr qword, as discovered in BlockAnalogStickSelectionPatch.  
 This subfunction I name CastOrCancelAbility and this call must be hooked.
+
+## Reminder
+
+A general reminder about things that can change in game patches and cause bugs without throwing
+warnings:
+
+The GameCommand IDs sometimes change! Make sure the IDs in GameCommand.hpp are in sync with the
+game.
+
+Offsets sometimes change! E.g. the Settings members or the CameraObject members.

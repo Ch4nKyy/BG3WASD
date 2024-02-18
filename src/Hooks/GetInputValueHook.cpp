@@ -1,7 +1,10 @@
 #include "GetInputValueHook.hpp"
+#include "../GameCommand.hpp"
 #include "../Settings.hpp"
 #include "../State.hpp"
 #include "../Structs/Vector2.hpp"
+
+using enum GameCommand;
 
 bool GetInputValueHook::Prepare()
 {
@@ -65,7 +68,7 @@ int64_t GetInputValueHook::OverrideFunc(int64_t player_input_controller_ptr,
     int command_id = *(int*)command_id_ptr;
     if (state->autoforward_toggled)
     {
-        if (command_id == 142)
+        if (command_id == CharacterMoveForward)
         {
             xyz_v->x = 1.0f;
             xyz_v->y = 1.0f;
@@ -80,7 +83,7 @@ int64_t GetInputValueHook::OverrideFunc(int64_t player_input_controller_ptr,
         }
         if (rotate_and_lmb_is_pressed)
         {
-            if (command_id == 142)
+            if (command_id == CharacterMoveForward)
             {
                 xyz_v->x = 1.0f;
                 xyz_v->y = 1.0f;
@@ -105,7 +108,7 @@ int64_t GetInputValueHook::OverrideFunc(int64_t player_input_controller_ptr,
         // The game has a center camera command, but it sucks, because it always faces north.
         // There is center logic that doesn't do that, e.g. when you press F1, but I didn't find it
         // yet.
-        if (command_id == 142)
+        if (command_id == CharacterMoveForward)
         {
             --(state->frames_to_hold_forward_to_center_camera);
             xyz_v->x = 1.0f;
