@@ -37,7 +37,7 @@ Find it on [Nexusmods](https://www.nexusmods.com/baldursgate3/mods/781).
 git clone https://github.com/Ch4nKyy/BG3WASD.git
 cd BG3WASD
 git submodule init
-git submodule update
+git submodule update --remote
 .\build-release.ps1
 ```
 
