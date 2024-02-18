@@ -14,9 +14,11 @@ Check these features before publishing:
     * After rotation, cursor icon is restored to the correct icon and not stuck on the rotate icon.
   * Rotate+Leftclick = Forward
   * Rightclick Camera Rotate works with Cancel Action and Context Menu
-    * Context Menu opens on click up, not click down
-    * Context Menu does not open after a long click
-    * Context Menu can be opened quickly after movement
+    * (For some reason, the following points sometimes don't work after you tab in or start the
+    game. But after a few seconds and clicking around, it should work!)
+    * Context Menu opens after short click, but not after long click
+    * Rightclick does not interrupt movement
+    * Context Menu can be opened during WASD movement
 * Keybinding check reports errors in toml (invalid keynames) and game menu (important keys unbound)
 * Game does not crash, when you manually make the WASD Unlock fail
 * Controller is unaffected
