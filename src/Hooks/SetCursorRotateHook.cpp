@@ -6,7 +6,7 @@
 bool SetCursorRotateHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? AE FF EB ?? E8 ?? ?? AE FF">()) };
+        "E8 ?? ?? ?? FF EB 05 E8 ?? ?? ?? FF 4C 8B 4D 7F">()) };
     addresses = address_array;
 
     all_found = true;

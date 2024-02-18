@@ -7,11 +7,11 @@ bool ResetCursorRotateHook::Prepare()
 {
     std::array<uintptr_t, 3> address_array = {
         AsAddress(
-            dku::Hook::Assembly::search_pattern<"E8 ?? ?? AE FF 4C ?? ?? ?? 41">()),
+            dku::Hook::Assembly::search_pattern<"E8 ?? ?? ?? FF 4C 8B 4D 7F 41">()),
         AsAddress(dku::Hook::Assembly::search_pattern<
-            "E8 ?? ?? AE FF 48 ?? ?? ?? 44">()),
+            "E8 ?? ?? ?? FF 48 8B 45 6F 44">()),
         AsAddress(dku::Hook::Assembly::search_pattern<
-            "E8 ?? ?? AE FF 4C ?? ?? ?? 4D">())
+            "E8 ?? ?? ?? FF 4C 8B ?? ?? 4D 85 ?? 74 ?? 4C 8B">())
     };
     addresses = address_array;
 
