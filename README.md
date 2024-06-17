@@ -4,9 +4,6 @@ A mod for Baldur's Gate 3 that allows direct character movement with WASD keys (
 
 Find it on [Nexusmods](https://www.nexusmods.com/baldursgate3/mods/781).
 
-`Instructions were moved to Nexusmods, because it seems more common!`
-
-
 ## Building
 
 ### Requirements

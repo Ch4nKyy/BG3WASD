@@ -16,5 +16,5 @@ class GameInputManager
         virtual void VFunction80();
         virtual void VFunction88();
         virtual void VFunction96();
-        virtual void SendCommand(WORD* return_value, int* command_struct);
+        virtual void CallSpecificCommandFunctionPre2(WORD* return_value, int* command_struct);
 };

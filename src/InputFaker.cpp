@@ -1,6 +1,5 @@
 #include "InputFaker.hpp"
 #include "GameCommand.hpp"
-#include "Hooks/CallSpecificCommandFunctionPre2Cavehook.hpp"
 #include "SDL.h"
 #include "Structs/GameInputManager.hpp"
 #include "VirtualKeyMap.hpp"
@@ -100,6 +99,10 @@ void InputFaker::SendMouseMotion(int xrel, int yrel)
     SDL_PushEvent(&event);
 }
 
+// The input faker currently uses CallSpecificCommandFunctionPre2 to send commands.
+// This only works for commands that go through this call chain usually.
+// For other commands like camera commands, HandleCameraInput should be hooked and called.
+// But camera commands seem to require some pointer members that are difficult to implement.
 int InputFaker::SendCommand(GameCommand command_id, bool down)
 {
     if (!game_input_manager)
@@ -140,7 +143,7 @@ int InputFaker::SendCommand(GameCommand command_id, bool down)
 
     GameInputManager* game_input_manager_cast =
         reinterpret_cast<GameInputManager*>(&game_input_manager);
-    game_input_manager_cast->SendCommand(&return_status, (int*)command_struct);
+    game_input_manager_cast->CallSpecificCommandFunctionPre2(&return_status, (int*)command_struct);
 
     return return_status;
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-typedef int64_t QWORD;
-
 using namespace DKUtil::Alias;
 
 // GameThread

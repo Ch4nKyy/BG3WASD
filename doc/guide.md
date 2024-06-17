@@ -150,6 +150,13 @@ Currently, the call looks something like this:
 If this does not work anymore, place a breakpoint inside LoadInputConfig and when it is hit the
 very first time during game start, trace the stack trace.
 
+## AfterChangingKeybindInMenuHook
+
+There is a function that maps keys from ints to strings. This function can easily be found by
+searching for the string "printscreen" for example.  
+To find the function that writes the inputconfigs, just place a breakpoint in this mapping
+function and look at the stack trace.
+
 ## BlockAnalogStickSelectionPatch
 
 Search for the string ```hec9cb611gdbebg4618ga7c8g069215436e27```. It should only have 1 xref and
@@ -183,9 +190,9 @@ In the PollInput function, also SDL_GetWindowGrabHook is called twice. We hook t
 
 ## SetCursorRotateHook
 
-In the middle of the HandleCameraInput function, there is a case handler for case 101. In this
-handler, there is a function that is called, depending on a condition
-```if ( (v44 & 1) != 0 )```. We hook the call in the true case.
+In the middle of the HandleCameraInput function, there is a case handler for case 100 (id of
+CameraToggleMouseRotate). In this handler, there is a function that is called, depending on a
+condition ```if ( (v44 & 1) != 0 )```. We hook the call in the true case.
 
 ## ResetCursorRotateHook
 
@@ -221,9 +228,12 @@ There, hook the call of CheckCommandInputs.
 ### Short way
 
 IsInControllerMode xrefs can be used to find this. You look for a function with a ```case 199```
-statement. The number can change by a tiny amount. The case before that should be case 160.  
-case 199 could even be part of the Text column in the xref list, so it is very easy to find.
+statement. The number can change by a tiny amount. It is the ID of the ContextMenu.  
+The case before that should be case 160, the ID of ActionCancel.  
+case 199 could even be part of the Text column in the xref list, so it is very easy to find.  
 Then, hook the only call of this function.
+
+Alternatively, a full text search for ```case 199``` or its hex value ```, C7h``` might help.
 
 ### Long way
 
@@ -269,6 +279,11 @@ Use the AOB pattern ```BB 00 7D 00 00```. This should only have 1 hit in UpdateI
 We want to hook ANY function in here that is always executed.  
 Since Patch 4 this is not possible anymore, so we need a cavehook.
 
+Alternatively, search for the string ```h2540f096gfe81g4931gb48bgcae2bb739b97```.  
+It is referenced once. Inside this function, at the very top a function is called.  
+```if ( !sub_xxxxxx(a1) || !*(_BYTE *)(a1 + 609) )```  
+This function is UpdateInteractmove.
+
 ### Long way
 
 Use input_program_flow.drawio.svg as reference:  
@@ -310,7 +325,8 @@ Debug, press Interact and then trace all the way from CheckCommandInputs.
 Use the AOB pattern ```C7 46 1C 00 00 80 BF```.  
 This has 2 hits, both in the function HandleMoveInput.  
 In there, there is one line like ```*((_DWORD *)a1 + 8) = 256;```  
-Nop this to block hold interact moves.
+Nop this to block hold interact moves.  
+In DOS2, it was ```*((_BYTE *)a1 + 33) = 1;```.
 
 ### Long way
 
@@ -328,6 +344,16 @@ different binaries. The Settings ptr is referenced 3 times in this function and 
 In the middle of this function, there is a call to a subfunction with many parameters, the last
 being the Settings ptr qword, as discovered in BlockAnalogStickSelectionPatch.  
 This subfunction I name CastOrCancelAbility and this call must be hooked.
+
+## GameInputManager Class
+
+In CallSpecificCommandFunctionPre3, virtual CallSpecificCommandFunctionPre2 is called.
+Compare the signature. Note that in IDA, it will look like it has 1 parameter more (self).
+
+## SetVirtualCursorPosFakeClass Class
+
+In PollEvents, virtual SetVirtualCursorPos is called at the bottom.
+Compare the signature. Note that in IDA, it will look like it has 1 parameter more (self).
 
 ## Reminder
 

@@ -1,5 +1,4 @@
 #include "ResetCursorRotateHook.hpp"
-#include "../InputFaker.hpp"
 #include "../Settings.hpp"
 #include "../State.hpp"
 

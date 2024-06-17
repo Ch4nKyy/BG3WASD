@@ -3,7 +3,6 @@
 #include "../Settings.hpp"
 #include "../State.hpp"
 #include "GameCommand.hpp"
-#include "SetVirtualCursorPosHook.hpp"
 
 using enum GameCommand;
 

@@ -107,6 +107,9 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                     "enabled.\n");
             }
 
+            // needed for both improved mouselook AND interact move canceller
+            bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
+
             bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
             bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
             bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
@@ -115,11 +118,10 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 CheckContextMenuOrCancelActionHook::Prepare();
             bool cast_or_cancel_ability_hook = CastOrCancelAbilityHook::Prepare();
             bool poll_event_hook = PollEventHook::Prepare();
-            bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
 
             // TODO ToggleMouselook
             // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
-            
+
             if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
                 reset_cursor_rotate_hook && check_context_menu_or_cancel_action_hook &&
                 cast_or_cancel_ability_hook && poll_event_hook && check_command_inputs_hook)
@@ -151,7 +153,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 BlockCancelActionStoppingMovementPatch::Prepare();
             if (decide_move_updater_hook && inside_update_interact_move_hook &&
                 call_specific_command_function_pre2_hook && block_interact_move_patch &&
-                block_hold_interact_move_patch && block_cancel_stopping_movement_patch)
+                block_hold_interact_move_patch && block_cancel_stopping_movement_patch &&
+                check_command_inputs_hook)
             {
                 DecideMoveUpdaterHook::Enable();
                 InsideUpdateInteractMoveCavehook::Enable();
