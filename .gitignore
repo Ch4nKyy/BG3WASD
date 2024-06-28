@@ -1,4 +1,5 @@
 /Build/
 /.vs/
 /.vscode/
+/out/
 /package/*.zip

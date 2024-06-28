@@ -45,3 +45,12 @@ If you want to generate a Visual Studio solution, run the following command:
 ```
 
 > ***Note:*** *This will generate a `BG3WASD.sln` file in the **build** directory.*
+
+### VSCode Intellisense (Optional)
+
+To fix Intellisense in VSCode, do the following:
+
+- Install the extensions ```ms-vscode.cpptools``` and ```ms-vscode.cmake-tools```.
+- Build the solution with the cmake tools extension.
+- In your ```c_cpp_properties.json```, use ```"configurationProvider": "ms-vscode.cmake-tools"```.
+This is the only needed parameter, apart from "name".
