@@ -1,6 +1,6 @@
 #include "FTBStartHook.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 
 bool FTBStartHook::Prepare()
 {

@@ -1,7 +1,7 @@
 #include "CheckContextMenuOrCancelActionHook.hpp"
-#include "../GameCommand.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "GameCommand.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 
 using enum GameCommand;
 

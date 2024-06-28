@@ -1,5 +1,5 @@
 #include "WASDUnlock.hpp"
-#include "../State.hpp"
+#include "State.hpp"
 
 struct WASDUnlockPatch : Xbyak::CodeGenerator
 {

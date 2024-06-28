@@ -1,7 +1,7 @@
 #include "CheckCommandInputsHook.hpp"
-#include "../InputFaker.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "InputFaker.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 #include "GameCommand.hpp"
 
 using enum GameCommand;

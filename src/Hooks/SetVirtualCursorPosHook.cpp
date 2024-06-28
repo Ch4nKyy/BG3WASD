@@ -1,8 +1,8 @@
 #include "SetVirtualCursorPosHook.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
-#include "../Structs/SetVirtualCursorPosFakeClass.hpp"
-#include "../Structs/Vector2.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
+#include "Structs/SetVirtualCursorPosFakeClass.hpp"
+#include "Structs/Vector2.hpp"
 #include "SDL.h"
 
 bool SetVirtualCursorPosHook::Prepare()

@@ -1,6 +1,6 @@
 #include "AfterInitialLoadInputConfigHook.hpp"
-#include "../InputconfigPatcher.hpp"
-#include "../State.hpp"
+#include "InputconfigPatcher.hpp"
+#include "State.hpp"
 
 bool AfterInitialLoadInputConfigHook::Prepare()
 {

@@ -1,4 +1,4 @@
-#include "../State.hpp"
+#include "State.hpp"
 #include "CharacterDeathHook.hpp"
 
 bool CharacterDeathHook::Prepare()

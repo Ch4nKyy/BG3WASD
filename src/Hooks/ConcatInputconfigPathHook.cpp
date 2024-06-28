@@ -1,8 +1,8 @@
 #include <codecvt>
 #include <locale>
 
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 #include "ConcatInputconfigPathHook.hpp"
 
 bool ConcatInputconfigPathHook::Prepare()

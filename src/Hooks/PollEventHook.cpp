@@ -1,7 +1,7 @@
 #include "PollEventHook.hpp"
-#include "../InputFaker.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "InputFaker.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 #include "SetVirtualCursorPosHook.hpp"
 
 bool PollEventHook::Prepare()

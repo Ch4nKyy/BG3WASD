@@ -1,9 +1,9 @@
 #include "CallSpecificCommandFunctionPre2Cavehook.hpp"
-#include "../GameCommand.hpp"
-#include "../InputFaker.hpp"
-#include "../Patches/BlockCancelActionStoppingMovementPatch.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "GameCommand.hpp"
+#include "InputFaker.hpp"
+#include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 
 using enum GameCommand;
 

@@ -1,8 +1,8 @@
 #include "GetInputValueHook.hpp"
-#include "../GameCommand.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
-#include "../Structs/Vector2.hpp"
+#include "GameCommand.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
+#include "Structs/Vector2.hpp"
 
 using enum GameCommand;
 

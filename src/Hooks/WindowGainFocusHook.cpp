@@ -1,6 +1,6 @@
 #include "WindowGainFocusHook.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 #include "SetVirtualCursorPosHook.hpp"
 
 bool WindowGainFocusHook::Prepare()

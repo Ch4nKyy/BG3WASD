@@ -1,7 +1,7 @@
 #include "GetCameraObjectHook.hpp"
-#include "../Addresses/IsInControllerMode.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "Addresses/IsInControllerMode.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 
 bool GetCameraObjectHook::Prepare()
 {

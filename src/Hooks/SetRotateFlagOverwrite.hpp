@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../State.hpp"
+#include "State.hpp"
 
 // Class is unused, but may be needed in the future.
 struct SetRotateFlagOverwriteAsm : Xbyak::CodeGenerator

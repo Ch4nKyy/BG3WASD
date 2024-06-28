@@ -1,5 +1,5 @@
 #include "LoadInputConfig.hpp"
-#include "../State.hpp"
+#include "State.hpp"
 
 bool LoadInputConfig::Prepare()
 {

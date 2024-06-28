@@ -1,5 +1,5 @@
 #include "CombatStartHook.hpp"
-#include "../State.hpp"
+#include "State.hpp"
 
 bool CombatStartHook::Prepare()
 {

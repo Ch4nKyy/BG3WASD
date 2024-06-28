@@ -1,5 +1,5 @@
 #include "AfterChangingKeybindInMenuHook.hpp"
-#include "../State.hpp"
+#include "State.hpp"
 #include "InputconfigPatcher.hpp"
 
 bool AfterChangingKeybindInMenuHook::Prepare()

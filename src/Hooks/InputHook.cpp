@@ -1,6 +1,6 @@
 #include "InputHook.hpp"
-#include "../ToggleRequest.hpp"
-#include "../VirtualKeyMap.hpp"
+#include "ToggleRequest.hpp"
+#include "VirtualKeyMap.hpp"
 
 using enum Command;
 

@@ -1,5 +1,5 @@
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 #include "HandleCameraInputHook.hpp"
 
 bool HandleCameraInputHook::Prepare()

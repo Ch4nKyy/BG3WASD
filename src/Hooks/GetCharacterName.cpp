@@ -1,5 +1,5 @@
 #include "GetCharacterName.hpp"
-#include "../State.hpp"
+#include "State.hpp"
 
 bool GetCharacterName::Prepare()
 {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Settings.hpp"
-#include "../State.hpp"
-#include "../VirtualKeyMap.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
+#include "VirtualKeyMap.hpp"
 
 #include <string>
 

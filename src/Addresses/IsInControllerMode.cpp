@@ -1,5 +1,5 @@
 #include "IsInControllerMode.hpp"
-#include "../State.hpp"
+#include "State.hpp"
 
 bool IsInControllerMode::Prepare()
 {

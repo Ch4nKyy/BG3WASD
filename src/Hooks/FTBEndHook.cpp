@@ -1,6 +1,6 @@
 #include "FTBEndHook.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 
 bool FTBEndHook::Prepare()
 {

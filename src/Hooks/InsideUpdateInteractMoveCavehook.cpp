@@ -1,6 +1,6 @@
 #include "InsideUpdateInteractMoveCavehook.hpp"
-#include "../Settings.hpp"
-#include "../State.hpp"
+#include "Settings.hpp"
+#include "State.hpp"
 
 struct InsideUpdateInteractMoveProlog : Xbyak::CodeGenerator
 {
