@@ -12,6 +12,7 @@ Check these features before publishing:
 * Mouselook
   * Cursor hides and stays in place during rotation. Interact UI and behaviour is disabled.
     * After rotation, cursor icon is restored to the correct icon and not stuck on the rotate icon.
+    * Also works when holding Alt meanwhile
   * Rotate+Leftclick = Forward
   * Rightclick Camera Rotate works with Cancel Action and Context Menu
     * (For some reason, the following points sometimes don't work after you tab in or start the
@@ -19,7 +20,9 @@ Check these features before publishing:
     * Context Menu opens after short click, but not after long click
     * Rightclick does not interrupt movement
     * Context Menu can be opened during WASD movement
+* Keybindings are saved into the json, when you change a key in the menu and change to another tab
 * Keybinding check reports errors in toml (invalid keynames) and game menu (important keys unbound)
 * Game does not crash, when you manually make the WASD Unlock fail
 * Controller is unaffected
 * Both Vulkan and DX11 work
+* Both GOG and Steam work

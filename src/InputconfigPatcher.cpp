@@ -46,9 +46,9 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     }
 
     data = UpdateData(data, "CharacterMoveBackward", "CameraBackward",
-        { "c:leftstick_yneg", "key:s", "key:down" });
+        { "c:leftstick_ypos", "key:s", "key:down" });
     data = UpdateData(data, "CharacterMoveForward", "CameraForward",
-        { "c:leftstick_ypos", "key:w", "key:up" });
+        { "c:leftstick_yneg", "key:w", "key:up" });
     data = UpdateData(data, "CharacterMoveLeft", "CameraLeft",
         { "c:leftstick_xneg", "key:a", "key:left" });
     data = UpdateData(data, "CharacterMoveRight", "CameraRight",
@@ -116,17 +116,18 @@ json InputconfigPatcher::UpdateData(json data, std::string character_command,
     if (data.contains(camera_command))
     {
         keys_to_bind = data[camera_command];
-        // Camera and Character input have flipped y axis.
-        for (json::iterator it = keys_to_bind.begin(); it != keys_to_bind.end(); ++it)
+    }
+
+    // Camera and Character input have flipped y axis.
+    for (json::iterator it = keys_to_bind.begin(); it != keys_to_bind.end(); ++it)
+    {
+        if (*it == "c:leftstick_yneg")
         {
-            if (*it == "c:leftstick_yneg")
-            {
-                *it = "c:leftstick_ypos";
-            }
-            else if (*it == "c:leftstick_ypos")
-            {
-                *it = "c:leftstick_yneg";
-            }
+            *it = "c:leftstick_ypos";
+        }
+        else if (*it == "c:leftstick_ypos")
+        {
+            *it = "c:leftstick_yneg";
         }
     }
 
@@ -148,6 +149,8 @@ json InputconfigPatcher::UpdateData(json data, std::string character_command,
     return data;
 }
 
+// When binding camera rotate to rightclick, it can collide with the ping/alt key for various
+// reasons. In this function we do some tricks to avoid the collision.
 json InputconfigPatcher::FixPingCommand(json data)
 {
     if (!data.contains("CameraToggleMouseRotate"))
@@ -156,6 +159,7 @@ json InputconfigPatcher::FixPingCommand(json data)
     }
 
     bool rightclick_is_bound_to_rotate = false;
+    bool alt_rightclick_is_bound_to_rotate = false;
     for (json::iterator it = data["CameraToggleMouseRotate"].begin();
          it != data["CameraToggleMouseRotate"].end(); ++it)
     {
@@ -163,27 +167,52 @@ json InputconfigPatcher::FixPingCommand(json data)
         {
             rightclick_is_bound_to_rotate = true;
         }
+        if (*it == "alt+mouse:right")
+        {
+            alt_rightclick_is_bound_to_rotate = true;
+        }
     }
     if (!rightclick_is_bound_to_rotate)
     {
         return data;
     }
 
+    // if rightclick is bound to rotate, make sure alt+rightclick is also bound to it
+    if (!alt_rightclick_is_bound_to_rotate)
+    {
+        data["CameraToggleMouseRotate"].push_back("alt+mouse:right");
+    }
+
+    // remove alt+right from ping to avoid collision.
+    // also make sure that ping is not unbound.
     json ping_hotkeys = { "alt+mouse:right" };  // Games default if not changed in the json file.
     if (data.contains("Ping"))
     {
         ping_hotkeys = data["Ping"];
     }
-
+    int valid_keys_bound_to_ping = 0;
     for (json::iterator it = ping_hotkeys.begin(); it != ping_hotkeys.end(); ++it)
     {
         if (dku::string::icontains(*it, "mouse:right"))
         {
             *it = "key:unknown";
         }
-    }
+            else if (dku::string::icontains(*it, "INVALID:unknown") or
+                     dku::string::icontains(*it, "key:unknown"))
+            {
+            }
+            else
+            {
+                valid_keys_bound_to_ping++;
+            }
+        }
 
+        if (valid_keys_bound_to_ping == 0)
+        {
+            ping_hotkeys = { "ctrl+alt+key:f24" };
+    }
     data["Ping"] = ping_hotkeys;
+
     return data;
 }
 

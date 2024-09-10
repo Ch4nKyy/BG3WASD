@@ -8,7 +8,7 @@
 bool SetVirtualCursorPosHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(
-        dku::Hook::Assembly::search_pattern<"FF ?? 08 01 00 00 40 ?? ?? ?? 48">()) };
+        dku::Hook::Assembly::search_pattern<"F3 0F 11 4D ?? FF ?? 08 01 00 00 ?? ?? ?? ?? 48">()) };
     addresses = address_array;
 
     all_found = true;
@@ -37,7 +37,7 @@ void SetVirtualCursorPosHook::Enable()
     {
         // Since this is a vfunction call, the returned address of the original func will be wrong,
         // so don't store it.
-        dku::Hook::write_call<6>(address, OverrideFunc);
+        dku::Hook::write_call<6>(address + 5, OverrideFunc);
         DEBUG("Hooked SetVirtualCursorPosHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }

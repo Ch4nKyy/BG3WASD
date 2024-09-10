@@ -8,7 +8,7 @@ using enum GameCommand;
 bool CheckContextMenuOrCancelActionHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? ?? 0F ?? ?? 66 ?? ?? 48 ?? ?? ?? ?? 48">()) };
+        "E8 ?? ?? 04 00 0F B7 08">()) };
     addresses = address_array;
 
     all_found = true;

@@ -5,7 +5,7 @@
 bool AfterChangingKeybindInMenuHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? ?? 40 ?? ?? 48 ?? ?? 48 ?? ?? 74 ?? 4C">()) };
+        "48 83 BB ?? 07 00 00 00 74 08 48 8B CB E8 ?? ?? ?? FF 48 8B">()) };
     addresses = address_array;
 
     all_found = true;
@@ -32,7 +32,7 @@ void AfterChangingKeybindInMenuHook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        OriginalFunc = dku::Hook::write_call<5>(address, Hook);
+        OriginalFunc = dku::Hook::write_call<5>(address + 13, Hook);
         DEBUG("Hooked AfterChangingKeybindInMenuHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
@@ -40,13 +40,13 @@ void AfterChangingKeybindInMenuHook::Enable()
 
 bool AfterChangingKeybindInMenuHook::IsValid() { return OriginalFunc != nullptr; }
 
-int64_t AfterChangingKeybindInMenuHook::Hook(int64_t a1)
+// Before Patch 7, this was called everytime you changed a keybind, but now it is only called when 
+// you go back from the keybind tab or when you switch tabs.
+void AfterChangingKeybindInMenuHook::Hook(int64_t a1)
 {
-    auto ret = CallOriginal(a1);
+    CallOriginal(a1);
 
     InputconfigPatcher::Patch();
-
-    return ret;
 }
 
-int64_t AfterChangingKeybindInMenuHook::CallOriginal(int64_t a1) { return OriginalFunc(a1); }
+void AfterChangingKeybindInMenuHook::CallOriginal(int64_t a1) { OriginalFunc(a1); }

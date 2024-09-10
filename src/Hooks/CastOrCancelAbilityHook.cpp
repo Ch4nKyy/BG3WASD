@@ -8,7 +8,7 @@ using enum GameCommand;
 bool CastOrCancelAbilityHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? 00 0F B7 ?? ?? 44 0F B7">()) };
+        "E8 ?? ?? ?? 00 0F B7 5D">()) };
     addresses = address_array;
 
     all_found = true;

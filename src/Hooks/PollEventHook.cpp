@@ -7,7 +7,7 @@
 bool PollEventHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "FF ?? ?? ?? ?? ?? 85 ?? 0F ?? ?? ?? ?? ?? 8B ?? ?? ?? 49 ?? ?? ?? 0F">()) };
+        "48 8D 4D ?? FF 15 ?? ?? ?? 04 85 C0 0F">()) };
     addresses = address_array;
 
     all_found = true;
@@ -34,7 +34,7 @@ void PollEventHook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        OriginalFunc = dku::Hook::write_call<6>(address, OverrideFunc);
+        OriginalFunc = dku::Hook::write_call<6>(address + 4, OverrideFunc);
         DEBUG("Hooked PollEventHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
@@ -51,6 +51,7 @@ void PollEventHook::HideVirtualCursor(bool in_value)
 }
 
 // Called in MainThread, every frame
+// TODO the camera has a flag "mouserotation". Maybe it is simpler to use than what we do right now?
 int64_t PollEventHook::OverrideFunc(int64_t a1)
 {
     auto* state = State::GetSingleton();

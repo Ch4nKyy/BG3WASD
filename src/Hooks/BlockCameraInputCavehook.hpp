@@ -1,14 +1,16 @@
 #pragma once
 
-class HandleCameraInputHook
+using namespace DKUtil::Alias;
+
+class BlockCameraInputCavehook
 {
 public:
     static void Enable();
     static bool Prepare();
 
 private:
-    static char* OverrideFunc(int64_t a1, char* a2, int64_t a3, int* a4);
-    static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;
+    static bool __cdecl Func();
     static inline std::array<uintptr_t, 1> addresses;
     static inline bool all_found = false;
+    static inline std::unique_ptr<DKUtil::Hook::CaveHookHandle> handle;
 };

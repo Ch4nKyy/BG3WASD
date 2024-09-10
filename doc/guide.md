@@ -112,23 +112,21 @@ So we have to disable exactly this check.
 To disable them, we can create AOB scans for them by looking at their bytes.
 We want to override the cmp and the jz (same as je) instruction with nops.
 
-## GetCameraObjectHook
+## BlockCameraInputCavehook
 
-To find this function call/hook, you can check the xrefs of GetInputValue.
+To find this, you can check the xrefs of GetInputValue.
 There should be a code section where GetInputValue is called 4 times next to each other with the
-command ids 101, 102,
-103, 104 (third parameter). These are the CameraForward/Backward/Left/Right command IDs.
-I name this function HandleCameraInput.
-The very first line of this function is ```camera_object = GetCameraObject(a3);```, but this is not
-the call that we want to hook.  
+command ids 101, 102, 103, 104 (third parameter). These are the CameraForward/Backward/Left/Right
+command IDs.  
+I name this function HandleCameraInput.  
+At the top, there is a line `x = *(_QWORD *)(a3 + 64);`. x is the camera object.
 Somewhere at the very bottom of HandleCameraInput, there is:  
 ```
 (v7 + 173) |= 4u;  
-(v7 + 324) = 1;  
-sub_xxx(...);  
+(v7 + 324) = 1;
 ```
 
-Inside this sub_xxx, there is another call to GetCameraObject and it is the one we hook.
+(v7 + 324) is "should_move" and must be set to 0 in CharacterMovementMode.
 
 ## LoadInputConfig
 
@@ -152,10 +150,11 @@ very first time during game start, trace the stack trace.
 
 ## AfterChangingKeybindInMenuHook
 
-There is a function that maps keys from ints to strings. This function can easily be found by
-searching for the string "printscreen" for example.  
+There is a function that maps keys from ints to strings. (Don't mistake it for the one that maps
+strings to ints.) This function can easily be found by e.g. searching for the string "printscreen".
 To find the function that writes the inputconfigs, just place a breakpoint in this mapping
-function and look at the stack trace.
+function and look at the stack trace. We need to hook a spot that is reached AFTER the config file
+has been written.
 
 ## BlockAnalogStickSelectionPatch
 
@@ -181,6 +180,11 @@ mov     [rax+0E60h], ebx
 
 Search for the strings ```ftb_start``` or ```ftb_end```.
 Hook the function call that is passed this string.
+
+## PollEventHook
+
+Search for the import "SDL_PollEvent". This function is called twice in the function I name
+PollInput. We hook the first occurrence. It is at the top of the function.
 
 ## SDL_GetWindowGrabHook
 
@@ -227,13 +231,12 @@ There, hook the call of CheckCommandInputs.
 
 ### Short way
 
-IsInControllerMode xrefs can be used to find this. You look for a function with a ```case 199```
-statement. The number can change by a tiny amount. It is the ID of the ContextMenu.  
-The case before that should be case 160, the ID of ActionCancel.  
-case 199 could even be part of the Text column in the xref list, so it is very easy to find.  
-Then, hook the only call of this function.
+IsInControllerMode xrefs can be used to find this. The order of the refs are always very similar.  
+Generally, you look for a function that has a case for 199 (ContextMenu) and 160 (ActionCancel),
+but sometimes the compiler does not generate a switch statement.  
+This function uses IsInControllerMode three times.
 
-Alternatively, a full text search for ```case 199``` or its hex value ```, C7h``` might help.
+Then, hook the only call of this function.
 
 ### Long way
 
@@ -335,10 +338,7 @@ Debug, hold Interact and then trace all the way from CheckCommandInputs.
 
 ## CastOrCancelAbilityHook
 
-Search for the string ```h61f300a7g2cfcg4536gad62gde94e92935ca```.  
-It should only have 1 xref in the function I name CallSpecificCommandFunction.
-TODO This doesn't work anymore as of Patch 6!
-I now found it through the Settings ptr. The order of xrefs is almost identical, even for
+I found it through the Settings ptr. The order of xrefs is almost identical, even for
 different binaries. The Settings ptr is referenced 3 times in this function and put into rcx.
 
 In the middle of this function, there is a call to a subfunction with many parameters, the last
@@ -350,7 +350,7 @@ This subfunction I name CastOrCancelAbility and this call must be hooked.
 In CallSpecificCommandFunctionPre3, virtual CallSpecificCommandFunctionPre2 is called.
 Compare the signature. Note that in IDA, it will look like it has 1 parameter more (self).
 
-## SetVirtualCursorPosFakeClass Class
+## SetVirtualCursorPosHook and SetVirtualCursorPosFakeClass
 
 In PollEvents, virtual SetVirtualCursorPos is called at the bottom.
 Compare the signature. Note that in IDA, it will look like it has 1 parameter more (self).

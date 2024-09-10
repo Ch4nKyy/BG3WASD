@@ -1,12 +1,12 @@
-#include "GetCameraObjectHook.hpp"
+#include "UpdateCameraHook.hpp"
 #include "Addresses/IsInControllerMode.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
 
-bool GetCameraObjectHook::Prepare()
+bool UpdateCameraHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? ?? 48 85 C0 74 ?? F3 0F 11 70 ?? 0F ?? ?? ?? ?? 48">()) };
+        "E8 ?? ?? ?? ?? 48 8D 8D E8 04 00 00 E8 ?? ?? ?? ?? E9 A6 FD FF FF">()) };
     addresses = address_array;
 
     all_found = true;
@@ -16,7 +16,7 @@ bool GetCameraObjectHook::Prepare()
         if (!address)
         {
             State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("GetCameraObjectHook #{} not found", i);
+            WARN("UpdateCameraHook #{} not found", i);
             all_found = false;
         }
         ++i;
@@ -24,7 +24,7 @@ bool GetCameraObjectHook::Prepare()
     return all_found;
 }
 
-void GetCameraObjectHook::Enable()
+void UpdateCameraHook::Enable()
 {
     if (not all_found)
     {
@@ -34,36 +34,23 @@ void GetCameraObjectHook::Enable()
     for (const auto& address : addresses)
     {
         OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        DEBUG("Hooked GetCameraObjectHook #{}: {:X}", i, AsAddress(address));
+        DEBUG("Hooked UpdateCameraHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }
 }
 
-int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
+// Called in GameThread, every frame? Called before HandleCameraInput.
+int64_t UpdateCameraHook::OverrideFunc(uint64_t a1, uint64_t a2, uint64_t a3, int64_t a4)
 {
     auto* settings = Settings::GetSingleton();
     auto* state = State::GetSingleton();
 
-    int64_t camera_object_ptr = OriginalFunc(a1);
-
     if (IsInControllerMode::Read())
     {
-        return camera_object_ptr;
+        return OriginalFunc(a1, a2, a3, a4);
     }
 
-    if (state->IsCharacterMovementMode())
-    {
-        *(float*)(camera_object_ptr + 148) = 0.0f;  // x input
-        *(float*)(camera_object_ptr + 152) = 0.0f;  // y input
-        *(char*)(camera_object_ptr + 324) = 0;      // should move
-    }
-
-    // TODO character_leftright_is_rotate
-    // if (*settings->character_leftright_is_rotate)
-    // {
-    //     *(char*)(camera_object_ptr + 497) = 0;      // is left/right rotating
-    //     *(float*)(camera_object_ptr + 160) = 0.0f;  // left/right rotation
-    // }
+    int64_t camera_object_ptr = *(int64_t *)(a4 + 48);
 
     bool new_combat_state = (*reinterpret_cast<bool*>(camera_object_ptr + 168) & 1) != 0;
     if (!state->combat_state_initiliazed || new_combat_state != state->old_combat_state)
@@ -81,5 +68,5 @@ int64_t GetCameraObjectHook::OverrideFunc(int64_t a1)
         state->last_time_combat_state_changed = SDL_GetTicks();
     }
 
-    return camera_object_ptr;
+    return OriginalFunc(a1, a2, a3, a4);
 }

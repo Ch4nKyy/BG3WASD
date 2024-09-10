@@ -5,7 +5,7 @@
 bool SetCursorRotateHook::Prepare()
 {
     std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? FF EB 05 E8 ?? ?? ?? FF 4C 8B 4D 7F">()) };
+        "41 84 C5 74 07 E8 ?? ?? ?? FF EB 05 E8 ?? ?? ?? FF 4C 8B">()) };
     addresses = address_array;
 
     all_found = true;
@@ -32,7 +32,7 @@ void SetCursorRotateHook::Enable()
     int i = 0;
     for (const auto& address : addresses)
     {
-        OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
+        OriginalFunc = dku::Hook::write_call<5>(address + 5, OverrideFunc);
         DEBUG("Hooked SetCursorRotateHook #{}: {:X}", i, AsAddress(address));
         ++i;
     }

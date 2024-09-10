@@ -10,8 +10,8 @@
 #include "Hooks/DecideMoveUpdaterHook.hpp"
 #include "Hooks/FTBEndHook.hpp"
 #include "Hooks/FTBStartHook.hpp"
-#include "Hooks/GetCameraObjectHook.hpp"
 #include "Hooks/GetInputValueHook.hpp"
+#include "Hooks/BlockCameraInputCavehook.hpp"
 #include "Hooks/InputHook.hpp"
 #include "Hooks/InsideUpdateInteractMoveCavehook.hpp"
 #include "Hooks/PollEventHook.hpp"
@@ -19,6 +19,7 @@
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
 #include "Hooks/SetCursorRotateHook.hpp"
 #include "Hooks/SetVirtualCursorPosHook.hpp"
+#include "Hooks/UpdateCameraHook.hpp"
 #include "Hooks/WASDUnlock.hpp"
 #include "Hooks/WindowGainFocusHook.hpp"
 #include "InputconfigPatcher.hpp"
@@ -67,7 +68,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         std::string errors;
 
         bool wasd_unlock = WASDUnlock::Prepare();
-        bool get_camera_object_hook = GetCameraObjectHook::Prepare();
+        bool block_camera_input_cavehook = BlockCameraInputCavehook::Prepare();
+        bool update_camera_hook = UpdateCameraHook::Prepare();
         bool character_movement_input_vector_hook = GetInputValueHook::Prepare();
         bool is_in_controller_mode = IsInControllerMode::Prepare();
         bool load_input_config = LoadInputConfig::Prepare();
@@ -76,14 +78,16 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         bool load_string_hook = ConcatInputconfigPathHook::Prepare();
         bool block_analog_stick_selection_patch = BlockAnalogStickSelectionPatch::Prepare();
         bool block_analog_stick_selection_patch2 = BlockAnalogStickSelection2Patch::Prepare();
-        if (wasd_unlock && get_camera_object_hook && character_movement_input_vector_hook &&
+        if (wasd_unlock && block_camera_input_cavehook && character_movement_input_vector_hook &&
             is_in_controller_mode && after_changing_keybind_in_menu_hook && load_input_config &&
             after_initial_load_inputconfig_hook && load_string_hook &&
-            block_analog_stick_selection_patch && block_analog_stick_selection_patch2)
+            block_analog_stick_selection_patch && block_analog_stick_selection_patch2 &&
+            update_camera_hook)
         {
             InputHook::Enable(a_hModule);  // throws on error
             WASDUnlock::Enable();
-            GetCameraObjectHook::Enable();
+            BlockCameraInputCavehook::Enable();
+            UpdateCameraHook::Enable();
             GetInputValueHook::Enable();
             AfterChangingKeybindInMenuHook::Enable();
             AfterInitialLoadInputConfigHook::Enable();
@@ -163,7 +167,7 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
                 BlockHoldInteractMovePatch::Enable();
                 CallSpecificCommandFunctionPre2Cavehook::Enable();
 
-                // The blocker patches are initialized, when, in GetCameraObjectHook, the init
+                // The blocker patches are initialized, when, in UpdateCameraHook, the init
                 // condition is met and SetMovementModeToggled is called.
             }
             else
