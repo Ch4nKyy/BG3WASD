@@ -5,40 +5,9 @@
 #include "State.hpp"
 #include "ConcatInputconfigPathHook.hpp"
 
-bool ConcatInputconfigPathHook::Prepare()
+void ConcatInputconfigPathHook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(
-        dku::Hook::Assembly::search_pattern<"E8 ?? ?? ?? ?? 90 45 ?? ?? 45 ?? ?? 48 ?? ?? 49">()) };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("ConcatInputconfigPathHook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void ConcatInputconfigPathHook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        DEBUG("Hooked ConcatInputconfigPathHook #{}: {:X}", i, AsAddress(address));
-        ++i;
-    }
+    OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }
 
 QWORD* ConcatInputconfigPathHook::OverrideFunc(QWORD* Src, uint32_t* a2, void* a3)

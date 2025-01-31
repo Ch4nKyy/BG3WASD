@@ -3,7 +3,7 @@
 #include <shlobj.h>
 #include <string>
 
-#include "Addresses/LoadInputConfig.hpp"
+#include "Hooks/LoadInputConfigHook.hpp"
 #include "InputconfigPatcher.hpp"
 #include "MessageBox.hpp"
 #include "Settings.hpp"
@@ -14,7 +14,7 @@ void InputconfigPatcher::Patch()
     try
     {
         ReadAndWriteInputconfig();
-        LoadInputConfig::Call(0, 0);
+        LoadInputConfigHook::CallOriginal(0, 0);
     }
     catch (...)
     {
@@ -161,7 +161,7 @@ json InputconfigPatcher::FixPingCommand(json data)
     bool rightclick_is_bound_to_rotate = false;
     bool alt_rightclick_is_bound_to_rotate = false;
     for (json::iterator it = data["CameraToggleMouseRotate"].begin();
-         it != data["CameraToggleMouseRotate"].end(); ++it)
+        it != data["CameraToggleMouseRotate"].end(); ++it)
     {
         if (*it == "mouse:right")
         {
@@ -197,19 +197,19 @@ json InputconfigPatcher::FixPingCommand(json data)
         {
             *it = "key:unknown";
         }
-            else if (dku::string::icontains(*it, "INVALID:unknown") or
-                     dku::string::icontains(*it, "key:unknown"))
-            {
-            }
-            else
-            {
-                valid_keys_bound_to_ping++;
-            }
-        }
-
-        if (valid_keys_bound_to_ping == 0)
+        else if (dku::string::icontains(*it, "INVALID:unknown") or
+                 dku::string::icontains(*it, "key:unknown"))
         {
-            ping_hotkeys = { "ctrl+alt+key:f24" };
+        }
+        else
+        {
+            valid_keys_bound_to_ping++;
+        }
+    }
+
+    if (valid_keys_bound_to_ping == 0)
+    {
+        ping_hotkeys = { "ctrl+alt+key:f24" };
     }
     data["Ping"] = ping_hotkeys;
 

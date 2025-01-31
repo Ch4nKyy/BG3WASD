@@ -4,40 +4,9 @@
 #include "State.hpp"
 #include "SetVirtualCursorPosHook.hpp"
 
-bool PollEventHook::Prepare()
+void PollEventHook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "48 8D 4D ?? FF 15 ?? ?? ?? 04 85 C0 0F">()) };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("PollEventHook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void PollEventHook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        OriginalFunc = dku::Hook::write_call<6>(address + 4, OverrideFunc);
-        DEBUG("Hooked PollEventHook #{}: {:X}", i, AsAddress(address));
-        ++i;
-    }
+    OriginalFunc = dku::Hook::write_call<6>(address_incl_offset, OverrideFunc);
 }
 
 // Actual hiding happens in SetVirtualCursorPosHook.

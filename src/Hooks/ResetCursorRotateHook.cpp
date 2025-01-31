@@ -2,49 +2,9 @@
 #include "Settings.hpp"
 #include "State.hpp"
 
-bool ResetCursorRotateHook::Prepare()
+void ResetCursorRotateHook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 3> address_array = {
-        AsAddress(dku::Hook::Assembly::search_pattern<
-            "41 84 C5 74 07 E8 ?? ?? ?? FF EB 05 E8 ?? ?? ?? FF 4C 8B">()),
-        AsAddress(dku::Hook::Assembly::search_pattern<
-            "41 ?? ?? ?? E8 ?? ?? ?? ?? 48 ?? ?? ?? ?? ?? ?? 44 ?? ?? ?? ?? ?? ?? ?? ?? 0F">()),
-        AsAddress(dku::Hook::Assembly::search_pattern<
-            "48 85 C9 74 0A BA 2E 00 00 00 E8 ?? ?? ?? FF ?? 8B">())
-    };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("ResetCursorRotateHook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void ResetCursorRotateHook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-
-    std::array<uintptr_t, 3> offsets_array = { 12, 4, 10 };
-
-    for (const auto& address : addresses)
-    {
-        OriginalFunc = dku::Hook::write_call<5>(address + offsets_array[i], OverrideFunc);
-        DEBUG("Hooked ResetCursorRotateHook #{}: {:X}", i, AsAddress(address + offsets_array[i]));
-        ++i;
-    }
+    OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }
 
 // Called in GameThread, when Camera Rotate key is up or forced by game, e.g. dialog or UI.

@@ -5,40 +5,9 @@
 
 using enum GameCommand;
 
-bool CastOrCancelAbilityHook::Prepare()
+void CastOrCancelAbilityHook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? 00 0F B7 5D">()) };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("CastOrCancelAbilityHook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void CastOrCancelAbilityHook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        DEBUG("Hooked CastOrCancelAbilityHook #{}: {:X}", i, AsAddress(address));
-        ++i;
-    }
+    OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }
 
 WORD* CastOrCancelAbilityHook::OverrideFunc(WORD* a1, int* command_struct, uint64_t* a3, int64_t a4,

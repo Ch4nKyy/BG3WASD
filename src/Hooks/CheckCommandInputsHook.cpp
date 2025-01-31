@@ -6,41 +6,9 @@
 
 using enum GameCommand;
 
-bool CheckCommandInputsHook::Prepare()
+void CheckCommandInputsHook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? ?? ?? 48 ?? ?? ?? 48 ?? ?? FF ?? ?? ?? ?? ?? 48 ?? ?? ?? ?? ?? ?? 48 ?? ?? 48 ?? "
-        "?? ?? ?? ?? ?? FF">()) };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("CheckCommandInputsHook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void CheckCommandInputsHook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        DEBUG("Hooked CheckCommandInputsHook #{}: {:X}", i, AsAddress(address));
-        ++i;
-    }
+    OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }
 
 // Called in GameThread, every frame

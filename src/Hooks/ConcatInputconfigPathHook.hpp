@@ -1,16 +1,24 @@
 #pragma once
 
+#include "Hooks/Base/FunctionHook.hpp"
+
 typedef int64_t QWORD;
 
-class ConcatInputconfigPathHook
+class ConcatInputconfigPathHook : public FunctionHook
 {
 public:
-    static void Enable();
-    static bool Prepare();
+    ConcatInputconfigPathHook() :
+        FunctionHook({ search_pattern<"E8 ?? ?? ?? ?? 90 45 ?? ?? 45 ?? ?? 48 ?? ?? 49">() }, { 0 },
+            std::source_location::current().function_name()) {};
 
-private:
+    void EnableSpecifically(uintptr_t address_incl_offset) override;
+
     static QWORD* OverrideFunc(QWORD* Src, uint32_t* a2, void* a3);
-    static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;
-    static inline std::array<uintptr_t, 1> addresses;
-    static inline bool all_found = false;
+    static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc = nullptr;
+
+    static ConcatInputconfigPathHook& Get()
+    {
+        static ConcatInputconfigPathHook instance;
+        return instance;
+    }
 };

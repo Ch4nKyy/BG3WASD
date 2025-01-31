@@ -1,9 +1,9 @@
 #include "State.hpp"
 #include "GameCommand.hpp"
 #include "InputFaker.hpp"
-#include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
-#include "Patches/BlockHoldInteractMovePatch.hpp"
-#include "Patches/BlockInteractMovePatch.hpp"
+#include "Hooks/BlockCancelActionStoppingMovementPatch.hpp"
+#include "Hooks/BlockHoldInteractMovePatch.hpp"
+#include "Hooks/BlockInteractMovePatch.hpp"
 #include "SDL.h"
 #include "Settings.hpp"
 
@@ -43,13 +43,13 @@ void State::EnableInteractMoveBlocker(bool enabled)
 
     if (enabled && *settings->block_interact_move)
     {
-        BlockInteractMovePatch::Activate();
-        BlockHoldInteractMovePatch::Activate();
+        BlockInteractMovePatch::Get().Activate();
+        BlockHoldInteractMovePatch::Get().Activate();
     }
     else
     {
-        BlockInteractMovePatch::Deactivate();
-        BlockHoldInteractMovePatch::Deactivate();
+        BlockInteractMovePatch::Get().Deactivate();
+        BlockHoldInteractMovePatch::Get().Deactivate();
     }
 }
 
@@ -63,14 +63,14 @@ void State::SetCurrentlyInteractMoving(bool in_value)
     {
         if (!currently_interact_moving)
         {
-            BlockCancelActionStoppingMovementPatch::Deactivate();
+            BlockCancelActionStoppingMovementPatch::Get().Deactivate();
         }
     }
     else
     {
         if (currently_interact_moving)
         {
-            BlockCancelActionStoppingMovementPatch::Activate();
+            BlockCancelActionStoppingMovementPatch::Get().Activate();
         }
     }
     currently_interact_moving = in_value;

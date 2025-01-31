@@ -1,14 +1,23 @@
 #pragma once
 
-class UpdateCameraHook
+#include "Hooks/Base/FunctionHook.hpp"
+
+class UpdateCameraHook : public FunctionHook
 {
 public:
-    static void Enable();
-    static bool Prepare();
+    UpdateCameraHook() :
+        FunctionHook({ search_pattern<
+                         "E8 ?? ?? ?? ?? 48 8D 8D E8 04 00 00 E8 ?? ?? ?? ?? E9 A6 FD FF FF">() },
+            { 0 }, std::source_location::current().function_name()) {};
 
-private:
+    void EnableSpecifically(uintptr_t address_incl_offset) override;
+
     static int64_t OverrideFunc(uint64_t a1, uint64_t a2, uint64_t a3, int64_t a4);
     static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;
-    static inline std::array<uintptr_t, 1> addresses;
-    static inline bool all_found = false;
+
+    static UpdateCameraHook& Get()
+    {
+        static UpdateCameraHook instance;
+        return instance;
+    }
 };

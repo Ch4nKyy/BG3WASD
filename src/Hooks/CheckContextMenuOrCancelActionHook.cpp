@@ -5,40 +5,9 @@
 
 using enum GameCommand;
 
-bool CheckContextMenuOrCancelActionHook::Prepare()
+void CheckContextMenuOrCancelActionHook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(dku::Hook::Assembly::search_pattern<
-        "E8 ?? ?? 04 00 0F B7 08">()) };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("CheckContextMenuOrCancelActionHook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void CheckContextMenuOrCancelActionHook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        OriginalFunc = dku::Hook::write_call<5>(address, OverrideFunc);
-        DEBUG("Hooked CheckContextMenuOrCancelActionHook #{}: {:X}", i, AsAddress(address));
-        ++i;
-    }
+    OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }
 
 // If this function returns 0 for the CancelAction command, the command is forwarded to

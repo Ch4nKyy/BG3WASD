@@ -1,7 +1,7 @@
 #include "CallSpecificCommandFunctionPre2Cavehook.hpp"
 #include "GameCommand.hpp"
 #include "InputFaker.hpp"
-#include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
+#include "Hooks/BlockCancelActionStoppingMovementPatch.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
 
@@ -31,46 +31,16 @@ struct CallSpecificCommandFunctionPre2Epilog : Xbyak::CodeGenerator
     }
 };
 
-bool CallSpecificCommandFunctionPre2Cavehook::Prepare()
+void CallSpecificCommandFunctionPre2Cavehook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(
-        dku::Hook::Assembly::search_pattern<"FF 50 68 48 8B C3">()) };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("CallSpecificCommandFunctionPre2Cavehook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void CallSpecificCommandFunctionPre2Cavehook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        CallSpecificCommandFunctionPre2Prolog prolog;
-        prolog.ready();
-        CallSpecificCommandFunctionPre2Epilog epilog;
-        epilog.ready();
-        handle = DKUtil::Hook::AddCaveHook(address, { 0, 6 }, FUNC_INFO(Func), &prolog, &epilog,
-            DKUtil::Hook::HookFlag::kRestoreAfterEpilog);
-        handle->Enable();
-        DEBUG("Hooked CallSpecificCommandFunctionPre2Cavehook #{}: {:X}", i, AsAddress(address));
-        ++i;
-    }
+    CallSpecificCommandFunctionPre2Prolog prolog;
+    prolog.ready();
+    CallSpecificCommandFunctionPre2Epilog epilog;
+    epilog.ready();
+    auto handle = DKUtil::Hook::AddCaveHook(address_incl_offset, { 0, 6 }, FUNC_INFO(Func), &prolog,
+        &epilog, DKUtil::Hook::HookFlag::kRestoreAfterEpilog);
+    handle->Enable();
+    handles.emplace_back(std::move(handle));
 }
 
 void CallSpecificCommandFunctionPre2Cavehook::Func(int64_t* self, WORD* a2, int* command_struct)

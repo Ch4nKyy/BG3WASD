@@ -1,5 +1,5 @@
 #include "BlockCameraInputCavehook.hpp"
-#include "Addresses/IsInControllerMode.hpp"
+#include "Hooks/IsInControllerModeHook.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
 
@@ -27,46 +27,16 @@ struct BlockCameraInputEpilog : Xbyak::CodeGenerator
     }
 };
 
-bool BlockCameraInputCavehook::Prepare()
+void BlockCameraInputCavehook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(
-        dku::Hook::Assembly::search_pattern<"44 88 A7 44 01 00 00">()) };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("BlockCameraInputCavehook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void BlockCameraInputCavehook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        BlockCameraInputProlog prolog;
-        prolog.ready();
-        BlockCameraInputEpilog epilog;
-        epilog.ready();
-        handle = DKUtil::Hook::AddCaveHook(address, { 0, 7 }, FUNC_INFO(Func), &prolog, &epilog,
-            DKUtil::Hook::HookFlag::kSkipNOP);
-        handle->Enable();
-        DEBUG("Hooked BlockCameraInputCavehook #{}: {:X}", i, AsAddress(address));
-        ++i;
-    }
+    BlockCameraInputProlog prolog;
+    prolog.ready();
+    BlockCameraInputEpilog epilog;
+    epilog.ready();
+    auto handle = DKUtil::Hook::AddCaveHook(address_incl_offset, { 0, 7 }, FUNC_INFO(Func), &prolog, &epilog,
+        DKUtil::Hook::HookFlag::kSkipNOP);
+    handle->Enable();
+    handles.emplace_back(std::move(handle));
 }
 
 // Write 1 or 0 into rax. Then, write al into r12b. Then, write r12b into [rdi+324], which is the
@@ -80,7 +50,7 @@ bool BlockCameraInputCavehook::Func()
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
 
-    if (IsInControllerMode::Read())
+    if (IsInControllerModeHook::Get().Read())
     {
         return 1;
     }

@@ -1,16 +1,21 @@
 #pragma once
 
-using namespace DKUtil::Alias;
+#include "Hooks/Base/CaveHook.hpp"
 
-class BlockCameraInputCavehook
+class BlockCameraInputCavehook : public CaveHook
 {
 public:
-    static void Enable();
-    static bool Prepare();
+    BlockCameraInputCavehook() :
+        CaveHook(
+            { search_pattern<"44 88 A7 44 01 00 00">() },
+            { 0 }, std::source_location::current().function_name()) {};
 
-private:
+    void EnableSpecifically(uintptr_t address_incl_offset) override;
     static bool __cdecl Func();
-    static inline std::array<uintptr_t, 1> addresses;
-    static inline bool all_found = false;
-    static inline std::unique_ptr<DKUtil::Hook::CaveHookHandle> handle;
+
+    static BlockCameraInputCavehook& Get()
+    {
+        static BlockCameraInputCavehook instance;
+        return instance;
+    }
 };

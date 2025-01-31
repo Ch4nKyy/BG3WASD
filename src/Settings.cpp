@@ -1,7 +1,7 @@
 #pragma comment(lib, "version.lib")
 
 #include "Settings.hpp"
-#include "Addresses/LoadInputConfig.hpp"
+#include "Hooks/LoadInputConfigHook.hpp"
 #include "InputconfigPatcher.hpp"
 #include "State.hpp"
 

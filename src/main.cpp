@@ -1,7 +1,12 @@
-#include "Addresses/IsInControllerMode.hpp"
-#include "Addresses/LoadInputConfig.hpp"
+#include "FeatureSet.hpp"
 #include "Hooks/AfterChangingKeybindInMenuHook.hpp"
 #include "Hooks/AfterInitialLoadInputConfigHook.hpp"
+#include "Hooks/BlockAnalogStickSelection2Patch.hpp"
+#include "Hooks/BlockAnalogStickSelectionPatch.hpp"
+#include "Hooks/BlockCameraInputCavehook.hpp"
+#include "Hooks/BlockCancelActionStoppingMovementPatch.hpp"
+#include "Hooks/BlockHoldInteractMovePatch.hpp"
+#include "Hooks/BlockInteractMovePatch.hpp"
 #include "Hooks/CallSpecificCommandFunctionPre2Cavehook.hpp"
 #include "Hooks/CastOrCancelAbilityHook.hpp"
 #include "Hooks/CheckCommandInputsHook.hpp"
@@ -11,24 +16,20 @@
 #include "Hooks/FTBEndHook.hpp"
 #include "Hooks/FTBStartHook.hpp"
 #include "Hooks/GetInputValueHook.hpp"
-#include "Hooks/BlockCameraInputCavehook.hpp"
-#include "Hooks/InputHook.hpp"
 #include "Hooks/InsideUpdateInteractMoveCavehook.hpp"
+#include "Hooks/IsInControllerModeHook.hpp"
+#include "Hooks/LoadInputConfigHook.hpp"
 #include "Hooks/PollEventHook.hpp"
 #include "Hooks/ResetCursorRotateHook.hpp"
 #include "Hooks/SDL_GetWindowGrabHook.hpp"
 #include "Hooks/SetCursorRotateHook.hpp"
 #include "Hooks/SetVirtualCursorPosHook.hpp"
 #include "Hooks/UpdateCameraHook.hpp"
-#include "Hooks/WASDUnlock.hpp"
+#include "Hooks/WASDUnlockPatch.hpp"
 #include "Hooks/WindowGainFocusHook.hpp"
+#include "InputHook.hpp"
 #include "InputconfigPatcher.hpp"
 #include "MessageBox.hpp"
-#include "Patches/BlockAnalogStickSelection2Patch.hpp"
-#include "Patches/BlockAnalogStickSelectionPatch.hpp"
-#include "Patches/BlockCancelActionStoppingMovementPatch.hpp"
-#include "Patches/BlockHoldInteractMovePatch.hpp"
-#include "Patches/BlockInteractMovePatch.hpp"
 #include "SDL.h"
 #include "Settings.hpp"
 #include "State.hpp"
@@ -65,129 +66,53 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         auto* settings = Settings::GetSingleton();
         settings->Load();
 
-        std::string errors;
+        FeatureSet core{ "WASD Core" };
+        core.AddRequiredHook(WASDUnlockPatch::Get());
+        core.AddRequiredHook(BlockCameraInputCavehook::Get());
+        core.AddRequiredHook(UpdateCameraHook::Get());
+        core.AddRequiredHook(GetInputValueHook::Get());
+        core.AddRequiredHook(IsInControllerModeHook::Get());
+        core.AddRequiredHook(LoadInputConfigHook::Get());
+        core.AddRequiredHook(AfterChangingKeybindInMenuHook::Get());
+        core.AddRequiredHook(AfterInitialLoadInputConfigHook::Get());
+        core.AddRequiredHook(ConcatInputconfigPathHook::Get());
+        core.AddRequiredHook(BlockAnalogStickSelectionPatch::Get());
+        core.AddRequiredHook(BlockAnalogStickSelection2Patch::Get());
 
-        bool wasd_unlock = WASDUnlock::Prepare();
-        bool block_camera_input_cavehook = BlockCameraInputCavehook::Prepare();
-        bool update_camera_hook = UpdateCameraHook::Prepare();
-        bool character_movement_input_vector_hook = GetInputValueHook::Prepare();
-        bool is_in_controller_mode = IsInControllerMode::Prepare();
-        bool load_input_config = LoadInputConfig::Prepare();
-        bool after_changing_keybind_in_menu_hook = AfterChangingKeybindInMenuHook::Prepare();
-        bool after_initial_load_inputconfig_hook = AfterInitialLoadInputConfigHook::Prepare();
-        bool load_string_hook = ConcatInputconfigPathHook::Prepare();
-        bool block_analog_stick_selection_patch = BlockAnalogStickSelectionPatch::Prepare();
-        bool block_analog_stick_selection_patch2 = BlockAnalogStickSelection2Patch::Prepare();
-        if (wasd_unlock && block_camera_input_cavehook && character_movement_input_vector_hook &&
-            is_in_controller_mode && after_changing_keybind_in_menu_hook && load_input_config &&
-            after_initial_load_inputconfig_hook && load_string_hook &&
-            block_analog_stick_selection_patch && block_analog_stick_selection_patch2 &&
-            update_camera_hook)
+        FeatureSet toggle_on_ftb{ "Auto toggling movement mode on FTB" };
+        toggle_on_ftb.AddRequiredHook(FTBStartHook::Get());
+        toggle_on_ftb.AddRequiredHook(FTBEndHook::Get());
+        core.AddSubFeatureSet(toggle_on_ftb);
+
+        FeatureSet improved_mouselook{ "Improved mouselook" };
+        improved_mouselook.AddRequiredHook(SetVirtualCursorPosHook::Get());
+        improved_mouselook.AddRequiredHook(SDL_GetWindowGrabHook::Get());
+        improved_mouselook.AddRequiredHook(SetCursorRotateHook::Get());
+        improved_mouselook.AddRequiredHook(ResetCursorRotateHook::Get());
+        improved_mouselook.AddRequiredHook(CheckContextMenuOrCancelActionHook::Get());
+        improved_mouselook.AddRequiredHook(CastOrCancelAbilityHook::Get());
+        improved_mouselook.AddRequiredHook(PollEventHook::Get());
+        improved_mouselook.AddRequiredHook(CheckCommandInputsHook::Get());
+        core.AddSubFeatureSet(improved_mouselook);
+
+        FeatureSet interactmove_blocker{ "InteractMove Blocker" };
+        interactmove_blocker.AddRequiredHook(DecideMoveUpdaterHook::Get());
+        interactmove_blocker.AddRequiredHook(InsideUpdateInteractMoveCavehook::Get());
+        interactmove_blocker.AddRequiredHook(BlockInteractMovePatch::Get());
+        interactmove_blocker.AddRequiredHook(BlockHoldInteractMovePatch::Get());
+        interactmove_blocker.AddRequiredHook(CallSpecificCommandFunctionPre2Cavehook::Get());
+        core.AddSubFeatureSet(interactmove_blocker);
+
+        auto [core_is_valid, errors] = core.EnableRecursively();
+
+        if (core_is_valid)
         {
-            InputHook::Enable(a_hModule);  // throws on error
-            WASDUnlock::Enable();
-            BlockCameraInputCavehook::Enable();
-            UpdateCameraHook::Enable();
-            GetInputValueHook::Enable();
-            AfterChangingKeybindInMenuHook::Enable();
-            AfterInitialLoadInputConfigHook::Enable();
-            ConcatInputconfigPathHook::Enable();
-            BlockAnalogStickSelectionPatch::Enable();
-            BlockAnalogStickSelectionPatch::Activate();
-            BlockAnalogStickSelection2Patch::Enable();
-            BlockAnalogStickSelection2Patch::Activate();
-
-            bool ftb_start_hook = FTBStartHook::Prepare();
-            bool ftb_end_hook = FTBEndHook::Prepare();
-            if (ftb_start_hook && ftb_end_hook)
-            {
-                FTBStartHook::Enable();
-                FTBEndHook::Enable();
-            }
-            else
-            {
-                errors.append(
-                    "Auto toggling movement mode at forced turn-based mode start/end could not be "
-                    "enabled.\n");
-            }
-
-            // needed for both improved mouselook AND interact move canceller
-            bool check_command_inputs_hook = CheckCommandInputsHook::Prepare();
-
-            bool set_virtual_cursor_pos_hook = SetVirtualCursorPosHook::Prepare();
-            bool get_window_grab_hook = SDL_GetWindowGrabHook::Prepare();
-            bool set_cursor_rotate_hook = SetCursorRotateHook::Prepare();
-            bool reset_cursor_rotate_hook = ResetCursorRotateHook::Prepare();
-            bool check_context_menu_or_cancel_action_hook =
-                CheckContextMenuOrCancelActionHook::Prepare();
-            bool cast_or_cancel_ability_hook = CastOrCancelAbilityHook::Prepare();
-            bool poll_event_hook = PollEventHook::Prepare();
-
-            // TODO ToggleMouselook
-            // bool windows_gain_focus_hook = WindowGainFocusHook::Prepare();
-
-            if (set_virtual_cursor_pos_hook && get_window_grab_hook && set_cursor_rotate_hook &&
-                reset_cursor_rotate_hook && check_context_menu_or_cancel_action_hook &&
-                cast_or_cancel_ability_hook && poll_event_hook && check_command_inputs_hook)
-            {
-                SetVirtualCursorPosHook::Enable();
-                SDL_GetWindowGrabHook::Enable();
-                SetCursorRotateHook::Enable();
-                ResetCursorRotateHook::Enable();
-                CheckContextMenuOrCancelActionHook::Enable();
-                CastOrCancelAbilityHook::Enable();
-                PollEventHook::Enable();
-                CheckCommandInputsHook::Enable();
-
-                // TODO ToggleMouselook
-                // WindowGainFocusHook::Enable();
-            }
-            else
-            {
-                errors.append("Improved Mouselook could not be enabled.\n");
-            }
-
-            bool decide_move_updater_hook = DecideMoveUpdaterHook::Prepare();
-            bool inside_update_interact_move_hook = InsideUpdateInteractMoveCavehook::Prepare();
-            bool call_specific_command_function_pre2_hook =
-                CallSpecificCommandFunctionPre2Cavehook::Prepare();
-            bool block_interact_move_patch = BlockInteractMovePatch::Prepare();
-            bool block_hold_interact_move_patch = BlockHoldInteractMovePatch::Prepare();
-            bool block_cancel_stopping_movement_patch =
-                BlockCancelActionStoppingMovementPatch::Prepare();
-            if (decide_move_updater_hook && inside_update_interact_move_hook &&
-                call_specific_command_function_pre2_hook && block_interact_move_patch &&
-                block_hold_interact_move_patch && block_cancel_stopping_movement_patch &&
-                check_command_inputs_hook)
-            {
-                DecideMoveUpdaterHook::Enable();
-                InsideUpdateInteractMoveCavehook::Enable();
-                BlockCancelActionStoppingMovementPatch::Enable();
-                BlockInteractMovePatch::Enable();
-                BlockHoldInteractMovePatch::Enable();
-                CallSpecificCommandFunctionPre2Cavehook::Enable();
-
-                // The blocker patches are initialized, when, in UpdateCameraHook, the init
-                // condition is met and SetMovementModeToggled is called.
-            }
-            else
-            {
-                errors.append("InteractMoveBlocker could not be enabled.\n");
-            }
-        }
-        else
-        {
-            errors.append(
-                "Character movement could not be enabled at all! Mod will be inactive.\n");
-        }
-
-        if (!State::GetSingleton()->mod_found_all_addresses)
-        {
-            errors.append("Your game version is not completely compatible with the mod version!\n");
+            InputHook::Enable(a_hModule);
         }
 
         if (!errors.empty())
         {
+            errors.append("Your game version is not completely compatible with the mod version!\n");
             WARN(errors);
             MessageBox::Show(errors);
         }

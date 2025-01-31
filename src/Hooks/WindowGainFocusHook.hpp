@@ -1,14 +1,24 @@
 #pragma once
 
-class WindowGainFocusHook
+#include "Hooks/Base/FunctionHook.hpp"
+
+class WindowGainFocusHook : public FunctionHook
 {
 public:
-    static void Enable();
-    static bool Prepare();
+    WindowGainFocusHook() :
+        FunctionHook({ search_pattern<"E9 ?? ?? ?? ?? 8B ?? ?? 33 ?? 44 ?? ?? ?? 41 ?? "
+                                      "?? 48 ?? ?? 48 ?? ?? ?? 8B ?? 48 ?? ?? ?? "
+                                      "48 ?? ?? 0F ?? ?? ?? ?? ?? 44">() },
+            { 0 }, std::source_location::current().function_name()) {};
 
-private:
+    void EnableSpecifically(uintptr_t address_incl_offset) override;
+
     static void OverrideFunc();
     static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;
-    static inline std::array<uintptr_t, 1> addresses;
-    static inline bool all_found = false;
+
+    static WindowGainFocusHook& Get()
+    {
+        static WindowGainFocusHook instance;
+        return instance;
+    }
 };

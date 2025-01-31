@@ -32,46 +32,16 @@ struct InsideUpdateInteractMoveEpilog : Xbyak::CodeGenerator
     }
 };
 
-bool InsideUpdateInteractMoveCavehook::Prepare()
+void InsideUpdateInteractMoveCavehook::EnableSpecifically(uintptr_t address_incl_offset)
 {
-    std::array<uintptr_t, 1> address_array = { AsAddress(
-        dku::Hook::Assembly::search_pattern<"4C 8B 89 80 00 00 00 4C ?? ?? 30 01 00 00">()) };
-    addresses = address_array;
-
-    all_found = true;
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        if (!address)
-        {
-            State::GetSingleton()->mod_found_all_addresses = false;
-            WARN("InsideUpdateInteractMoveCavehook #{} not found", i);
-            all_found = false;
-        }
-        ++i;
-    }
-    return all_found;
-}
-
-void InsideUpdateInteractMoveCavehook::Enable()
-{
-    if (not all_found)
-    {
-        return;
-    }
-    int i = 0;
-    for (const auto& address : addresses)
-    {
-        InsideUpdateInteractMoveProlog prolog;
+    InsideUpdateInteractMoveProlog prolog;
         prolog.ready();
         InsideUpdateInteractMoveEpilog epilog;
         epilog.ready();
-        handle = DKUtil::Hook::AddCaveHook(address, { 0, 7 }, FUNC_INFO(Func), &prolog, &epilog,
+        auto handle = DKUtil::Hook::AddCaveHook(address_incl_offset, { 0, 7 }, FUNC_INFO(Func), &prolog, &epilog,
             DKUtil::Hook::HookFlag::kRestoreBeforeProlog);
         handle->Enable();
-        DEBUG("Hooked InsideUpdateInteractMoveCavehook #{}: {:X}", i, AsAddress(address));
-        ++i;
-    }
+        handles.emplace_back(std::move(handle));
 }
 
 void InsideUpdateInteractMoveCavehook::Func()
