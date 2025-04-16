@@ -18,12 +18,8 @@ void InputconfigPatcher::Patch()
     }
     catch (...)
     {
-        FATAL(
-            "Inputconfig could not be patched!\n"
-            "This can often be fixed by renaming or deleting "
-            "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
-            "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
-            "Win+R and typing %localappdata%.");
+        WARN(INPUTCONFIG_ERROR);
+        MessageBox::Show(INPUTCONFIG_ERROR);
     }
 }
 
@@ -44,6 +40,7 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     {
         data = json::parse(input_stream);
     }
+    input_stream.close();
 
     data = UpdateData(data, "CharacterMoveBackward", "CameraBackward",
         { "c:leftstick_ypos", "key:s", "key:down" });
@@ -54,17 +51,13 @@ void InputconfigPatcher::ReadAndWriteInputconfig()
     data = UpdateData(data, "CharacterMoveRight", "CameraRight",
         { "c:leftstick_xpos", "key:d", "key:right" });
 
-    data = FixPingCommand(data);
+    data = FixRightclickBinds(data);
 
     std::ofstream output_stream(config_path_absolute);
     if (output_stream.fail())
     {
-        FATAL(
-            "Inputconfig could not be patched!\n"
-            "This can often be fixed by renaming or deleting "
-            "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
-            "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
-            "Win+R and typing %localappdata%");
+        WARN(INPUTCONFIG_ERROR);
+        MessageBox::Show(INPUTCONFIG_ERROR);
     }
     output_stream << std::setw(4) << data << std::endl;
 
@@ -151,7 +144,8 @@ json InputconfigPatcher::UpdateData(json data, std::string character_command,
 
 // When binding camera rotate to rightclick, it can collide with the ping/alt key for various
 // reasons. In this function we do some tricks to avoid the collision.
-json InputconfigPatcher::FixPingCommand(json data)
+// It also collides with modifier keys!
+json InputconfigPatcher::FixRightclickBinds(json data)
 {
     if (!data.contains("CameraToggleMouseRotate"))
     {
@@ -160,6 +154,8 @@ json InputconfigPatcher::FixPingCommand(json data)
 
     bool rightclick_is_bound_to_rotate = false;
     bool alt_rightclick_is_bound_to_rotate = false;
+    bool ctrl_rightclick_is_bound_to_rotate = false;
+    bool shift_rightclick_is_bound_to_rotate = false;
     for (json::iterator it = data["CameraToggleMouseRotate"].begin();
         it != data["CameraToggleMouseRotate"].end(); ++it)
     {
@@ -171,16 +167,47 @@ json InputconfigPatcher::FixPingCommand(json data)
         {
             alt_rightclick_is_bound_to_rotate = true;
         }
+        if (*it == "ctrl+mouse:right")
+        {
+            ctrl_rightclick_is_bound_to_rotate = true;
+        }
+        if (*it == "shift+mouse:right")
+        {
+            shift_rightclick_is_bound_to_rotate = true;
+        }
     }
+
     if (!rightclick_is_bound_to_rotate)
     {
+        for (json::iterator it = data["CameraToggleMouseRotate"].begin();
+            it != data["CameraToggleMouseRotate"].end();
+            /*inc in loop*/)
+        {
+            if (*it == "alt+mouse:right" || *it == "ctrl+mouse:right" || *it == "shift+mouse:right")
+            {
+                it = data["CameraToggleMouseRotate"].erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
         return data;
     }
 
-    // if rightclick is bound to rotate, make sure alt+rightclick is also bound to it
+    // if rightclick is bound to rotate, make sure the modifier combinations are also bound to it
+    // to avoid a bug.
     if (!alt_rightclick_is_bound_to_rotate)
     {
         data["CameraToggleMouseRotate"].push_back("alt+mouse:right");
+    }
+    if (!shift_rightclick_is_bound_to_rotate)
+    {
+        data["CameraToggleMouseRotate"].push_back("shift+mouse:right");
+    }
+    if (!ctrl_rightclick_is_bound_to_rotate)
+    {
+        data["CameraToggleMouseRotate"].push_back("ctrl+mouse:right");
     }
 
     // remove alt+right from ping to avoid collision.

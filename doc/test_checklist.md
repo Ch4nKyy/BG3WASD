@@ -12,7 +12,7 @@ Check these features before publishing:
 * Mouselook
   * Cursor hides and stays in place during rotation. Interact UI and behaviour is disabled.
     * After rotation, cursor icon is restored to the correct icon and not stuck on the rotate icon.
-    * Also works when holding Alt meanwhile
+    * Also works when holding Alt or Shift or Ctrl meanwhile
   * Rotate+Leftclick = Forward
   * Rightclick Camera Rotate works with Cancel Action and Context Menu
     * (For some reason, the following points sometimes don't work after you tab in or start the

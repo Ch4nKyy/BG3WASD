@@ -20,7 +20,7 @@ private:
         json camera_default_keys);
     // If the user binds Camera Rotation to Rightclick, it will collide with the default bind
     // Alt+Rightclick of Ping. That is why we automatically remove this bind.
-    static json FixPingCommand(json data);
+    static json FixRightclickBinds(json data);
     static void UpdateVkCombosOfCommandMap(json data, std::vector<std::string>& commands);
     static void ValidateKeys(json data);
     static void FindIssues(json data, const std::vector<std::string> commands,
@@ -28,4 +28,12 @@ private:
         bool allow_modifiers);
     static void ValidateModHotkeys(std::vector<std::string>& mod_hotkeys_not_found_keycombos);
     static json GetKeycombosAsJsonObject(std::string keycombos_as_string);
+
+    inline static const std::string INPUTCONFIG_ERROR =
+        "Inputconfig could not be patched!\n"
+        "This error often occurs randomly. Please try again to change your hotkeys.\n"
+        "If the error persists, try renaming or deleting "
+        "C:/Users/xxxxx/AppData/Local/Larian Studios/Baldur's Gate "
+        "3/PlayerProfiles/Public/inputconfig_p1.json. You can find this folder by pressing "
+        "Win+R and typing %localappdata%.";
 };
