@@ -26,7 +26,6 @@
 #include "Hooks/SetVirtualCursorPosHook.hpp"
 #include "Hooks/UpdateCameraHook.hpp"
 #include "Hooks/WASDUnlockPatch.hpp"
-#include "Hooks/WindowGainFocusHook.hpp"
 #include "InputHook.hpp"
 #include "InputconfigPatcher.hpp"
 #include "MessageBox.hpp"
@@ -50,17 +49,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
         VersionInfo::Print(a_hModule);
 
-        SDL_version linked;
-        SDL_GetVersion(&linked);
-        if (linked.major != 2 || linked.minor != 28)
-        {
-            FATAL(
-                "SDL2.dll version mismatch. This usually means that you must re-install the mod, "
-                "or at least the SDL2.dll!");
-        }
-        // With SDL 2.24 and spam-clicking Rotate I could bug the cursor so that it would
-        // warp to the center of the screen.
-        // Using SDL 2.28 and this Hint fixes this issue.
+        // Avoids a bug when spam-clicking Rotate where the cursor ends up in weird positions.
+        // Requires SDL 2.28 or higher to work.
         SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_CENTER, "0");
 
         auto* settings = Settings::GetSingleton();
