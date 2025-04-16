@@ -6,7 +6,7 @@ class CastOrCancelAbilityHook : public FunctionHook
 {
 public:
     CastOrCancelAbilityHook() :
-        FunctionHook({ search_pattern<"E8 ?? ?? ?? 00 0F B7 5D">() }, { 0 },
+        FunctionHook({ search_pattern<"E8 ?? ?? ?? 00 0F B7 5D F7">() }, { 0 },
             std::source_location::current().function_name()) {};
 
     void EnableSpecifically(uintptr_t address_incl_offset) override;

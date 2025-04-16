@@ -2,16 +2,16 @@
 
 enum GameCommand
 {
-    CameraToggleMouseRotateDONTUSE = 100, // Does not work yet with the default values
-    CameraBackward = 101,
-    CameraForward = 102,
-    CameraLeft = 103,
-    CameraRight = 104,
-    CameraRotateDONTUSE = 108, // Use CameraToggleMouseRotate instead
-    CharacterMoveForward = 141,
-    CharacterMoveBackward = 142,
-    CharacterMoveLeft = 143,
-    CharacterMoveRight = 144,
-    ActionCancel = 159,
-    ContextMenu = 199,
+    CameraToggleMouseRotateDONTUSE = 98,  // Does not work yet with the default values
+    CameraBackward = 99,
+    CameraForward = 100,
+    CameraLeft = 101,
+    CameraRight = 102,
+    CameraRotateDONTUSE = 106,  // Use CameraToggleMouseRotate instead
+    CharacterMoveForward = 157,
+    CharacterMoveBackward = 158,
+    CharacterMoveLeft = 159,
+    CharacterMoveRight = 160,
+    ActionCancel = 174,
+    ContextMenu = 214,
 };

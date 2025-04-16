@@ -6,9 +6,8 @@ class UpdateCameraHook : public FunctionHook
 {
 public:
     UpdateCameraHook() :
-        FunctionHook({ search_pattern<
-                         "E8 ?? ?? ?? ?? 48 8D 8D E8 04 00 00 E8 ?? ?? ?? ?? E9 A6 FD FF FF">() },
-            { 0 }, std::source_location::current().function_name()) {};
+        FunctionHook({ search_pattern<"88 ?? ?? 4C ?? ?? ?? 4D ?? ?? 49 ?? ?? 49 ?? ?? E8">() },
+            { 16 }, std::source_location::current().function_name()) {};
 
     void EnableSpecifically(uintptr_t address_incl_offset) override;
 

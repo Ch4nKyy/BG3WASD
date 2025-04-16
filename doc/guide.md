@@ -33,7 +33,7 @@ https://defuse.ca/online-x86-assembler.htm#disassembly
 https://stackoverflow.com/questions/54499327/setting-and-clearing-the-zero-flag-in-x86
 https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170
 
-## WASDUnlock
+## WASDUnlockPatch and GetInputValueHook
 
 Open bg3.exe in IDA and let it analyze it completely. This takes a while.
 
@@ -44,19 +44,19 @@ Go to the only xref of aCharactermovef.
 Go to Pseudocode view.
 
 CharacterMoveForward is given to a function as parameter. This function also takes an int that is
-declared in the line above. Should be 141, if it doesn't change. This is 0x8D or 8Dh in hex.
+declared in the line above. Should be 157, if it doesn't change. This is 0x9D or 9Dh in hex.
 
 Hint: The subfunction that takes "CharacterMoveForward" and the command ID, also takes the
 PlayerController as its first parameter.
 
-Do a full text search for ```, 8Dh``` or whatever hex value CharacterMoveForward is
+Do a full text search for ```, 9Dh``` or whatever hex value CharacterMoveForward is
 and look for an occurrence where value, value+1, value+2 and value+3 are very close to each other
 assigned to variables or moved into registers!
 There are 2 functions where this is the case. I name them GetMovementInputVec and
 GetMovementInputWorldVec. The latter one has some matrix transformation math at the end.
 This is the one we are looking for. Rename and mark this function, so we can easily find it.
 
-In this function, 141/142/143/144 are assigned to variables. These variables are then passed to
+In this function, 157/158/159/160 are assigned to variables. These variables are then passed to
 a function I name GetInputValue. All 4 calls of this function calls are hooked by the mod!
 So if one of those hooks breaks, you know how to repair it.
 
@@ -66,7 +66,7 @@ Now, there are 2 ways.
 
 The function GetMovementInputWorldVec is called in 3 xrefs. The third one should be a function I
 call UpdateWasdMove.  
-The UpdateWasdMove function starts with a check: if(sub_xxx()) return -1.
+The UpdateWasdMove function starts with a check: if(!sub_xxx()) return 1.
 Inside this check function sub_xxx, a lot of checks are done and one of them needs to be removed
 for the WASD Unlock.
 
@@ -116,23 +116,28 @@ We want to override the cmp and the jz (same as je) instruction with nops.
 
 To find this, you can check the xrefs of GetInputValue.
 There should be a code section where GetInputValue is called 4 times next to each other with the
-command ids 101, 102, 103, 104 (third parameter). These are the CameraForward/Backward/Left/Right
+command ids 99, 100, 101, 102 (third parameter). These are the CameraForward/Backward/Left/Right
 command IDs.  
 I name this function HandleCameraInput.  
-At the top, there is a line `x = *(_QWORD *)(a3 + 64);`. x is the camera object.
-Somewhere at the very bottom of HandleCameraInput, there is:  
+Somewhere at the top, there is a line `x = *(_QWORD *)(a3 + 64);`. x is the camera object.
+Somewhere in the middle of HandleCameraInput, there is:  
 ```
-(v7 + 173) |= 4u;  
-(v7 + 324) = 1;
+*(_BYTE *)(CameraObject + 169) |= 4u;
+*(_DWORD *)(CameraObject + 92) = *(_DWORD *)(CameraObject + 352);
+*(_BYTE *)(CameraObject + 324) = 1;
 ```
 
-(v7 + 324) is "should_move" and must be set to 0 in CharacterMovementMode.
+(CameraObject + 324) is "should_move" and must be set to 0 in CharacterMovementMode.
 
 ## LoadInputConfig
 
 Search for the string ```inputremap_p1.json```. It should only have one xref and that is inside the
 function I name LoadInputConfig.  
 The AOB signature aims at the function start, not at any call of the function.
+
+## UpdateCameraHook
+
+TODO
 
 ## AfterInitialLoadInputConfigHook
 
@@ -150,6 +155,14 @@ very first time during game start, trace the stack trace.
 
 ## AfterChangingKeybindInMenuHook
 
+### Short way
+
+The string ls.VMListButton once helped me find it. Doesn't appear too often. The last occurrence is
+in a function I name AfterChangingKeybindInMenu2. It is called 3 times. One of those calls we want
+to hook.
+
+### Long way
+
 There is a function that maps keys from ints to strings. (Don't mistake it for the one that maps
 strings to ints.) This function can easily be found by e.g. searching for the string "printscreen".
 To find the function that writes the inputconfigs, just place a breakpoint in this mapping
@@ -163,9 +176,10 @@ lead you to the function I name ChangeSetting.
 At the very bottom, there is something like  
 ```
 case aaa:
-  *(_DWORD *)(qword_xxx + yyy) = zzz;
+  *(_DWORD *)(qword_xxx + 3696) = zzz;
 ```
 
+case aaa is the second to last case.
 qword_xxx is the Settings ptr.
 yyy should be the Analog Stick Selection setting.
 You can cross-check by setting a breakpoint and debugging it and changing the setting.
@@ -173,7 +187,7 @@ The patch nops this assignment. The assembly looks something like this:
 
 ```
 mov     rax, cs:Settings
-mov     [rax+0E60h], ebx
+mov     [rax+0E70h], ebx
 ```
 
 ## FTBStartHook/FTBEndHook
@@ -194,7 +208,7 @@ In the PollInput function, also SDL_GetWindowGrabHook is called twice. We hook t
 
 ## SetCursorRotateHook
 
-In the middle of the HandleCameraInput function, there is a case handler for case 100 (id of
+In the middle of the HandleCameraInput function, there is a case handler for case 98 (id of
 CameraToggleMouseRotate). In this handler, there is a function that is called, depending on a
 condition ```if ( (v44 & 1) != 0 )```. We hook the call in the true case.
 
@@ -232,7 +246,7 @@ There, hook the call of CheckCommandInputs.
 ### Short way
 
 IsInControllerMode xrefs can be used to find this. The order of the refs are always very similar.  
-Generally, you look for a function that has a case for 199 (ContextMenu) and 160 (ActionCancel),
+Generally, you look for a function that has a case for 214 (ContextMenu) and 174 (ActionCancel),
 but sometimes the compiler does not generate a switch statement.  
 This function uses IsInControllerMode three times.
 

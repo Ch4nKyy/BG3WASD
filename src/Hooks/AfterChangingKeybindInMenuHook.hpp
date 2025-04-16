@@ -7,7 +7,7 @@ class AfterChangingKeybindInMenuHook : public FunctionHook
 public:
     AfterChangingKeybindInMenuHook() :
         FunctionHook(
-            { search_pattern<"48 83 BB ?? 07 00 00 00 74 08 48 8B CB E8 ?? ?? ?? FF 48 8B">() },
+            { search_pattern<"48 83 BB F0 06">() },
             { 13 }, std::source_location::current().function_name()) {};
 
     void EnableSpecifically(uintptr_t address_incl_offset) override;

@@ -4,7 +4,7 @@ void BlockAnalogStickSelectionPatch::EnableSpecifically(uintptr_t address_incl_o
 {
     BlockAnalogStickSelectionPatchAsm patch;
     patch.ready();
-    auto handle = dku::Hook::AddASMPatch(address_incl_offset, { 0, 7 }, &patch);
+    auto handle = dku::Hook::AddASMPatch(address_incl_offset, { 0, 6 }, &patch);
     handle->Enable();
     handles.emplace_back(std::move(handle));
 }

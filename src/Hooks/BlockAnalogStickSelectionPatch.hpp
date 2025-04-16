@@ -12,7 +12,6 @@ struct BlockAnalogStickSelectionPatchAsm : Xbyak::CodeGenerator
         nop();
         nop();
         nop();
-        nop();
     }
 };
 
@@ -22,7 +21,7 @@ class BlockAnalogStickSelectionPatch : public PatchHook
 public:
     BlockAnalogStickSelectionPatch() :
         PatchHook({ search_pattern<
-                      "44 89 80 ?? 0E 00 00 48 81 C4 ?? ?? ?? ?? 41 ?? 5F 5E 5B 5D C3">() },
+                      "89 90 70 0E 00 00">() },
             { 0 }, std::source_location::current().function_name()) {};
     void EnableSpecifically(uintptr_t address_incl_offset) override;
 

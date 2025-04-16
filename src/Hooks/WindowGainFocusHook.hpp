@@ -2,6 +2,7 @@
 
 #include "Hooks/Base/FunctionHook.hpp"
 
+// This class is currently unused. It is prep work for mouselook toggle.
 class WindowGainFocusHook : public FunctionHook
 {
 public:
