@@ -14,7 +14,7 @@ include(GNUInstallDirs)
 # info
 project(
     BG3WASD
-    VERSION 1.9.5
+    VERSION 1.9.6
     LANGUAGES CXX
 )
 
