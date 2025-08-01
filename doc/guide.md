@@ -378,3 +378,6 @@ The GameCommand IDs sometimes change! Make sure the IDs in GameCommand.hpp are i
 game.
 
 Offsets sometimes change! E.g. the Settings members or the CameraObject members.
+
+When you attach IDAs debugger, set all exceptions to no suspend, no pass to app, no warning.
+Otherwise the game will crash.
