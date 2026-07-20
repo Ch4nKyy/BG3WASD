@@ -29,9 +29,16 @@ The long way is more complicated and requires debugging and tracing, but is more
 and might be needed if the short way breaks.
 
 Useful links:  
-https://defuse.ca/online-x86-assembler.htm#disassembly
-https://stackoverflow.com/questions/54499327/setting-and-clearing-the-zero-flag-in-x86
-https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170
+https://defuse.ca/online-x86-assembler.htm#disassembly  
+https://stackoverflow.com/questions/54499327/setting-and-clearing-the-zero-flag-in-x86  
+https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170  
+
+The mod basically works like this:
+- Assign the CharacterMoveForward etc commands, which are usually for analog controller movement,
+to some keyboard keys in the input config
+- The game usually ignores this input when the controller UI is inactive, but
+WASDUnlockPatch overrides this check
+- Everything else is just QoL and bonus features
 
 ## WASDUnlockPatch and GetInputValueHook
 
@@ -381,3 +388,7 @@ Offsets sometimes change! E.g. the Settings members or the CameraObject members.
 
 When you attach IDAs debugger, set all exceptions to no suspend, no pass to app, no warning.
 Otherwise the game will crash.
+
+When you reverse a new binary, try if the AOB for SetCursorRotateHook is still working. It's a very
+easy way to find the HandleCameraInput function and from there you can easily find other functions
+and stuff like GetInputValue, IsInControllerMode, SettingsPtr, etc!

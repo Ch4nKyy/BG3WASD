@@ -1,6 +1,7 @@
 #include "FeatureSet.hpp"
 #include "Hooks/AfterChangingKeybindInMenuHook.hpp"
 #include "Hooks/AfterInitialLoadInputConfigHook.hpp"
+#include "Hooks/AutoRotateUnlockPatch.hpp"
 #include "Hooks/BlockAnalogStickSelection2Patch.hpp"
 #include "Hooks/BlockAnalogStickSelectionPatch.hpp"
 #include "Hooks/BlockCameraInputCavehook.hpp"
@@ -68,6 +69,10 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
         core.AddRequiredHook(ConcatInputconfigPathHook::Get());
         core.AddRequiredHook(BlockAnalogStickSelectionPatch::Get());
         core.AddRequiredHook(BlockAnalogStickSelection2Patch::Get());
+
+        FeatureSet autorotate{ "Auto rotate camera to follow character if enabled" };
+        autorotate.AddRequiredHook(AutoRotateUnlockPatch::Get());
+        core.AddSubFeatureSet(autorotate);
 
         FeatureSet toggle_on_ftb{ "Auto toggling movement mode on FTB" };
         toggle_on_ftb.AddRequiredHook(FTBStartHook::Get());
