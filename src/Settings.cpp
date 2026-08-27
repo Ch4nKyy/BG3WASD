@@ -23,14 +23,6 @@ void Settings::Load() noexcept
         config.Bind<0.0, 1.0>(walk_speed, 0.3);
         config.Bind(walking_is_default, FALSE);
         config.Bind(walk_after_combat, FALSE);
-        // TODO character_leftright_is_rotate
-        // config.Bind(character_leftright_is_rotate, FALSE);
-        // Future toml lines:
-        // CharacterLeftRightIsRotateInsteadOfMove = false
-        // # Set this to true if you want to MOVE the Camera with Left/Right, but ROTATE the
-        // # Character.
-        // # For this to work, you need to bind Camera Rotate Left/Right to the same keys as
-        // # Camera Left/Right.
 
         config.Bind(enable_auto_toggling_movement_mode, TRUE);
         config.Bind(character_movement_mode_is_default, TRUE);
