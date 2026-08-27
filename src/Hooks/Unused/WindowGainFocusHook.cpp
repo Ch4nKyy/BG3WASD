@@ -1,5 +1,4 @@
 #include "WindowGainFocusHook.hpp"
-#include "SetVirtualCursorPosHook.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
 
