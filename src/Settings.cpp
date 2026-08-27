@@ -33,6 +33,7 @@ void Settings::Load() noexcept
         // # Camera Left/Right.
 
         config.Bind(enable_auto_toggling_movement_mode, TRUE);
+        config.Bind(character_movement_mode_is_default, TRUE);
 
         config.Bind(enable_improved_mouselook, TRUE);
         config.Bind(enable_rotate_plus_lmb_is_forward, TRUE);
@@ -75,6 +76,8 @@ void Settings::InitState()
     auto* state = State::GetSingleton();
 
     state->walking_toggled = walking_is_default;
+
+    state->SetMovementModeToggled(character_movement_mode_is_default);
 
     // Flag invalid to react later.
     state->cursor_position_to_restore.x = -1;

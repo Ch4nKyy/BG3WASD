@@ -40,6 +40,13 @@ SwitchToWalkingAfterCombat = false
 EnableAutoTogglingMovementMode = true
 # Automatically toggle movement mode depending on the context. 
 # Toggle to Camera movement, when combat starts, and back to Character movement, when combat ends.
+# When you load a savegame, the mod will auto-detect your combat state and set the movement mode
+# accordingly.
+# [true, false]
+
+CharacterMovementModeIsDefault = true
+# If EnableAutoTogglingMovementMode is false, this setting determines whether the game starts in
+# Character or Camera movement mode.
 # [true, false]
 
 

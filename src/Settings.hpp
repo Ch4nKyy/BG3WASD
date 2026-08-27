@@ -24,6 +24,8 @@ public:
 
     Boolean enable_auto_toggling_movement_mode{ "EnableAutoTogglingMovementMode",
         "AutoToggleMovementMode" };
+    Boolean character_movement_mode_is_default{ "CharacterMovementModeIsDefault",
+        "AutoToggleMovementMode" };
 
     Boolean enable_improved_mouselook{ "EnableMouselook", "Mouselook" };
     Boolean enable_rotate_plus_lmb_is_forward{ "EnableRotatePlusLeftclickMovesForward",
