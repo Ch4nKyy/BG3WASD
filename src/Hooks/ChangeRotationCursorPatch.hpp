@@ -26,8 +26,10 @@ class ChangeRotationCursorPatch : public PatchHook
 {
 public:
     ChangeRotationCursorPatch() :
-        PatchHook({ search_pattern<"48 8D 05 08 FA 6D 04">() }, { 0 },
-            std::source_location::current().function_name()) {};
+        PatchHook(
+            { search_pattern<"8B FB 4C 39 04 F9 74 ?? 48 8B 46 10 8B 1C B8 85 DB 79 ?? EB ?? 8B D3 "
+                             "48 8B CE E8 ?? ?? ?? ?? 48 63 46 2C 3B D8 7D ?? 48 8B 4E 30">() },
+            { 26 }, std::source_location::current().function_name()) {};
     void EnableSpecifically(intptr_t address_incl_offset) override;
 
     static ChangeRotationCursorPatch& Get()

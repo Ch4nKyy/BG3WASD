@@ -9,15 +9,13 @@
 // Purpose: Detect when all loot windows are closed, to update camera rotation.
 //
 // The target function returns the remaining number of loot windows.
-//
-// The AOB signature is terrible, but the code around the target is so generic that the signature would have to be
-// super long otherwise.
 class LootWindowClosedHook : public FunctionHook
 {
 public:
     LootWindowClosedHook() :
-        FunctionHook({ search_pattern<"E8 F0 AF 47 FF">() }, { 0 },
-            std::source_location::current().function_name()) {};
+        FunctionHook({ search_pattern<"E8 ?? ?? ?? ?? 48 63 46 2C 3B D8 7D ?? 48 8B 4E 30 48 03 C0 "
+                                      "0F 10 04 C1 48 8B C7 48 03 C0 0F 11 04 C1 48 8B 05">() },
+            { 0 }, std::source_location::current().function_name()) {};
 
     void EnableSpecifically(intptr_t address_incl_offset) override;
 
