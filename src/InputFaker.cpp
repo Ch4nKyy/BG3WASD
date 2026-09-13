@@ -1,10 +1,89 @@
 #include "InputFaker.hpp"
-#include "GameCommand.hpp"
+#include "CommandId.hpp"
 #include "SDL.h"
-#include "Structs/GameInputManager.hpp"
+#include "Structs/CommandHandler.hpp"
 #include "VirtualKeyMap.hpp"
 
-using enum GameCommand;
+using enum CommandId;
+
+int InputFaker::SendCommand(CommandId command_id, bool pressed, float value1, float value2)
+{
+    Command command{
+        .id = static_cast<uint32_t>(command_id),
+        .device_id = 0,
+        .new_value1 = value1,
+        .new_value2 = value2,
+        .new_pressed = pressed,
+    };
+    return SendCommand(command);
+}
+
+int InputFaker::SendCommand(Command command)
+{
+    CommandHandler* handler = GetCommandHandler(static_cast<CommandId>(command.id));
+
+    if (!handler)
+    {
+        return 0;
+    }
+
+    WORD return_value = 0;
+
+    handler->HandleCommand(&return_value, &command);
+
+    return return_value;
+}
+
+void InputFaker::QueueCommand(CommandId command_id, bool pressed, float value1, float value2)
+{
+    pending_commands.push(Command{
+        .id = static_cast<uint32_t>(command_id),
+        .device_id = 0,
+        .new_value1 = value1,
+        .new_value2 = value2,
+        .new_pressed = pressed,
+    });
+}
+
+void InputFaker::ProcessQueuedCommands()
+{
+    while (!pending_commands.empty())
+    {
+        Command command = pending_commands.front();
+        pending_commands.pop();
+        SendCommand(static_cast<CommandId>(command.id), command.new_pressed, command.new_value1,
+            command.new_value2);
+    }
+}
+
+// Get the correct command handler for a given command id.
+// If you want to use new commands, you have to add them here.
+// Note that there are more than just these two handlers. Some commands might need hooking a new one.
+CommandHandler* InputFaker::GetCommandHandler(CommandId command_id)
+{
+    switch (command_id)
+    {
+    case CameraToggleMouseRotate:
+    case CameraBackward:
+    case CameraForward:
+    case CameraLeft:
+    case CameraRight:
+    case CameraRotate:
+        return camera_command_handler;
+
+    case CharacterMoveForward:
+    case CharacterMoveBackward:
+    case CharacterMoveLeft:
+    case CharacterMoveRight:
+    case HighlightCharacters:
+    case ActionCancel:
+    case ContextMenu:
+        return character_command_handler;
+
+    default:
+        return nullptr;
+    }
+}
 
 void InputFaker::SendKeyDownAndUp(std::string keyname)
 {
@@ -23,15 +102,15 @@ void InputFaker::SendKey(std::string keyname, bool down)
     auto prefix = main_key_split[0];
     if (prefix == "mouse")
     {
-        SendKeyMouse(main_key, down);
+        SendKey_Mouse(main_key, down);
     }
     else if (prefix == "key")
     {
-        SendKeyKeyboard(main_key, down, modifiers);
+        SendKey_Keyboard(main_key, down, modifiers);
     }
 }
 
-void InputFaker::SendKeyMouse(std::string keyname, bool down)
+void InputFaker::SendKey_Mouse(std::string keyname, bool down)
 {
     SDL_Event event;
     event.button.timestamp = SDL_GetTicks();
@@ -50,7 +129,8 @@ void InputFaker::SendKeyMouse(std::string keyname, bool down)
     SDL_PushEvent(&event);
 }
 
-void InputFaker::SendKeyKeyboard(std::string keyname, bool down, std::vector<std::string> modifiers)
+void InputFaker::SendKey_Keyboard(std::string keyname, bool down,
+    std::vector<std::string> modifiers)
 {
     SDL_Event event;
     event.key.timestamp = SDL_GetTicks();
@@ -97,53 +177,4 @@ void InputFaker::SendMouseMotion(int xrel, int yrel)
     event.motion.xrel = xrel;
     event.motion.yrel = yrel;
     SDL_PushEvent(&event);
-}
-
-// The input faker currently uses CallSpecificCommandFunctionPre2 to send commands.
-// This only works for commands that go through this call chain usually.
-// For other commands like camera commands, HandleCameraInput should be hooked and called.
-// But camera commands seem to require some pointer members that are difficult to implement.
-int InputFaker::SendCommand(GameCommand command_id, bool down)
-{
-    if (!game_input_manager)
-    {
-        return 0;
-    }
-
-    constexpr auto size = 64;
-    unsigned char command_struct[size] = { 0 };
-    *(int16_t*)(command_struct + 0) = static_cast<int>(command_id);
-
-    // The following data works for ActionCancel. Maybe ONLY for ActionCancel.
-    if (down)
-    {
-        *(int8_t*)(command_struct + 4) = 0x01;
-        *(int8_t*)(command_struct + 7) = 0x01;
-        *(int16_t*)(command_struct + 22) = 0x3F80;
-        *(int16_t*)(command_struct + 26) = 0x3F80;
-        *(int8_t*)(command_struct + 28) = 0x01; // down flag
-        *(int32_t*)(command_struct + 32) = 0x0;
-        *(int8_t*)(command_struct + 36) = 0x01;
-        *(int32_t*)(command_struct + 37) = 0x7D3F0000;
-    }
-    else
-    {
-        *(int8_t*)(command_struct + 4) = 0x01;
-        *(int8_t*)(command_struct + 7) = 0x02;
-        *(int16_t*)(command_struct + 10) = 0x3F80;
-        *(int16_t*)(command_struct + 14) = 0x3F80;
-        *(int8_t*)(command_struct + 16) = 0x01;
-        *(int32_t*)(command_struct + 29) = 0x00000000;
-        *(int8_t*)(command_struct + 36) = 0x01;
-        *(int32_t*)(command_struct + 37) = 0x7D3F0000;
-        *(int8_t*)(command_struct + 52) = 0xC0;
-    }
-
-    WORD return_status = 0;
-
-    GameInputManager* game_input_manager_cast =
-        reinterpret_cast<GameInputManager*>(&game_input_manager);
-    game_input_manager_cast->CallSpecificCommandFunctionPre2(&return_status, (int*)command_struct);
-
-    return return_status;
 }

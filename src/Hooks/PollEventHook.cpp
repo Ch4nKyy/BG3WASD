@@ -1,59 +1,56 @@
 #include "PollEventHook.hpp"
 #include "InputFaker.hpp"
+#include "RotationCursorType.hpp"
+#include "SetVirtualCursorPosHook.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
-#include "SetVirtualCursorPosHook.hpp"
 
-void PollEventHook::EnableSpecifically(uintptr_t address_incl_offset)
+void PollEventHook::EnableSpecifically(intptr_t address_incl_offset)
 {
     OriginalFunc = dku::Hook::write_call<6>(address_incl_offset, OverrideFunc);
 }
 
-// Actual hiding happens in SetVirtualCursorPosHook.
-// Sending a fake mouse input guarantees that it is called.
-void PollEventHook::HideVirtualCursor(bool in_value)
+int32_t PollEventHook::DistanceSquaredBetweenPoints(POINT a, POINT b)
 {
-    auto* state = State::GetSingleton();
-    state->should_hide_virtual_cursor = in_value;
-    state->rotate_start_time = 0;
-    InputFaker::SendMouseMotion(0, 0);
+    return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
 }
 
-// Called in MainThread, every frame
-// TODO the camera has a flag "mouserotation". Maybe it is simpler to use than what we do right now?
 int64_t PollEventHook::OverrideFunc(int64_t a1)
 {
     auto* state = State::GetSingleton();
     auto* settings = Settings::GetSingleton();
 
-    if (*settings->enable_improved_mouselook)
+    const std::lock_guard<std::mutex> lock(state->override_cursor_mutex);
+    if (state->ShouldOverrideCursor())
     {
-        const std::lock_guard<std::mutex> lock(state->hide_cursor_mutex);
-        if (state->ShouldHideCursor())
+        if (!state->cursor_overriden_last_frame)
         {
-            if (!state->cursor_hidden_last_frame)
-            {
-                SDL_SetRelativeMouseMode(SDL_TRUE);
-                state->rotate_start_time = SDL_GetTicks();
-            }
-            if (state->rotate_start_time != 0 && SDL_GetTicks() - state->rotate_start_time >
-                                                     *Settings::GetSingleton()->rotate_threshold)
-            {
-                HideVirtualCursor(true);
-            }
+            SDL_SetRelativeMouseMode(SDL_TRUE);
+            state->virtual_cursor_state = VirtualCursorState::REQUEST_OVERRIDE;
         }
-        else
+
+        constexpr int DISTANCE_THRESHOLD_SQUARED = 6 * 6;
+        if (state->virtual_cursor_state == VirtualCursorState::REQUEST_OVERRIDE &&
+            DistanceSquaredBetweenPoints(state->cursor_position_to_restore,
+                state->virtual_cursor_position) > DISTANCE_THRESHOLD_SQUARED)
         {
-            if (state->cursor_hidden_last_frame)
-            {
-                POINT p = state->cursor_position_to_restore;
-                SDL_WarpMouseInWindow(state->sdl_window, (int)p.x, (int)p.y);
-                SDL_SetRelativeMouseMode(SDL_FALSE);
-                HideVirtualCursor(false);
-            }
+            state->virtual_cursor_state = VirtualCursorState::OVERRIDE;
+            InputFaker::SendMouseMotion(0, 0);  // force cursor update
         }
-        state->cursor_hidden_last_frame = state->ShouldHideCursor();
     }
+    else
+    {
+        if (state->cursor_overriden_last_frame)
+        {
+            POINT p = state->cursor_position_to_restore;
+            SDL_WarpMouseInWindow(state->sdl_window, (int)p.x, (int)p.y);
+            SDL_SetRelativeMouseMode(SDL_FALSE);
+
+            state->virtual_cursor_state = VirtualCursorState::END_OVERRIDE;
+            InputFaker::SendMouseMotion(0, 0);  // force cursor update
+        }
+    }
+    state->cursor_overriden_last_frame = state->ShouldOverrideCursor();
 
     return OriginalFunc(a1);
 }

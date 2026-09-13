@@ -1,6 +1,6 @@
 #include "WASDUnlockPatch.hpp"
 
-void WASDUnlockPatch::EnableSpecifically(uintptr_t address_incl_offset)
+void WASDUnlockPatch::EnableSpecifically(intptr_t address_incl_offset)
 {
     WASDUnlockPatchAsm patch;
     patch.ready();

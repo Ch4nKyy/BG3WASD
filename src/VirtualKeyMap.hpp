@@ -9,7 +9,7 @@
 
 using namespace DKUtil::Alias;
 
-enum Command
+enum ModCommand
 {
     TOGGLE_WALKSPEED,
     HOLD_WALKSPEED,
@@ -19,7 +19,7 @@ enum Command
     FORWARD,
     BACKWARD,
     MOUSE_LEFT_DOWN,
-    TOGGLE_MOUSELOOK,
+    TOGGLE_CAMERAROTATION,
     HOLD_MOVEMENT_MODE,
 };
 
@@ -29,13 +29,13 @@ public:
     static int GetVkByName(const std::string name);
     static int GetScancodeByName(const std::string name);
     static int GetKeycodeByName(const std::string name);
-    static std::vector<std::vector<std::uint32_t>> GetVkCombosOfCommand(Command command);
+    static std::vector<std::vector<std::uint32_t>> GetVkCombosOfCommand(ModCommand command);
     static void UpdateVkCombosOfCommandMap();
     static bool VkIsValid(std::string keyname);
 
 private:
-    static void AddVkCombosForCommand(Command command, std::vector<std::string> keycombos);
-    static inline std::map<Command, std::vector<std::vector<std::uint32_t>>> vkcombos_of_command;
+    static void AddVkCombosForCommand(ModCommand command, std::vector<std::string> keycombos);
+    static inline std::map<ModCommand, std::vector<std::vector<std::uint32_t>>> vkcombos_of_command;
     // clang-format off
 
     /*

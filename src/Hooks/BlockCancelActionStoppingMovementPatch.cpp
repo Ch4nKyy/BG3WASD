@@ -1,6 +1,6 @@
 #include "BlockCancelActionStoppingMovementPatch.hpp"
 
-void BlockCancelActionStoppingMovementPatch::EnableSpecifically(uintptr_t address_incl_offset)
+void BlockCancelActionStoppingMovementPatch::EnableSpecifically(intptr_t address_incl_offset)
 {
     BlockCancelActionStoppingMovementPatchAsm patch;
     patch.ready();

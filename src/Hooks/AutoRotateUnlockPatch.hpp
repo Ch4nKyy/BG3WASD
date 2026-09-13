@@ -16,6 +16,14 @@ struct AutoRotateUnlockPatchAsm : Xbyak::CodeGenerator
     }
 };
 
+// Caller: UpdateCameraRotation
+// Target: auto-rotation section
+// Thread: GameThread
+// Called when: the camera rotates or moves.
+// Purpose: Unlock auto-rotate functionality for WASD movement.
+//
+// In older versions, the vanilla auto-rotate feature worked for WASD, but after some update, it was blocked.
+// This patch unlocks it.
 class AutoRotateUnlockPatch : public PatchHook
 {
 public:
@@ -24,7 +32,7 @@ public:
             { search_pattern<
                 "44 ?? ?? ?? ?? ?? ?? 0F ?? ?? ?? ?? ?? 48 ?? ?? E8 ?? ?? ?? ?? 48 ?? ?? 0F">(0) },
             { 0 }, std::source_location::current().function_name()) {};
-    void EnableSpecifically(uintptr_t address_incl_offset) override;
+    void EnableSpecifically(intptr_t address_incl_offset) override;
 
     static AutoRotateUnlockPatch& Get()
     {

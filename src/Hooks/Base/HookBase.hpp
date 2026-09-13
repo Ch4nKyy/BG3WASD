@@ -21,7 +21,7 @@ public:
      * fallback_search_patterns are used, when a original search_pattern is not found.
      * Necessary, when GOG and Steam versions are too different.
      */
-    HookBase(std::vector<void*> search_patterns, std::vector<uintptr_t> offsets, std::string name,
+    HookBase(std::vector<void*> search_patterns, std::vector<intptr_t> offsets, std::string name,
         std::vector<void*> fallback_search_patterns = {}) : offsets(offsets), name(name)
     {
         if (search_patterns.size() > 0)
@@ -51,7 +51,7 @@ public:
     virtual void Enable();
 
     // Specific hooks must implement this.
-    virtual void EnableSpecifically(uintptr_t address_incl_offset) = 0;
+    virtual void EnableSpecifically(intptr_t address_incl_offset) = 0;
 
     bool IsValid() { return found_all_addresses; }
 
@@ -60,6 +60,6 @@ public:
 protected:
     bool found_all_addresses = false;
     std::vector<uintptr_t> addresses;
-    std::vector<uintptr_t> offsets;
+    std::vector<intptr_t> offsets;
     std::string name;
 };

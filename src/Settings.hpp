@@ -13,27 +13,31 @@ public:
     String toggle_autoforward{ "ToggleAutoforward", "ModHotkeys" };
     String hold_walkspeed{ "HoldWalkspeed", "ModHotkeys" };
     String reload_config{ "ReloadConfig", "ModHotkeys" };
-    // TODO ToggleMouselook
-    // String toggle_mouselook{ "ToggleMouselook", "ModHotkeys" };
+    String toggle_camerarotation{ "ToggleCameraRotation", "ModHotkeys" };
 
-    Double walk_speed{ "WalkSpeed", "Core" };
-    Boolean walking_is_default{ "WalkingIsDefault", "Core" };
-    Boolean walk_after_combat{ "SwitchToWalkingAfterCombat", "Core" };
+    Double walk_speed{ "WalkSpeed", "Walking" };
+    Boolean is_walking_default{ "IsWalkingDefault", "Walking" };
+    Boolean walk_after_combat{ "SwitchToWalkingAfterCombat", "Walking" };
 
-    Boolean enable_auto_toggling_movement_mode{ "EnableAutoTogglingMovementMode",
-        "AutoToggleMovementMode" };
-    Boolean character_movement_mode_is_default{ "CharacterMovementModeIsDefault",
+    Boolean auto_toggle_movement_mode{ "AutoToggleMovementMode", "AutoToggleMovementMode" };
+    Boolean is_character_movement_mode_default{ "IsCharacterMovementDefault",
         "AutoToggleMovementMode" };
 
-    Boolean enable_improved_mouselook{ "EnableMouselook", "Mouselook" };
-    Boolean enable_rotate_plus_lmb_is_forward{ "EnableRotatePlusLeftclickMovesForward",
-        "Mouselook" };
-    // TODO ToggleMouselook
-    // Boolean toggle_movement_toggles_mouselook{ "ToggleMovementModeAlsoTogglesMouselook",
-    //     "Mouselook" };
-    Integer rotate_threshold{ "RotateThreshold", "Mouselook" };
+    // I don't include this setting in the shipped toml file, because I think there isn't really a reason to turn it
+    // off, and then the settings file is leaner.
+    Boolean rotate_plus_lmb_is_forward{ "RotatePlusLeftclickMovesForward", "CameraRotation" };
 
-    Boolean block_interact_move{ "BlockInteractMove", "InteractMoveBlocker" };
+    Boolean toggling_movement_mode_also_toggles_camera_rotation{
+        "TogglingMovementModeAlsoTogglesCameraRotation", "CameraRotation"
+    };
+
+    Boolean block_interact_move{ "BlockInteractMove", "Miscellaneous" };
+
+    Boolean prevent_clicking_active_character{ "PreventClickingActiveCharacter", "Miscellaneous" };
+
+    Boolean prevent_clicking_camera_occluders{
+        "PreventClickingCameraOccluders", "Miscellaneous"
+    };
 
     void Load() noexcept;
     std::vector<std::string> GetBoundKeycombos(std::string setting);
@@ -41,6 +45,11 @@ public:
 private:
     TomlConfig config = COMPILE_PROXY("NativeMods/BG3WASD.toml"sv);
     bool first_time_loaded = true;
+
+    // For performance reasons, we convert this into an enum and store it in the State.
+    String rotation_cursor_in_character_mode{ "CharacterMovementRotationCursor", "CameraRotation" };
+    // For performance reasons, we convert this into an enum and store it in the State.
+    String rotation_cursor_in_camera_mode{ "CameraMovementRotationCursor", "CameraRotation" };
 
     void InitState();
 };

@@ -11,6 +11,7 @@ void PatchHook::Activate()
     {
         handle->Enable();
     }
+    is_active = true;
 }
 
 void PatchHook::Deactivate()
@@ -24,4 +25,5 @@ void PatchHook::Deactivate()
     {
         handle->Disable();
     }
+    is_active = false;
 }

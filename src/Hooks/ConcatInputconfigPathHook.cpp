@@ -1,11 +1,11 @@
 #include <codecvt>
 #include <locale>
 
+#include "ConcatInputconfigPathHook.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
-#include "ConcatInputconfigPathHook.hpp"
 
-void ConcatInputconfigPathHook::EnableSpecifically(uintptr_t address_incl_offset)
+void ConcatInputconfigPathHook::EnableSpecifically(intptr_t address_incl_offset)
 {
     OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }

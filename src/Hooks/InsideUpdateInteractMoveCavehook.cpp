@@ -2,46 +2,13 @@
 #include "Settings.hpp"
 #include "State.hpp"
 
-struct InsideUpdateInteractMoveProlog : Xbyak::CodeGenerator
+void InsideUpdateInteractMoveCavehook::EnableSpecifically(intptr_t address_incl_offset)
 {
-    InsideUpdateInteractMoveProlog()
-    {
-        push(rax);
-        push(rbx);
-        push(rcx);
-        push(rdx);
-        push(r8);
-        push(r9);
-        push(r10);
-        push(r11);
-    }
-};
-
-struct InsideUpdateInteractMoveEpilog : Xbyak::CodeGenerator
-{
-    InsideUpdateInteractMoveEpilog()
-    {
-        pop(r11);
-        pop(r10);
-        pop(r9);
-        pop(r8);
-        pop(rdx);
-        pop(rcx);
-        pop(rbx);
-        pop(rax);
-    }
-};
-
-void InsideUpdateInteractMoveCavehook::EnableSpecifically(uintptr_t address_incl_offset)
-{
-    InsideUpdateInteractMoveProlog prolog;
-        prolog.ready();
-        InsideUpdateInteractMoveEpilog epilog;
-        epilog.ready();
-        auto handle = DKUtil::Hook::AddCaveHook(address_incl_offset, { 0, 7 }, FUNC_INFO(Func), &prolog, &epilog,
-            DKUtil::Hook::HookFlag::kRestoreBeforeProlog);
-        handle->Enable();
-        handles.emplace_back(std::move(handle));
+    auto [prolog, epilog] = dku::Hook::JIT::MakeNonVolatilePatch({ dku::Hook::Register::ALL });
+    auto handle = DKUtil::Hook::AddCaveHook(address_incl_offset, { 0, 7 }, FUNC_INFO(Func), &prolog,
+        &epilog, DKUtil::Hook::HookFlag::kRestoreBeforeProlog);
+    handle->Enable();
+    handles.emplace_back(std::move(handle));
 }
 
 void InsideUpdateInteractMoveCavehook::Func()

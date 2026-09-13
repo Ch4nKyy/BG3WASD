@@ -2,7 +2,7 @@
 #include "Settings.hpp"
 #include "State.hpp"
 
-void DecideMoveUpdaterHook::EnableSpecifically(uintptr_t address_incl_offset)
+void DecideMoveUpdaterHook::EnableSpecifically(intptr_t address_incl_offset)
 {
     OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }

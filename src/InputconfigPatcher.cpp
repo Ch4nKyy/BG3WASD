@@ -3,7 +3,7 @@
 #include <shlobj.h>
 #include <string>
 
-#include "Hooks/LoadInputConfigHook.hpp"
+#include "Hooks/LoadInputConfigFunctionRef.hpp"
 #include "InputconfigPatcher.hpp"
 #include "MessageBox.hpp"
 #include "Settings.hpp"
@@ -14,7 +14,7 @@ void InputconfigPatcher::Patch()
     try
     {
         ReadAndWriteInputconfig();
-        LoadInputConfigHook::CallOriginal(0, 0);
+        LoadInputConfigFunctionRef::Get()(0, 0);
     }
     catch (...)
     {
@@ -236,10 +236,10 @@ void InputconfigPatcher::UpdateVkCombosOfCommandMap(json data, std::vector<std::
         GetKeycombosOfCommandFromInputconfig(data, "CharacterMoveForward", commands, { "" });
     state->character_backward_keys =
         GetKeycombosOfCommandFromInputconfig(data, "CharacterMoveBackward", commands, { "" });
-    state->rotate_keys = GetKeycombosOfCommandFromInputconfig(data, "CameraToggleMouseRotate",
+    auto rotate_keys = GetKeycombosOfCommandFromInputconfig(data, "CameraToggleMouseRotate",
         commands, { "mouse:middle" });
-    state->rotate_keys_include_lmb = std::find(state->rotate_keys.begin(), state->rotate_keys.end(),
-                                         "mouse:left") != state->rotate_keys.end();
+    state->rotate_keys_include_lmb =
+        std::find(rotate_keys.begin(), rotate_keys.end(), "mouse:left") != rotate_keys.end();
     VirtualKeyMap::UpdateVkCombosOfCommandMap();
 }
 
@@ -312,9 +312,8 @@ void InputconfigPatcher::ValidateModHotkeys(
             { "HoldMovementMode", GetKeycombosAsJsonObject(*settings->hold_movement_mode)},
             { "ToggleAutoforward", GetKeycombosAsJsonObject(*settings->toggle_autoforward)},
             { "HoldWalkspeed", GetKeycombosAsJsonObject(*settings->hold_walkspeed) },
-            { "ReloadConfig", GetKeycombosAsJsonObject(*settings->reload_config) }
-            // TODO ToggleMouselook
-            // { "ToggleMouselook", { *settings->toggle_mouselook } }
+            { "ReloadConfig", GetKeycombosAsJsonObject(*settings->reload_config) },
+            { "ToggleCameraRotation", GetKeycombosAsJsonObject(*settings->toggle_camerarotation) },
         };
     // clang-format on
 

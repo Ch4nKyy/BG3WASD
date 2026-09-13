@@ -54,3 +54,7 @@ To fix Intellisense in VSCode, do the following:
 - Build the solution with the cmake tools extension.
 - In your ```c_cpp_properties.json```, use ```"configurationProvider": "ms-vscode.cmake-tools"```.
 This is the only needed parameter, apart from "name".
+
+### More documentation
+
+For more on architecture and reverse engineering, see the doc folder.

@@ -8,7 +8,14 @@ ToggleMovementMode = "key:capslock"
 HoldMovementMode = ""
 # Switch between Character and Camera movement mode while you hold this key.
 
-ToggleWalkspeed = "key:insert"
+ToggleCameraRotation = ""
+# Toggles the camera rotation to enable full mouselook.
+
+ToggleAutoforward = "shift+key:w"
+# Lets you move forward without holding Forward.
+# AZERTY users should set it to shift+key:z.
+
+ToggleWalkspeed = ""
 # Toggles between walking and jogging movespeed.
 
 HoldWalkspeed = ""
@@ -18,66 +25,101 @@ HoldWalkspeed = ""
 ReloadConfig = "key:f11"
 # This will hot reload all config values and the inputconfig.
 
-ToggleAutoforward = "shift+key:w"
-# Lets you move forward without holding Forward.
-# AZERTY users should set it to shift+key:z.
+
+[CameraRotation]
+
+CharacterMovementRotationCursor = "invisible"
+# Defines the behavior of the mouse cursor during camera rotation in Character movement mode.
+# Option 1: "invisible"
+#            The cursor is invisible. This is WASD 1.x behavior. Similar to Dragon Age or WoW.
+#            Recommended ingame hotkeys:
+#                                 Camera Rotate: Rightclick or Middleclick
+#            Recommended WASD mod settings:
+#                                 TogglingMovementModeAlsoTogglesCameraRotation = false
+#                                 PreventClickingCameraOccluders = false
+# Option 2: "centered"
+#            The cursor is centered on the screen and becomes a crosshair.
+#            This is similar to Elder Scrolls games like ESO or Skyrim.
+#            Recommended ingame hotkeys:
+#                                 Camera Rotate: Rightclick
+#            Recommended WASD mod settings:
+#                                 ToggleCameraRotation = "mouse:middle"
+#                                 TogglingMovementModeAlsoTogglesCameraRotation = true
+#                                 PreventClickingCameraOccluders = true
+#            Recommended NativeCameraTweaks mod settings:
+#                                 ExplorationOverrideOffset = true
+#                                 ExplorationHorizontalOffsetMult = 0.66
+#                                 ExplorationZoomMin = 1.5
+#                                 ReduceCameraLag = true
+# Option 3: "vanilla"
+#            The cursor is visible and moves like in vanilla BG3.
+#            When your cursor hits the screen edge, you cannot rotate the camera any further.
+#            This is only useful if you run into compatibility issues.
+
+CameraMovementRotationCursor = "invisible"
+# Same as CharacterMovementRotationCursor, but for the Camera movement mode.
+# I recommend invisible, regardless of the setting for CharacterMovementRotationCursor.
+
+TogglingMovementModeAlsoTogglesCameraRotation = false
+# If true, when you switch to Character movement mode, the mod will toggle on camera rotation,
+# and when you switch to Camera movement mode, the mod will toggle off camera rotation.
+# [true, false]
 
 
-[Core]
+[Miscellaneous]
+
+PreventClickingActiveCharacter = true
+# If true, the cursor ignores the active character, in character movement mode. This prevents accidentally opening the 
+# context menu on them, or clicking your character instead of the object/ground behind it.
+# Vanilla is false.
+# [true, false]
+
+PreventClickingCameraOccluders = false
+# If true, the cursor ignores objects that are closer to the camera than the active character, in character
+# movement mode. This prevents accidentally clicking on your trailing companions.
+# If you zoom out a lot or have a steep camera angle, the mod makes an exception.
+# Vanilla is false.
+# [true, false]
+
+BlockInteractMove = false
+# During Character movement mode, block that leftclicking the ground moves your character.
+# (Or whatever key you have bound to the "Interact" command.)
+# Interacting with objects and people still works.
+# [true, false]
+
+
+[Walking]
 
 WalkSpeed = 0.3
-# 1.0 would be jog speed. 0.5 would be 50% of that. [0.0, 1.0]
+# 1.0 would be the normal jog speed from vanilla. 0.5 would be 50% of that.
+# You cannot make the character move faster than vanilla with this option.
+# [0.0, 1.0]
 
-WalkingIsDefault = false
-# Whether the character walks, when the game starts up. [true, false]
+IsWalkingDefault = false
+# Whether the character walks, when the game starts up.
+# [true, false]
 
 SwitchToWalkingAfterCombat = false
-# Whether to switch to walking, when combat ends. [true, false]
+# Whether to switch to walking, when combat ends.
+# [true, false]
 
 
 [AutoToggleMovementMode]
 
-EnableAutoTogglingMovementMode = true
+AutoToggleMovementMode = true
 # Automatically toggle movement mode depending on the context. 
 # Toggle to Camera movement, when combat starts, and back to Character movement, when combat ends.
 # When you load a savegame, the mod will auto-detect your combat state and set the movement mode
 # accordingly.
 # [true, false]
 
-CharacterMovementModeIsDefault = true
-# If EnableAutoTogglingMovementMode is false, this setting determines whether the game starts in
+IsCharacterMovementDefault = true
+# If AutoToggleMovementMode is false, this setting determines whether the game starts in
 # Character or Camera movement mode.
 # [true, false]
 
 
-[Mouselook]
-
-EnableMouselook = true
-# Hides the mouse cursor and disables Interact (usually left click) during rotation.
-# [true, false]
-
-EnableRotatePlusLeftclickMovesForward = true
-# Holding the Camera Rotate key and Leftclick at the same time will move Forward.
-# This feature is automatically suppressed if you bind Rotate to Leftclick.
-# [true, false]
-
-RotateThreshold = 200
-# This threshold is only of interest, when you bind Camera Rotate to the same key as Context Menu and Cancel Action.
-# E.g. when you want to bind Rotate to Rightclick.
-# In that case, it is the threshold in milliseconds where the mod distinguishes between Rotate and other commands.
-# [0, 2000]
-
-
-[InteractMoveBlocker]
-
-BlockInteractMove = false
-# During Character movement mode, block Interact (usually Leftclick) from moving your character.
-# Interacting with objects and people still works.
-# Even if set to false, you can still cancel interact moves by pressing your CharacterMove keys.
-# [true, false]
-
-
-# List of all available keys:
+# List of all available keys for mod hotkeys:
 
 # Modifiers: ctrl, shift, alt. E.g. "ctrl+shift+key:w"
 # Multiple keycombos possible, separated by comma: "key:x,ctrl+key:y"

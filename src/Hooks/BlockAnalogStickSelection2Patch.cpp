@@ -1,6 +1,6 @@
 #include "BlockAnalogStickSelection2Patch.hpp"
 
-void BlockAnalogStickSelection2Patch::EnableSpecifically(uintptr_t address_incl_offset)
+void BlockAnalogStickSelection2Patch::EnableSpecifically(intptr_t address_incl_offset)
 {
     BlockAnalogStickSelection2PatchAsm patch;
     patch.ready();

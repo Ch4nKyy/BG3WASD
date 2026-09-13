@@ -1,6 +1,6 @@
 #include "BlockHoldInteractMovePatch.hpp"
 
-void BlockHoldInteractMovePatch::EnableSpecifically(uintptr_t address_incl_offset)
+void BlockHoldInteractMovePatch::EnableSpecifically(intptr_t address_incl_offset)
 {
     BlockHoldInteractMovePatchAsm patch;
     patch.ready();

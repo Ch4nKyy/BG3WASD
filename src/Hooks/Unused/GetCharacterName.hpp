@@ -2,6 +2,7 @@
 
 #include "Hooks/Base/FunctionHook.hpp"
 
+// Not sure what it was used for.
 class GetCharacterName : public FunctionHook
 {
 public:
@@ -13,7 +14,7 @@ public:
                                       "?? ?? ?? E8 ?? ?? ?? ?? 90 48 ?? ?? ?? ?? ?? ?? 48">() },
             { 0 }, std::source_location::current().function_name()) {};
 
-    void EnableSpecifically(uintptr_t address_incl_offset) override;
+    void EnableSpecifically(intptr_t address_incl_offset) override;
 
     static DWORD* OverrideFunc(DWORD* a1);
     static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;

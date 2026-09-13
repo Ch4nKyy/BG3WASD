@@ -1,6 +1,6 @@
 #include "BlockInteractMovePatch.hpp"
 
-void BlockInteractMovePatch::EnableSpecifically(uintptr_t address_incl_offset)
+void BlockInteractMovePatch::EnableSpecifically(intptr_t address_incl_offset)
 {
     BlockInteractMovePatchAsm patch;
     patch.ready();

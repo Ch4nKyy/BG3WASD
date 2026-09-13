@@ -2,6 +2,7 @@
 
 #include "Hooks/Base/FunctionHook.hpp"
 
+// Was needed for the CombatEndHook to detect combat end, but detecting the camera combat flag is more reliable.
 class CharacterDeathHook : public FunctionHook
 {
 public:
@@ -12,7 +13,7 @@ public:
                                       "?? ?? ?? ?? 48 ?? ?? E8">() },
             { 57 }, std::source_location::current().function_name()) {};
 
-    void EnableSpecifically(uintptr_t address_incl_offset) override;
+    void EnableSpecifically(intptr_t address_incl_offset) override;
 
     static bool OverrideFunc(int64_t a1, int64_t a2);
     static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;

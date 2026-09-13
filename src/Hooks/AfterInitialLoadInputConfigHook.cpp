@@ -1,7 +1,7 @@
 #include "AfterInitialLoadInputConfigHook.hpp"
 #include "InputconfigPatcher.hpp"
 
-void AfterInitialLoadInputConfigHook::EnableSpecifically(uintptr_t address_incl_offset)
+void AfterInitialLoadInputConfigHook::EnableSpecifically(intptr_t address_incl_offset)
 {
     OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }

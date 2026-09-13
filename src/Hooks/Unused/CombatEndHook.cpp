@@ -1,7 +1,7 @@
 #include "CombatEndHook.hpp"
 #include "State.hpp"
 
-void CombatEndHook::EnableSpecifically(uintptr_t address_incl_offset)
+void CombatEndHook::EnableSpecifically(intptr_t address_incl_offset)
 {
     OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }

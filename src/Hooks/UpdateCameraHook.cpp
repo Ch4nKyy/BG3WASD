@@ -1,39 +1,40 @@
 #include "UpdateCameraHook.hpp"
-#include "Hooks/IsInControllerModeHook.hpp"
+#include "Hooks/IsInControllerModeGlobalRef.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
+#include "Structs/Camera.hpp"
 
-void UpdateCameraHook::EnableSpecifically(uintptr_t address_incl_offset)
+void UpdateCameraHook::EnableSpecifically(intptr_t address_incl_offset)
 {
     OriginalFunc = dku::Hook::write_call<5>(address_incl_offset, OverrideFunc);
 }
 
-// Called in GameThread, every frame? Called before HandleCameraInput.
 int64_t UpdateCameraHook::OverrideFunc(uint64_t a1, uint64_t a2, uint64_t a3, int64_t a4)
 {
-    auto* settings = Settings::GetSingleton();
-    auto* state = State::GetSingleton();
-
-    if (IsInControllerModeHook::Get().Read())
+    if (IsInControllerModeGlobalRef::Get().Read())
     {
         return OriginalFunc(a1, a2, a3, a4);
     }
 
-    int64_t camera_object_ptr = *(int64_t*)(a4 + 48);
+    auto* settings = Settings::GetSingleton();
+    auto* state = State::GetSingleton();
 
-    bool new_combat_state = (*reinterpret_cast<bool*>(camera_object_ptr + 168) & 1) != 0;
-    if (!state->combat_state_initiliazed || new_combat_state != state->old_combat_state)
+    auto* camera = *reinterpret_cast<Camera**>(a4 + 48);
+    state->SetCamera(camera);
+
+    bool new_is_in_combat = camera->cameraModeFlags & CameraModeFlags::kCombat;
+    if (!state->combat_state_initialized || new_is_in_combat != state->is_in_combat)
     {
-        if (*settings->enable_auto_toggling_movement_mode)
+        if (*settings->auto_toggle_movement_mode)
         {
-            state->SetMovementModeToggled(!new_combat_state);
+            state->SetMovementModeToggled(!new_is_in_combat);
         }
-        if (new_combat_state == false && *settings->walk_after_combat)
+        if (new_is_in_combat == false && *settings->walk_after_combat)
         {
             state->walking_toggled = true;
         }
-        state->old_combat_state = new_combat_state;
-        state->combat_state_initiliazed = true;
+        state->is_in_combat = new_is_in_combat;
+        state->combat_state_initialized = true;
         state->last_time_combat_state_changed = SDL_GetTicks();
     }
 

@@ -22,6 +22,11 @@ struct WASDUnlockPatchAsm : Xbyak::CodeGenerator
     }
 };
 
+// Caller: UpdateWasdMove2
+// Target: Nop a IsInControllerMode check in UpdateWasdMove2.
+// Thread: GameThread
+// Called when: character movement is allowed, once per frame.
+// Purpose: Unlock WASD movement in keyboard mode.
 class WASDUnlockPatch : public PatchHook
 {
 public:
@@ -30,7 +35,7 @@ public:
             { search_pattern<
                 "80 ?? ?? ?? ?? ?? ?? 0F ?? ?? ?? ?? ?? 49 ?? ?? ?? 8B ?? ?? ?? ?? ?? 39">(0) },
             { 0 }, std::source_location::current().function_name()) {};
-    void EnableSpecifically(uintptr_t address_incl_offset) override;
+    void EnableSpecifically(intptr_t address_incl_offset) override;
 
     static WASDUnlockPatch& Get()
     {

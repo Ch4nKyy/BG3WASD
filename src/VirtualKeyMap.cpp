@@ -89,7 +89,7 @@ int VirtualKeyMap::GetKeycodeByName(const std::string name)
     return 0;
 }
 
-void VirtualKeyMap::AddVkCombosForCommand(Command command, std::vector<std::string> keycombos)
+void VirtualKeyMap::AddVkCombosForCommand(ModCommand command, std::vector<std::string> keycombos)
 {
     std::vector<std::vector<std::uint32_t>> vkcombos;
     for (auto keycombo : keycombos)
@@ -103,7 +103,7 @@ void VirtualKeyMap::AddVkCombosForCommand(Command command, std::vector<std::stri
     vkcombos_of_command.insert({ command, vkcombos });
 }
 
-std::vector<std::vector<std::uint32_t>> VirtualKeyMap::GetVkCombosOfCommand(Command command)
+std::vector<std::vector<std::uint32_t>> VirtualKeyMap::GetVkCombosOfCommand(ModCommand command)
 {
     if (vkcombos_of_command.contains(command))
     {
@@ -133,8 +133,7 @@ void VirtualKeyMap::UpdateVkCombosOfCommandMap()
     AddVkCombosForCommand(FORWARD, state->character_forward_keys);
     AddVkCombosForCommand(BACKWARD, state->character_backward_keys);
     AddVkCombosForCommand(MOUSE_LEFT_DOWN, settings->GetBoundKeycombos(std::string("mouse:left")));
-    // TODO ToggleMouselook
-    // AddVkCombosForCommand(TOGGLE_MOUSELOOK, settings->GetBoundKeycombos( *settings->toggle_mouselook ));
+    AddVkCombosForCommand(TOGGLE_CAMERAROTATION, settings->GetBoundKeycombos( *settings->toggle_camerarotation ));
 }
 
 bool VirtualKeyMap::VkIsValid(std::string keyname) { return GetVkByName(keyname) != 0; }

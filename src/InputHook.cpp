@@ -1,8 +1,7 @@
 #include "InputHook.hpp"
-#include "ToggleRequest.hpp"
 #include "VirtualKeyMap.hpp"
 
-using enum Command;
+using enum ModCommand;
 
 void InputHook::Enable(HMODULE a_hModule)
 {
@@ -87,19 +86,27 @@ LRESULT CALLBACK InputHook::KeyboardProc(int a_nCode, WPARAM a_wParam, LPARAM a_
 
 void InputHook::HandleInput()
 {
+    auto* state = State::GetSingleton();
+
+    CancelAutoRun(state);
+
+    if (state->IsPlayerInputBlocked())
+    {
+        return;
+    }
+
     is_shift_down = (GetAsyncKeyState(VK_SHIFT) & 0x8000);
     is_ctrl_down = (GetAsyncKeyState(VK_CONTROL) & 0x8000);
     is_alt_down = (GetAsyncKeyState(VK_MENU) & 0x8000);
-    auto* state = State::GetSingleton();
     AutoRun(state);
     ToggleMovementMode(state);
     WalkOrSprint(state);
     ReloadConfig();
     MouseLeftDown();
-    ToggleMouselook();
+    ToggleCameraRotation();
 }
 
-bool InputHook::DidCommandChange(Command command, int transition)
+bool InputHook::DidCommandChange(ModCommand command, int transition)
 {
     // keydown or syskeydown doesn't matter.
     if (last_transition != transition && last_transition != transition + 4)
@@ -155,7 +162,10 @@ void InputHook::AutoRun(State* state)
         state->autoforward_toggled = !state->autoforward_toggled;
         return;
     }
+}
 
+void InputHook::CancelAutoRun(State* state)
+{
     if (DidCommandChange(FORWARD, WM_KEYDOWN) || DidCommandChange(BACKWARD, WM_KEYDOWN) ||
         DidCommandChange(TOGGLE_MOVEMENT_MODE, WM_KEYDOWN) ||
         DidCommandChange(HOLD_MOVEMENT_MODE, WM_KEYDOWN) ||
@@ -232,21 +242,13 @@ void InputHook::MouseLeftDown()
     }
 }
 
-void InputHook::ToggleMouselook()
+void InputHook::ToggleCameraRotation()
 {
-    // TODO ToggleMouselook
-    // auto* state = State::GetSingleton();
-    // if (DidCommandChange(TOGGLE_MOUSELOOK, WM_KEYDOWN))
-    // {
-    //     if (state->mouselook_toggled)
-    //     {
-    //         state->mouselook_request = ToggleRequest::OFF;
-    //     }
-    //     else
-    //     {
-    //         state->mouselook_request = ToggleRequest::ON;
-    //     }
-    // }
+    auto* state = State::GetSingleton();
+    if (DidCommandChange(TOGGLE_CAMERAROTATION, WM_KEYDOWN))
+    {
+        state->ToggleCameraRotation();
+    }
 }
 
 bool InputHook::SetLastInputVkByMouseInput(WPARAM wParam, DWORD mouseData)

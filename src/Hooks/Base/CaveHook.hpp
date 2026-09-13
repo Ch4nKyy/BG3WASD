@@ -15,7 +15,7 @@ using namespace DKUtil::Alias;
 class CaveHook : public HookBase
 {
 public:
-    CaveHook(std::vector<void*> search_patterns, std::vector<uintptr_t> offsets, std::string name,
+    CaveHook(std::vector<void*> search_patterns, std::vector<intptr_t> offsets, std::string name,
         std::vector<void*> fallback_search_patterns = {}) :
         HookBase(search_patterns, offsets, name, fallback_search_patterns) {};
 

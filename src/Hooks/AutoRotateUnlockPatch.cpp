@@ -1,6 +1,6 @@
 #include "AutoRotateUnlockPatch.hpp"
 
-void AutoRotateUnlockPatch::EnableSpecifically(uintptr_t address_incl_offset)
+void AutoRotateUnlockPatch::EnableSpecifically(intptr_t address_incl_offset)
 {
     AutoRotateUnlockPatchAsm patch;
     patch.ready();

@@ -2,6 +2,8 @@
 
 #include "Hooks/Base/FunctionHook.hpp"
 
+// Was used to detect the end of combat to auto toggle the camera movement mode, but the camera combat flag is
+// more reliable to check.
 class CombatEndHook : public FunctionHook
 {
 public:
@@ -12,7 +14,7 @@ public:
                                       "?? ?? E8 ?? ?? ?? ?? 90">() },
             { 40 }, std::source_location::current().function_name()) {};
 
-    void EnableSpecifically(uintptr_t address_incl_offset) override;
+    void EnableSpecifically(intptr_t address_incl_offset) override;
 
     static const char* OverrideFunc(DWORD* a1);
     static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;

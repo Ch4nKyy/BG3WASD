@@ -15,15 +15,17 @@ class ASMPatchHandle;
 class PatchHook : public HookBase
 {
 public:
-    PatchHook(std::vector<void*> search_patterns, std::vector<uintptr_t> offsets, std::string name,
+    PatchHook(std::vector<void*> search_patterns, std::vector<intptr_t> offsets, std::string name,
         std::vector<void*> fallback_search_patterns = {}) :
         HookBase(search_patterns, offsets, name, fallback_search_patterns) {};
 
     void Activate();
     void Deactivate();
+    bool IsActive() { return is_active; }
 
 protected:
     std::vector<std::unique_ptr<DKUtil::Hook::ASMPatchHandle,
         std::default_delete<DKUtil::Hook::ASMPatchHandle>>>
         handles;
+    bool is_active = false;
 };

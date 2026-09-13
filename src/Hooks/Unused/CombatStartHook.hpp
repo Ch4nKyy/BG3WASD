@@ -2,6 +2,8 @@
 
 #include "Hooks/Base/FunctionHook.hpp"
 
+// Was used to detect the start of combat to auto toggle the camera movement mode, but the camera combat flag is
+// more reliable to check.
 class CombatStartHook : public FunctionHook
 {
 public:
@@ -11,7 +13,7 @@ public:
         "?? ?? 48 ?? ?? ?? E8 ?? ?? ?? ?? 48 ?? ?? 48 ?? ?? ?? E8 ?? ?? ?? ?? 90">() },
             { 37 }, std::source_location::current().function_name()) {};
 
-    void EnableSpecifically(uintptr_t address_incl_offset) override;
+    void EnableSpecifically(intptr_t address_incl_offset) override;
 
     static const char* OverrideFunc(DWORD* a1);
     static inline std::add_pointer_t<decltype(OverrideFunc)> OriginalFunc;
