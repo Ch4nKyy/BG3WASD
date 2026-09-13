@@ -2,6 +2,7 @@
 
 #include "Settings.hpp"
 #include "InputconfigPatcher.hpp"
+#include "PCH.hpp"
 #include "RotationCursorType.hpp"
 #include "State.hpp"
 
@@ -9,6 +10,8 @@ using enum ModCommand;
 
 void Settings::Load() noexcept
 {
+    WriteLock lock(mutex);
+
     if (first_time_loaded)
     {
         config.Bind(toggle_walkspeed, "");
@@ -16,7 +19,7 @@ void Settings::Load() noexcept
         config.Bind(hold_movement_mode, "");
         config.Bind(toggle_autoforward, "shift+key:w");
         config.Bind(hold_walkspeed, "");
-        config.Bind(reload_config, "key:f11");
+        config.Bind(reload_config, "");
         config.Bind(toggle_camerarotation, "");
 
         config.Bind<0.0, 1.0>(walk_speed, 0.3);
@@ -77,7 +80,7 @@ void Settings::Load() noexcept
     }
 
     first_time_loaded = false;
-    INFO("Config loaded successfully."sv)
+    INFO("Config loaded successfully."sv);
 }
 
 void Settings::InitState()

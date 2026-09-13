@@ -22,9 +22,6 @@ HoldWalkspeed = ""
 # When you are jogging, holding this key will make you walk.
 # If you are walking, holding this key will make you jog.
 
-ReloadConfig = "key:f11"
-# This will hot reload all config values and the inputconfig.
-
 
 [CameraRotation]
 

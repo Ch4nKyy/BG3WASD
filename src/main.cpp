@@ -50,6 +50,7 @@
 #include "MessageBox.hpp"
 #include "SDL.h"
 #include "Settings.hpp"
+#include "SettingsListener.hpp"
 #include "State.hpp"
 #include "VersionInfo.hpp"
 
@@ -135,6 +136,8 @@ BOOL APIENTRY DllMain(HMODULE a_hModule, DWORD a_ul_reason_for_call, LPVOID a_lp
 
         auto* settings = Settings::GetSingleton();
         settings->Load();
+
+        SettingsListener::Init();
 
         if (core_is_valid)
         {

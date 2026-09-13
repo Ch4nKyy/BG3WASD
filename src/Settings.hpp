@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DKUtil/Config.hpp"
+#include "PCH.hpp"
 
 using namespace DKUtil::Alias;
 
@@ -12,8 +13,11 @@ public:
     String hold_movement_mode{ "HoldMovementMode", "ModHotkeys" };
     String toggle_autoforward{ "ToggleAutoforward", "ModHotkeys" };
     String hold_walkspeed{ "HoldWalkspeed", "ModHotkeys" };
-    String reload_config{ "ReloadConfig", "ModHotkeys" };
     String toggle_camerarotation{ "ToggleCameraRotation", "ModHotkeys" };
+
+    // I don't include this setting in the shipped toml file, because I think it shouldn't be necessary.
+    // I will keep it though in case someone has compatibility issues.
+    String reload_config{ "ReloadConfig", "ModHotkeys" };
 
     Double walk_speed{ "WalkSpeed", "Walking" };
     Boolean is_walking_default{ "IsWalkingDefault", "Walking" };
@@ -35,14 +39,14 @@ public:
 
     Boolean prevent_clicking_active_character{ "PreventClickingActiveCharacter", "Miscellaneous" };
 
-    Boolean prevent_clicking_camera_occluders{
-        "PreventClickingCameraOccluders", "Miscellaneous"
-    };
+    Boolean prevent_clicking_camera_occluders{ "PreventClickingCameraOccluders", "Miscellaneous" };
 
     void Load() noexcept;
     std::vector<std::string> GetBoundKeycombos(std::string setting);
 
 private:
+    SharedMutex mutex;
+
     TomlConfig config = COMPILE_PROXY("NativeMods/BG3WASD.toml"sv);
     bool first_time_loaded = true;
 
